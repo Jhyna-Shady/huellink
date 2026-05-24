@@ -396,20 +396,66 @@ if (accionesDashboard && actividadDashboard) {
   });
 }
 
-// FORMULARIO PARA PUBLICAR MASCOTA
+// FORMULARIO PARA PUBLICAR MASCOTA EN SUPABASE
 const formPublicarMascota = document.getElementById("formPublicarMascota");
 
 if (formPublicarMascota) {
-  formPublicarMascota.addEventListener("submit", (e) => {
+  formPublicarMascota.addEventListener("submit", async (e) => {
     e.preventDefault();
 
-    const nombrePublicar = document.getElementById("nombrePublicar").value;
-    const tipoPublicar = document.getElementById("tipoPublicar").value;
-    const ciudadPublicar = document.getElementById("ciudadPublicar").value;
-    const estadoPublicar = document.getElementById("estadoPublicar").value;
+    const nombre = document.getElementById("nombrePublicar").value;
+    const tipo = document.getElementById("tipoPublicar").value;
+    const edad = document.getElementById("edadPublicar").value;
+    const tamano = document.getElementById("tamanoPublicar").value;
+    const sexo = document.getElementById("sexoPublicar").value;
+    const estado = document.getElementById("estadoPublicar").value;
+    const vacunas = document.getElementById("vacunasPublicar").value;
+    const salud = document.getElementById("saludPublicar").value;
+    const comportamiento = document.getElementById("comportamientoPublicar").value;
+    const historia = document.getElementById("historiaPublicar").value;
+    const ciudad = document.getElementById("ciudadPublicar").value;
+    const zona = document.getElementById("zonaPublicar").value;
+    const responsable = document.getElementById("responsablePublicar").value;
+
+    let icono = "🐾";
+
+    if (tipo === "perro") {
+      icono = "🐶";
+    } else if (tipo === "gato") {
+      icono = "🐱";
+    }
+
+    const nuevaMascota = {
+      nombre,
+      tipo,
+      edad,
+      tamano,
+      sexo,
+      estado,
+      vacunas,
+      salud,
+      comportamiento,
+      historia,
+      ciudad,
+      zona,
+      responsable,
+      icono,
+      estado_publicacion: "aprobada"
+    };
+
+    const { data, error } = await db
+      .from("mascotas")
+      .insert([nuevaMascota])
+      .select();
+
+    if (error) {
+   console.error("Error Supabase:", error);
+    alert("Error al registrar mascota: " + error.message);
+    return;
+    }
 
     alert(
-      `Mascota registrada correctamente 🐾\n\nNombre: ${nombrePublicar}\nTipo: ${tipoPublicar}\nCiudad: ${ciudadPublicar}\nEstado: ${estadoPublicar}\n\nLa publicación quedará pendiente de revisión.`
+      `Mascota registrada correctamente 🐾\n\nNombre: ${nombre}\nTipo: ${tipo}\nCiudad: ${ciudad}`
     );
 
     formPublicarMascota.reset();

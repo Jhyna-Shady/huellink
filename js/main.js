@@ -641,20 +641,51 @@ if (formSolicitudAdopcion) {
   });
 }
 
-// FORMULARIO DE SEGUIMIENTO POST ADOPCIÓN
+// FORMULARIO DE SEGUIMIENTO POST ADOPCIÓN EN SUPABASE
 const formSeguimiento = document.getElementById("formSeguimiento");
 
 if (formSeguimiento) {
-  formSeguimiento.addEventListener("submit", (e) => {
+  formSeguimiento.addEventListener("submit", async (e) => {
     e.preventDefault();
 
-    const mascota = document.getElementById("mascotaSeguimiento").value;
-    const adoptante = document.getElementById("adoptanteSeguimiento").value;
-    const estado = document.getElementById("estadoMascota").value;
-    const proximaRevision = document.getElementById("proximaRevision").value;
+    if (typeof db === "undefined") {
+      alert("Supabase no está cargado. Revisa los scripts en seguimiento.html");
+      return;
+    }
+
+    const nuevoSeguimiento = {
+      mascota_nombre: document.getElementById("mascotaSeguimiento").value,
+      adoptante_nombre: document.getElementById("adoptanteSeguimiento").value,
+
+      fecha_adopcion: document.getElementById("fechaAdopcion").value,
+      fecha_seguimiento: document.getElementById("fechaSeguimiento").value,
+      tipo_seguimiento: document.getElementById("tipoSeguimiento").value,
+
+      estado_mascota: document.getElementById("estadoMascota").value,
+      alimentacion: document.getElementById("alimentacionSeguimiento").value,
+      salud: document.getElementById("saludSeguimiento").value,
+      adaptacion: document.getElementById("adaptacionSeguimiento").value,
+      observaciones: document.getElementById("observacionesSeguimiento").value,
+
+      proxima_revision: document.getElementById("proximaRevision").value || null,
+      estado_registro: "registrado"
+    };
+
+    const { data, error } = await db
+      .from("seguimientos_adopcion")
+      .insert([nuevoSeguimiento])
+      .select();
+
+    console.log("Seguimiento guardado:", data);
+    console.log("Error seguimiento:", error);
+
+    if (error) {
+      alert("Error al registrar seguimiento: " + error.message);
+      return;
+    }
 
     alert(
-      `Seguimiento registrado correctamente 🐾\n\nMascota: ${mascota}\nAdoptante: ${adoptante}\nEstado: ${estado}\nPróxima revisión: ${proximaRevision || "No definida"}\n\nEl registro quedó guardado de forma simulada.`
+      `Seguimiento registrado correctamente 🐾\n\nMascota: ${nuevoSeguimiento.mascota_nombre}\nAdoptante: ${nuevoSeguimiento.adoptante_nombre}\nEstado: ${nuevoSeguimiento.estado_mascota}\n\nEl seguimiento quedó guardado en Supabase.`
     );
 
     formSeguimiento.reset();

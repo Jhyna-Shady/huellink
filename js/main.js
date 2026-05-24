@@ -5,9 +5,14 @@ console.log("Huellink cargado correctamente 🐾");
 document.addEventListener("click", (e) => {
   if (e.target.classList.contains("btn-detalle")) {
     const tarjetaMascota = e.target.closest(".pet-card");
+    const idMascota = tarjetaMascota.dataset.id;
     const nombreMascota = tarjetaMascota.querySelector("h3").textContent;
 
-    window.location.href = `detalle-mascota.html?mascota=${encodeURIComponent(nombreMascota)}`;
+    if (idMascota) {
+      window.location.href = `detalle-mascota.html?id=${idMascota}`;
+    } else {
+      window.location.href = `detalle-mascota.html?mascota=${encodeURIComponent(nombreMascota)}`;
+    }
   }
 
   if (e.target.classList.contains("btn-adoptar")) {
@@ -664,134 +669,90 @@ botonesRechazar.forEach((boton) => {
   });
 });
 
-// DETALLE DE MASCOTA
+// DETALLE DE MASCOTA DESDE SUPABASE
 const detalleNombre = document.getElementById("detalleNombre");
 
 if (detalleNombre) {
   const params = new URLSearchParams(window.location.search);
-  const mascotaSeleccionada = params.get("mascota") || "Luna";
+  const mascotaId = params.get("id");
+  const mascotaNombre = params.get("mascota");
 
-  const mascotasDetalle = {
-    Luna: {
-      icono: "🐶",
-      nombre: "Luna",
-      resumen: "Luna es una perrita cariñosa, tranquila y lista para encontrar un hogar responsable.",
-      estado: "Disponible para adopción",
-      tipo: "Perro",
-      edad: "2 años",
-      tamano: "Mediana",
-      sexo: "Hembra",
-      ciudad: "Lima",
-      vacunas: "Vacunada",
-      personalidad: "Amigable con niños, tranquila y sociable con otras mascotas.",
-      historia: "Fue rescatada por un refugio local y actualmente se encuentra estable, esperando una familia responsable.",
-      responsable: "Refugio Vida Animal"
-    },
-
-    Michi: {
-      icono: "🐱",
-      nombre: "Michi",
-      resumen: "Michi es un gatito tranquilo, ideal para una familia que viva en casa o departamento.",
-      estado: "Disponible para adopción",
-      tipo: "Gato",
-      edad: "1 año",
-      tamano: "Pequeño",
-      sexo: "Macho",
-      ciudad: "Cajamarca",
-      vacunas: "Esterilizado",
-      personalidad: "Tranquilo, limpio y cariñoso cuando toma confianza.",
-      historia: "Fue encontrado cerca de una zona urbana y recibió cuidados básicos antes de ser publicado en Huellink.",
-      responsable: "Rescatista independiente"
-    },
-
-    Toby: {
-      icono: "🐕",
-      nombre: "Toby",
-      resumen: "Toby es un cachorro juguetón y energético que busca una familia activa.",
-      estado: "Disponible para adopción",
-      tipo: "Perro",
-      edad: "4 meses",
-      tamano: "Pequeño",
-      sexo: "Macho",
-      ciudad: "Trujillo",
-      vacunas: "Vacunas iniciales",
-      personalidad: "Juguetón, curioso y sociable.",
-      historia: "Fue rescatado junto a otros cachorros y ahora está listo para iniciar un proceso de adopción.",
-      responsable: "Rescate Animal Norte"
-    },
-
-    Rocky: {
-      icono: "🐩",
-      nombre: "Rocky",
-      resumen: "Rocky es un perro grande, protector y noble, actualmente en recuperación.",
-      estado: "En recuperación",
-      tipo: "Perro",
-      edad: "3 años",
-      tamano: "Grande",
-      sexo: "Macho",
-      ciudad: "Cajamarca",
-      vacunas: "Vacunas incompletas",
-      personalidad: "Protector, leal y tranquilo con personas conocidas.",
-      historia: "Fue rescatado en estado de abandono y se encuentra recuperándose antes de completar su proceso de adopción.",
-      responsable: "Patitas Cajamarca"
-    },
-
-    Nala: {
-      icono: "🐈",
-      nombre: "Nala",
-      resumen: "Nala es una gatita pequeña, cariñosa y muy sociable.",
-      estado: "Disponible para adopción",
-      tipo: "Gato",
-      edad: "5 meses",
-      tamano: "Pequeña",
-      sexo: "Hembra",
-      ciudad: "Lima",
-      vacunas: "Desparasitada",
-      personalidad: "Cariñosa, curiosa y juguetona.",
-      historia: "Fue encontrada en una zona residencial y actualmente recibe cuidados temporales.",
-      responsable: "Rescatista urbana"
-    },
-
-    Max: {
-      icono: "🦮",
-      nombre: "Max",
-      resumen: "Max es un perrito sociable, alegre y con mucha energía.",
-      estado: "Disponible para adopción",
-      tipo: "Perro",
-      edad: "8 meses",
-      tamano: "Mediano",
-      sexo: "Macho",
-      ciudad: "Lima",
-      vacunas: "Vacunado",
-      personalidad: "Sociable, activo y amigable con personas.",
-      historia: "Fue rescatado por un grupo de voluntarios y busca un hogar estable.",
-      responsable: "Voluntarios Huellink"
+  async function cargarDetalleMascota() {
+    if (typeof db === "undefined") {
+      alert("Supabase no está cargado. Revisa los scripts en detalle-mascota.html");
+      return;
     }
-  };
 
-  const datos = mascotasDetalle[mascotaSeleccionada] || mascotasDetalle.Luna;
+    let consulta;
 
-  document.getElementById("detalleIcono").textContent = datos.icono;
-  document.getElementById("detalleNombre").textContent = datos.nombre;
-  document.getElementById("detalleResumen").textContent = datos.resumen;
-  document.getElementById("detalleEstado").textContent = datos.estado;
-  document.getElementById("detalleTipo").textContent = datos.tipo;
-  document.getElementById("detalleEdad").textContent = datos.edad;
-  document.getElementById("detalleTamano").textContent = datos.tamano;
-  document.getElementById("detalleSexo").textContent = datos.sexo;
-  document.getElementById("detalleCiudad").textContent = datos.ciudad;
-  document.getElementById("detalleVacunas").textContent = datos.vacunas;
-  document.getElementById("detallePersonalidad").textContent = datos.personalidad;
-  document.getElementById("detalleHistoria").textContent = datos.historia;
-  document.getElementById("detalleResponsable").textContent = datos.responsable;
+    if (mascotaId) {
+      consulta = db
+        .from("mascotas")
+        .select("*")
+        .eq("id", mascotaId)
+        .single();
+    } else if (mascotaNombre) {
+      consulta = db
+        .from("mascotas")
+        .select("*")
+        .eq("nombre", mascotaNombre)
+        .limit(1)
+        .single();
+    } else {
+      alert("No se recibió información de la mascota.");
+      return;
+    }
 
-  const btnSolicitarDetalle = document.getElementById("btnSolicitarDetalle");
+    const { data: mascota, error } = await consulta;
 
-  btnSolicitarDetalle.addEventListener("click", () => {
-    window.location.href = `solicitud-adopcion.html?mascota=${encodeURIComponent(datos.nombre)}`;
-  });
+    console.log("Detalle mascota:", mascota);
+    console.log("Error detalle:", error);
+
+    if (error) {
+      alert("No se pudo cargar el detalle de la mascota: " + error.message);
+      return;
+    }
+
+    pintarDetalleMascota(mascota);
+  }
+
+  function pintarDetalleMascota(mascota) {
+    document.getElementById("detalleIcono").textContent = mascota.icono || "🐾";
+    document.getElementById("detalleNombre").textContent = mascota.nombre || "Mascota sin nombre";
+
+    document.getElementById("detalleResumen").textContent =
+      mascota.historia || "Mascota registrada en Huellink para iniciar un proceso de adopción responsable.";
+
+    document.getElementById("detalleEstado").textContent =
+      mascota.estado || mascota.estado_publicacion || "Disponible";
+
+    document.getElementById("detalleTipo").textContent = mascota.tipo || "-";
+    document.getElementById("detalleEdad").textContent = mascota.edad || "-";
+    document.getElementById("detalleTamano").textContent = mascota.tamano || "-";
+    document.getElementById("detalleSexo").textContent = mascota.sexo || "-";
+    document.getElementById("detalleCiudad").textContent = mascota.ciudad || "-";
+    document.getElementById("detalleVacunas").textContent = mascota.vacunas || "Sin información";
+
+    document.getElementById("detallePersonalidad").textContent =
+      mascota.comportamiento || "No se registró información sobre su personalidad.";
+
+    document.getElementById("detalleHistoria").textContent =
+      mascota.historia || "No se registró una historia detallada de la mascota.";
+
+    document.getElementById("detalleResponsable").textContent =
+      mascota.responsable || "Responsable no especificado.";
+
+    const btnSolicitarDetalle = document.getElementById("btnSolicitarDetalle");
+
+    if (btnSolicitarDetalle) {
+      btnSolicitarDetalle.addEventListener("click", () => {
+        window.location.href = `solicitud-adopcion.html?mascota=${encodeURIComponent(mascota.nombre)}`;
+      });
+    }
+  }
+
+  cargarDetalleMascota();
 }
-
 // CARGAR MASCOTAS DESDE SUPABASE EN adoptar.html
 const contenedorMascotas = document.getElementById("contenedorMascotas");
 
@@ -830,10 +791,11 @@ async function cargarMascotasDesdeBD() {
 
     contenedorMascotas.innerHTML += `
       <div class="pet-card mascota"
-        data-tipo="${mascota.tipo}"
-        data-ciudad="${mascota.ciudad.toLowerCase()}"
-        data-tamano="${mascota.tamano}"
-        data-edad="${edadFiltro}">
+       data-id="${mascota.id}"
+       data-tipo="${mascota.tipo}"
+       data-ciudad="${mascota.ciudad}"
+       data-tamano="${mascota.tamano}"
+       data-edad="${edadFiltro}">
 
         <div class="pet-photo">${mascota.icono || "🐾"}</div>
 

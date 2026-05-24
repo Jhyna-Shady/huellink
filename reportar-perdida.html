@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>Reportar mascota perdida | Huellink</title>
+
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+
+  <!-- ENCABEZADO -->
+  <header class="header">
+    <nav class="navbar">
+      <a href="index.html" class="logo-link">
+        <div class="logo">🐾 Huellink</div>
+      </a>
+
+      <ul class="nav-links">
+        <li><a href="index.html">Inicio</a></li>
+        <li><a href="adoptar.html">Adoptar</a></li>
+        <li><a href="reportar-perdida.html">Reportar</a></li>
+        <li><a href="#">Refugios</a></li>
+        <li><a href="index.html#funciona">Cómo funciona</a></li>
+      </ul>
+
+      <a href="login.html" class="btn-login">Iniciar sesión</a>
+    </nav>
+  </header>
+
+  <!-- CABECERA -->
+  <section class="page-hero">
+    <span class="tag">Reporte ciudadano</span>
+    <h1>Reportar mascota perdida</h1>
+    <p>
+      Registra los datos de tu mascota extraviada para que ciudadanos,
+      rescatistas y refugios puedan ayudarte a encontrarla.
+    </p>
+  </section>
+
+  <!-- FORMULARIO -->
+  <section class="form-section">
+    <div class="form-container">
+
+      <div class="form-info">
+        <h2>Datos importantes</h2>
+        <p>
+          Completa la información con el mayor detalle posible. La ubicación
+          debe ser aproximada para proteger tus datos personales.
+        </p>
+
+        <ul>
+          <li>✔ Agrega una foto clara de la mascota.</li>
+          <li>✔ Indica la zona donde se perdió.</li>
+          <li>✔ Describe color, tamaño y señales particulares.</li>
+          <li>✔ Usa referencias fáciles de ubicar.</li>
+        </ul>
+
+        <div class="info-box">
+          <h3>🔒 Seguridad</h3>
+          <p>
+            Huellink recomienda no publicar direcciones exactas de vivienda.
+            Usa una zona, avenida o punto de referencia.
+          </p>
+        </div>
+      </div>
+
+      <form class="report-form" id="formPerdida">
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="nombreMascota">Nombre de la mascota</label>
+            <input type="text" id="nombreMascota" placeholder="Ejemplo: Luna" required>
+          </div>
+
+          <div class="form-group">
+            <label for="tipoMascota">Tipo de mascota</label>
+            <select id="tipoMascota" required>
+              <option value="">Seleccionar</option>
+              <option value="perro">Perro</option>
+              <option value="gato">Gato</option>
+              <option value="otro">Otro</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="colorMascota">Color</label>
+            <input type="text" id="colorMascota" placeholder="Ejemplo: blanco con manchas negras" required>
+          </div>
+
+          <div class="form-group">
+            <label for="tamanoMascota">Tamaño</label>
+            <select id="tamanoMascota" required>
+              <option value="">Seleccionar</option>
+              <option value="pequeño">Pequeño</option>
+              <option value="mediano">Mediano</option>
+              <option value="grande">Grande</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="sexoMascota">Sexo</label>
+            <select id="sexoMascota">
+              <option value="">No sé / No especificar</option>
+              <option value="hembra">Hembra</option>
+              <option value="macho">Macho</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="fechaPerdida">Fecha de pérdida</label>
+            <input type="date" id="fechaPerdida" required>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="zonaPerdida">Zona donde se perdió</label>
+          <input type="text" id="zonaPerdida" placeholder="Ejemplo: Baños del Inca, Cajamarca" required>
+        </div>
+
+        <div class="form-group">
+          <label for="referenciaPerdida">Referencia</label>
+          <input type="text" id="referenciaPerdida" placeholder="Ejemplo: cerca del mercado, parque o avenida principal">
+        </div>
+
+        <div class="form-group">
+          <label for="descripcionMascota">Descripción adicional</label>
+          <textarea id="descripcionMascota" rows="5" placeholder="Ejemplo: tiene collar rojo, es tímida, responde al nombre de Luna..." required></textarea>
+        </div>
+
+        <div class="form-group">
+          <label for="fotoMascota">Foto de la mascota</label>
+          <input type="file" id="fotoMascota" accept="image/*">
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="nombreContacto">Nombre de contacto</label>
+            <input type="text" id="nombreContacto" placeholder="Tu nombre" required>
+          </div>
+
+          <div class="form-group">
+            <label for="telefonoContacto">Celular</label>
+            <input type="tel" id="telefonoContacto" placeholder="Ejemplo: 987654321" required>
+          </div>
+        </div>
+
+        <button type="submit" class="btn-submit">
+          Publicar reporte
+        </button>
+
+      </form>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <p>© 2026 Huellink. Plataforma para adopción responsable y protección animal.</p>
+  </footer>
+
+  <script src="js/main.js"></script>
+</body>
+</html>

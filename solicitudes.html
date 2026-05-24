@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>Solicitudes de adopción | Huellink</title>
+
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+
+  <!-- ENCABEZADO -->
+  <header class="header">
+    <nav class="navbar">
+      <a href="index.html" class="logo-link">
+        <div class="logo">🐾 Huellink</div>
+      </a>
+
+      <ul class="nav-links">
+        <li><a href="index.html">Inicio</a></li>
+        <li><a href="adoptar.html">Adoptar</a></li>
+        <li><a href="reportes.html">Reportes</a></li>
+        <li><a href="refugios.html">Refugios</a></li>
+        <li><a href="dashboard.html">Panel</a></li>
+      </ul>
+
+      <a href="login.html" class="btn-login">Cerrar sesión</a>
+    </nav>
+  </header>
+
+  <!-- CABECERA -->
+  <section class="page-hero">
+    <span class="tag">Gestión de adopciones</span>
+    <h1>Solicitudes de adopción</h1>
+    <p>
+      Revisa las solicitudes enviadas por ciudadanos interesados en adoptar una mascota.
+      Puedes aprobar, rechazar o mantener una solicitud en evaluación.
+    </p>
+  </section>
+
+  <!-- ESTADÍSTICAS -->
+  <section class="dashboard-stats admin-stats">
+    <div class="dashboard-stat-card">
+      <h2>9</h2>
+      <p>Solicitudes recibidas</p>
+    </div>
+
+    <div class="dashboard-stat-card">
+      <h2>4</h2>
+      <p>En revisión</p>
+    </div>
+
+    <div class="dashboard-stat-card">
+      <h2>3</h2>
+      <p>Aprobadas</p>
+    </div>
+
+    <div class="dashboard-stat-card">
+      <h2>2</h2>
+      <p>Rechazadas</p>
+    </div>
+  </section>
+
+  <!-- FILTROS -->
+  <section class="filters-section">
+    <div class="filters-box solicitudes-filter-box">
+
+      <div class="filter-group">
+        <label for="filtroSolicitudEstado">Estado</label>
+        <select id="filtroSolicitudEstado">
+          <option value="todos">Todos</option>
+          <option value="pendiente">Pendiente</option>
+          <option value="revision">En revisión</option>
+          <option value="aprobada">Aprobada</option>
+          <option value="rechazada">Rechazada</option>
+        </select>
+      </div>
+
+      <div class="filter-group">
+        <label for="filtroSolicitudMascota">Mascota</label>
+        <select id="filtroSolicitudMascota">
+          <option value="todos">Todas</option>
+          <option value="luna">Luna</option>
+          <option value="michi">Michi</option>
+          <option value="toby">Toby</option>
+        </select>
+      </div>
+
+      <button class="btn-filter" id="limpiarFiltrosSolicitudes">
+        Limpiar filtros
+      </button>
+
+    </div>
+  </section>
+
+  <!-- LISTA DE SOLICITUDES -->
+  <section class="section">
+    <div class="section-title">
+      <h2>Solicitudes registradas</h2>
+      <p>Listado simulado de solicitudes enviadas por posibles adoptantes.</p>
+    </div>
+
+    <div class="admin-list solicitudes-list">
+
+      <div class="admin-card solicitud-card" data-estado="pendiente" data-mascota="luna">
+        <div>
+          <h3>Solicitud para adoptar a Luna</h3>
+          <p><strong>Adoptante:</strong> Andrea Salazar</p>
+          <p><strong>Ciudad:</strong> Cajamarca</p>
+          <p><strong>Tipo de vivienda:</strong> Casa</p>
+          <p><strong>Experiencia:</strong> Ya tuvo perros anteriormente.</p>
+          <p><strong>Motivo:</strong> Desea adoptar una mascota para compañía familiar.</p>
+          <p><strong>Estado:</strong> <span class="estado-texto">Pendiente</span></p>
+        </div>
+
+        <div class="admin-actions">
+          <button class="btn-review">En revisión</button>
+          <button class="btn-approve">Aprobar</button>
+          <button class="btn-reject">Rechazar</button>
+        </div>
+      </div>
+
+      <div class="admin-card solicitud-card" data-estado="revision" data-mascota="michi">
+        <div>
+          <h3>Solicitud para adoptar a Michi</h3>
+          <p><strong>Adoptante:</strong> Luis Ramírez</p>
+          <p><strong>Ciudad:</strong> Lima</p>
+          <p><strong>Tipo de vivienda:</strong> Departamento</p>
+          <p><strong>Experiencia:</strong> Tiene experiencia cuidando gatos.</p>
+          <p><strong>Motivo:</strong> Busca adoptar un gato tranquilo para departamento.</p>
+          <p><strong>Estado:</strong> <span class="estado-texto">En revisión</span></p>
+        </div>
+
+        <div class="admin-actions">
+          <button class="btn-review">En revisión</button>
+          <button class="btn-approve">Aprobar</button>
+          <button class="btn-reject">Rechazar</button>
+        </div>
+      </div>
+
+      <div class="admin-card solicitud-card" data-estado="aprobada" data-mascota="toby">
+        <div>
+          <h3>Solicitud para adoptar a Toby</h3>
+          <p><strong>Adoptante:</strong> Camila Torres</p>
+          <p><strong>Ciudad:</strong> Trujillo</p>
+          <p><strong>Tipo de vivienda:</strong> Casa familiar</p>
+          <p><strong>Experiencia:</strong> Tiene otra mascota en casa.</p>
+          <p><strong>Motivo:</strong> Quiere dar hogar a un cachorro rescatado.</p>
+          <p><strong>Estado:</strong> <span class="estado-texto">Aprobada</span></p>
+        </div>
+
+        <div class="admin-actions">
+          <button class="btn-review">En revisión</button>
+          <button class="btn-approve">Aprobar</button>
+          <button class="btn-reject">Rechazar</button>
+        </div>
+      </div>
+
+      <div class="admin-card solicitud-card" data-estado="rechazada" data-mascota="luna">
+        <div>
+          <h3>Solicitud para adoptar a Luna</h3>
+          <p><strong>Adoptante:</strong> Pedro Castillo</p>
+          <p><strong>Ciudad:</strong> Lima</p>
+          <p><strong>Tipo de vivienda:</strong> Habitación alquilada</p>
+          <p><strong>Experiencia:</strong> Sin experiencia previa.</p>
+          <p><strong>Motivo:</strong> Desea adoptar, pero no cuenta con espacio suficiente.</p>
+          <p><strong>Estado:</strong> <span class="estado-texto">Rechazada</span></p>
+        </div>
+
+        <div class="admin-actions">
+          <button class="btn-review">En revisión</button>
+          <button class="btn-approve">Aprobar</button>
+          <button class="btn-reject">Rechazar</button>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="no-results" id="noResultsSolicitudes">
+      <h3>No encontramos solicitudes con esos filtros 🐾</h3>
+      <p>Prueba cambiando el estado o la mascota seleccionada.</p>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="cta">
+    <h2>Gestión responsable de adopciones</h2>
+    <p>
+      Evalúa cada solicitud antes de aprobar una adopción para asegurar el bienestar de la mascota.
+    </p>
+    <a href="seguimiento.html" class="btn-primary">Registrar seguimiento</a>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <p>© 2026 Huellink. Plataforma para adopción responsable y protección animal.</p>
+  </footer>
+
+  <script src="js/main.js"></script>
+</body>
+</html>

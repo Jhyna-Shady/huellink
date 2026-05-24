@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>Refugios y rescatistas | Huellink</title>
+
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+
+  <!-- ENCABEZADO -->
+  <header class="header">
+    <nav class="navbar">
+      <a href="index.html" class="logo-link">
+        <div class="logo">🐾 Huellink</div>
+      </a>
+
+      <ul class="nav-links">
+        <li><a href="index.html">Inicio</a></li>
+        <li><a href="adoptar.html">Adoptar</a></li>
+        <li><a href="reportar-perdida.html">Reportar</a></li>
+        <li><a href="refugios.html">Refugios</a></li>
+        <li><a href="index.html#funciona">Cómo funciona</a></li>
+      </ul>
+
+      <a href="login.html" class="btn-login">Iniciar sesión</a>
+    </nav>
+  </header>
+
+  <!-- CABECERA -->
+  <section class="page-hero">
+    <span class="tag">Aliados Huellink</span>
+    <h1>Registro de refugios y rescatistas</h1>
+    <p>
+      Inscríbete como refugio o rescatista para publicar mascotas,
+      gestionar solicitudes de adopción, recibir reportes y realizar seguimiento.
+    </p>
+  </section>
+
+  <!-- BENEFICIOS -->
+  <section class="section">
+    <div class="section-title">
+      <h2>¿Qué podrás hacer como aliado?</h2>
+      <p>Huellink te ayuda a organizar tus casos y conectar con adoptantes responsables.</p>
+    </div>
+
+    <div class="features-grid">
+      <div class="feature-card">
+        <div class="icon">🐶</div>
+        <h3>Publicar mascotas</h3>
+        <p>Registra perros o gatos rescatados con fotos, descripción, salud y ubicación.</p>
+      </div>
+
+      <div class="feature-card">
+        <div class="icon">📋</div>
+        <h3>Gestionar solicitudes</h3>
+        <p>Revisa formularios de adopción, aprueba, rechaza o solicita más información.</p>
+      </div>
+
+      <div class="feature-card">
+        <div class="icon">📍</div>
+        <h3>Recibir reportes</h3>
+        <p>Visualiza mascotas perdidas o encontradas según ciudad, distrito o zona.</p>
+      </div>
+
+      <div class="feature-card">
+        <div class="icon">💬</div>
+        <h3>Contactar usuarios</h3>
+        <p>Comunícate con ciudadanos y adoptantes mediante un chat interno seguro.</p>
+      </div>
+
+      <div class="feature-card">
+        <div class="icon">✅</div>
+        <h3>Seguimiento post adopción</h3>
+        <p>Registra controles, visitas, observaciones y estado de bienestar de la mascota.</p>
+      </div>
+
+      <div class="feature-card">
+        <div class="icon">📊</div>
+        <h3>Ver estadísticas</h3>
+        <p>Consulta mascotas publicadas, solicitudes recibidas y adopciones logradas.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- FORMULARIO -->
+  <section class="form-section">
+    <div class="form-container">
+
+      <div class="form-info">
+        <h2>Validación de aliados</h2>
+        <p>
+          Para mantener la seguridad de la plataforma, los registros de refugios
+          y rescatistas serán revisados por un administrador antes de ser activados.
+        </p>
+
+        <ul>
+          <li>✔ El registro no se aprueba automáticamente.</li>
+          <li>✔ El administrador revisa la información enviada.</li>
+          <li>✔ Una vez validado, podrás publicar mascotas.</li>
+          <li>✔ Esto ayuda a evitar cuentas falsas.</li>
+        </ul>
+
+        <div class="info-box">
+          <h3>🤝 Confianza</h3>
+          <p>
+            Esta validación permite que Huellink sea una plataforma más segura
+            para mascotas, refugios, rescatistas y adoptantes.
+          </p>
+        </div>
+      </div>
+
+      <form class="report-form" id="formAliado">
+
+        <div class="form-group">
+          <label for="tipoAliado">Tipo de aliado</label>
+          <select id="tipoAliado" required>
+            <option value="">Seleccionar</option>
+            <option value="refugio">Refugio</option>
+            <option value="rescatista">Rescatista independiente</option>
+          </select>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="nombreAliado">Nombre del refugio o rescatista</label>
+            <input type="text" id="nombreAliado" placeholder="Ejemplo: Patitas Cajamarca" required>
+          </div>
+
+          <div class="form-group">
+            <label for="responsableAliado">Responsable</label>
+            <input type="text" id="responsableAliado" placeholder="Nombre del responsable" required>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="correoAliado">Correo</label>
+            <input type="email" id="correoAliado" placeholder="correo@ejemplo.com" required>
+          </div>
+
+          <div class="form-group">
+            <label for="telefonoAliado">Celular</label>
+            <input type="tel" id="telefonoAliado" placeholder="Ejemplo: 987654321" required>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="ciudadAliado">Ciudad</label>
+            <input type="text" id="ciudadAliado" placeholder="Ejemplo: Cajamarca" required>
+          </div>
+
+          <div class="form-group">
+            <label for="distritoAliado">Distrito</label>
+            <input type="text" id="distritoAliado" placeholder="Ejemplo: Baños del Inca" required>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="direccionAliado">Dirección aproximada o zona de trabajo</label>
+          <input type="text" id="direccionAliado" placeholder="Ejemplo: zona central de Cajamarca">
+        </div>
+
+        <div class="form-group">
+          <label for="redesAliado">Red social o página web</label>
+          <input type="text" id="redesAliado" placeholder="Instagram, Facebook o página web">
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="cantidadMascotas">Cantidad aproximada de mascotas a cargo</label>
+            <input type="number" id="cantidadMascotas" placeholder="Ejemplo: 15" min="0">
+          </div>
+
+          <div class="form-group">
+            <label for="experienciaAliado">Años de experiencia</label>
+            <input type="number" id="experienciaAliado" placeholder="Ejemplo: 3" min="0">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="descripcionAliado">Descripción del trabajo que realiza</label>
+          <textarea id="descripcionAliado" rows="5" placeholder="Cuéntanos qué tipo de rescates realizas, cómo ayudas a las mascotas o cómo funciona tu refugio..." required></textarea>
+        </div>
+
+        <div class="form-group">
+          <label for="documentoAliado">Documento o evidencia opcional</label>
+          <input type="file" id="documentoAliado" accept="image/*,.pdf">
+        </div>
+
+        <button type="submit" class="btn-submit">
+          Enviar solicitud de registro
+        </button>
+
+      </form>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="cta">
+    <h2>Únete a la red Huellink</h2>
+    <p>
+      Juntos podemos organizar rescates, adopciones y reportes de mascotas en una sola plataforma.
+    </p>
+    <a href="adoptar.html" class="btn-primary">Ver mascotas en adopción</a>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <p>© 2026 Huellink. Plataforma para adopción responsable y protección animal.</p>
+  </footer>
+
+  <script src="js/main.js"></script>
+</body>
+</html>

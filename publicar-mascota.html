@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>Publicar mascota | Huellink</title>
+
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+
+  <!-- ENCABEZADO -->
+  <header class="header">
+    <nav class="navbar">
+      <a href="index.html" class="logo-link">
+        <div class="logo">🐾 Huellink</div>
+      </a>
+
+      <ul class="nav-links">
+        <li><a href="index.html">Inicio</a></li>
+        <li><a href="adoptar.html">Adoptar</a></li>
+        <li><a href="reportar-perdida.html">Reportar</a></li>
+        <li><a href="refugios.html">Refugios</a></li>
+        <li><a href="dashboard.html">Panel</a></li>
+      </ul>
+
+      <a href="login.html" class="btn-login">Cerrar sesión</a>
+    </nav>
+  </header>
+
+  <!-- CABECERA -->
+  <section class="page-hero">
+    <span class="tag">Gestión de mascotas</span>
+    <h1>Publicar mascota en adopción</h1>
+    <p>
+      Registra una mascota rescatada para que pueda ser visible para ciudadanos,
+      adoptantes, refugios y rescatistas dentro de Huellink.
+    </p>
+  </section>
+
+  <!-- FORMULARIO -->
+  <section class="form-section">
+    <div class="form-container">
+
+      <div class="form-info">
+        <h2>Información recomendada</h2>
+        <p>
+          Mientras más completa sea la ficha de la mascota, más fácil será encontrar
+          un hogar responsable y adecuado para ella.
+        </p>
+
+        <ul>
+          <li>✔ Usa una foto clara.</li>
+          <li>✔ Indica edad aproximada.</li>
+          <li>✔ Describe su comportamiento.</li>
+          <li>✔ Señala vacunas, salud y cuidados especiales.</li>
+          <li>✔ Agrega ubicación aproximada.</li>
+        </ul>
+
+        <div class="info-box">
+          <h3>✅ Publicación responsable</h3>
+          <p>
+            La publicación puede quedar pendiente de revisión por el administrador
+            antes de mostrarse públicamente.
+          </p>
+        </div>
+      </div>
+
+      <form class="report-form" id="formPublicarMascota">
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="nombrePublicar">Nombre de la mascota</label>
+            <input type="text" id="nombrePublicar" placeholder="Ejemplo: Luna" required>
+          </div>
+
+          <div class="form-group">
+            <label for="tipoPublicar">Tipo de mascota</label>
+            <select id="tipoPublicar" required>
+              <option value="">Seleccionar</option>
+              <option value="perro">Perro</option>
+              <option value="gato">Gato</option>
+              <option value="otro">Otro</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="edadPublicar">Edad aproximada</label>
+            <input type="text" id="edadPublicar" placeholder="Ejemplo: 2 años / 5 meses" required>
+          </div>
+
+          <div class="form-group">
+            <label for="tamanoPublicar">Tamaño</label>
+            <select id="tamanoPublicar" required>
+              <option value="">Seleccionar</option>
+              <option value="pequeño">Pequeño</option>
+              <option value="mediano">Mediano</option>
+              <option value="grande">Grande</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="sexoPublicar">Sexo</label>
+            <select id="sexoPublicar" required>
+              <option value="">Seleccionar</option>
+              <option value="hembra">Hembra</option>
+              <option value="macho">Macho</option>
+              <option value="no-se">No sé</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="estadoPublicar">Estado actual</label>
+            <select id="estadoPublicar" required>
+              <option value="">Seleccionar</option>
+              <option value="rescatada">Rescatada</option>
+              <option value="recuperacion">En recuperación</option>
+              <option value="disponible">Disponible para adopción</option>
+              <option value="proceso">En proceso de adopción</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="vacunasPublicar">Vacunas</label>
+            <select id="vacunasPublicar" required>
+              <option value="">Seleccionar</option>
+              <option value="completas">Vacunas completas</option>
+              <option value="incompletas">Vacunas incompletas</option>
+              <option value="no">No vacunada</option>
+              <option value="no-se">No sé</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="saludPublicar">Estado de salud</label>
+            <select id="saludPublicar" required>
+              <option value="">Seleccionar</option>
+              <option value="sano">Aparentemente sano</option>
+              <option value="tratamiento">En tratamiento</option>
+              <option value="recuperacion">En recuperación</option>
+              <option value="especial">Requiere cuidado especial</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="comportamientoPublicar">Comportamiento</label>
+          <textarea id="comportamientoPublicar" rows="4" placeholder="Ejemplo: amigable con niños, tranquilo, juguetón, sociable con otros perros..." required></textarea>
+        </div>
+
+        <div class="form-group">
+          <label for="historiaPublicar">Historia o descripción</label>
+          <textarea id="historiaPublicar" rows="5" placeholder="Cuenta brevemente cómo fue rescatada o por qué busca hogar..." required></textarea>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="ciudadPublicar">Ciudad</label>
+            <input type="text" id="ciudadPublicar" placeholder="Ejemplo: Cajamarca" required>
+          </div>
+
+          <div class="form-group">
+            <label for="zonaPublicar">Zona o distrito</label>
+            <input type="text" id="zonaPublicar" placeholder="Ejemplo: Baños del Inca" required>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="responsablePublicar">Responsable de la mascota</label>
+          <input type="text" id="responsablePublicar" placeholder="Nombre del refugio o rescatista" required>
+        </div>
+
+        <div class="form-group">
+          <label for="fotoPublicar">Foto de la mascota</label>
+          <input type="file" id="fotoPublicar" accept="image/*">
+        </div>
+
+        <button type="submit" class="btn-submit">
+          Publicar mascota
+        </button>
+
+      </form>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <p>© 2026 Huellink. Plataforma para adopción responsable y protección animal.</p>
+  </footer>
+
+  <script src="js/main.js"></script>
+</body>
+</html>

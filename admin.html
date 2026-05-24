@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>Administrador | Huellink</title>
+
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+
+  <!-- ENCABEZADO -->
+  <header class="header">
+    <nav class="navbar">
+      <a href="index.html" class="logo-link">
+        <div class="logo">🐾 Huellink</div>
+      </a>
+
+      <ul class="nav-links">
+        <li><a href="index.html">Inicio</a></li>
+        <li><a href="adoptar.html">Adoptar</a></li>
+        <li><a href="reportes.html">Reportes</a></li>
+        <li><a href="refugios.html">Refugios</a></li>
+        <li><a href="dashboard.html">Panel</a></li>
+      </ul>
+
+      <a href="login.html" class="btn-login">Cerrar sesión</a>
+    </nav>
+  </header>
+
+  <!-- CABECERA -->
+  <section class="page-hero">
+    <span class="tag">Panel administrativo</span>
+    <h1>Administración de Huellink</h1>
+    <p>
+      Gestiona validaciones, publicaciones, reportes y estadísticas generales
+      de la plataforma.
+    </p>
+  </section>
+
+  <!-- ESTADÍSTICAS ADMIN -->
+  <section class="dashboard-stats admin-stats">
+    <div class="dashboard-stat-card">
+      <h2>12</h2>
+      <p>Validaciones pendientes</p>
+    </div>
+
+    <div class="dashboard-stat-card">
+      <h2>35</h2>
+      <p>Usuarios registrados</p>
+    </div>
+
+    <div class="dashboard-stat-card">
+      <h2>24</h2>
+      <p>Publicaciones activas</p>
+    </div>
+
+    <div class="dashboard-stat-card">
+      <h2>8</h2>
+      <p>Alertas recibidas</p>
+    </div>
+  </section>
+
+  <!-- VALIDACIÓN DE ALIADOS -->
+  <section class="section">
+    <div class="section-title">
+      <h2>Validación de refugios y rescatistas</h2>
+      <p>Solicitudes pendientes de revisión por el administrador.</p>
+    </div>
+
+    <div class="admin-list">
+
+      <div class="admin-card">
+        <div>
+          <h3>Patitas Cajamarca</h3>
+          <p><strong>Tipo:</strong> Refugio</p>
+          <p><strong>Ciudad:</strong> Cajamarca</p>
+          <p><strong>Responsable:</strong> María Torres</p>
+          <p><strong>Estado:</strong> Pendiente de validación</p>
+        </div>
+
+        <div class="admin-actions">
+          <button class="btn-approve">Aprobar</button>
+          <button class="btn-reject">Rechazar</button>
+        </div>
+      </div>
+
+      <div class="admin-card">
+        <div>
+          <h3>Rescate Animal Norte</h3>
+          <p><strong>Tipo:</strong> Rescatista independiente</p>
+          <p><strong>Ciudad:</strong> Trujillo</p>
+          <p><strong>Responsable:</strong> Carlos Mendoza</p>
+          <p><strong>Estado:</strong> Pendiente de validación</p>
+        </div>
+
+        <div class="admin-actions">
+          <button class="btn-approve">Aprobar</button>
+          <button class="btn-reject">Rechazar</button>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- PUBLICACIONES -->
+  <section class="section admin-section-bg">
+    <div class="section-title">
+      <h2>Publicaciones por revisar</h2>
+      <p>Mascotas publicadas que pueden requerir aprobación o revisión.</p>
+    </div>
+
+    <div class="admin-list">
+
+      <div class="admin-card">
+        <div>
+          <h3>Luna</h3>
+          <p><strong>Tipo:</strong> Perro</p>
+          <p><strong>Ciudad:</strong> Lima</p>
+          <p><strong>Publicado por:</strong> Refugio Vida Animal</p>
+          <p><strong>Estado:</strong> Pendiente</p>
+        </div>
+
+        <div class="admin-actions">
+          <button class="btn-approve">Aprobar</button>
+          <button class="btn-reject">Rechazar</button>
+        </div>
+      </div>
+
+      <div class="admin-card">
+        <div>
+          <h3>Michi</h3>
+          <p><strong>Tipo:</strong> Gato</p>
+          <p><strong>Ciudad:</strong> Cajamarca</p>
+          <p><strong>Publicado por:</strong> Rescatista independiente</p>
+          <p><strong>Estado:</strong> Pendiente</p>
+        </div>
+
+        <div class="admin-actions">
+          <button class="btn-approve">Aprobar</button>
+          <button class="btn-reject">Rechazar</button>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- REPORTES SOSPECHOSOS -->
+  <section class="section">
+    <div class="section-title">
+      <h2>Reportes y alertas</h2>
+      <p>Contenido reportado por usuarios o marcado para revisión.</p>
+    </div>
+
+    <div class="admin-list">
+
+      <div class="admin-card alert-card">
+        <div>
+          <h3>Publicación reportada</h3>
+          <p><strong>Motivo:</strong> Información incompleta</p>
+          <p><strong>Usuario:</strong> ciudadano01@gmail.com</p>
+          <p><strong>Tipo:</strong> Mascota encontrada</p>
+          <p><strong>Estado:</strong> En revisión</p>
+        </div>
+
+        <div class="admin-actions">
+          <button class="btn-approve">Marcar revisado</button>
+          <button class="btn-reject">Eliminar</button>
+        </div>
+      </div>
+
+      <div class="admin-card alert-card">
+        <div>
+          <h3>Usuario sospechoso</h3>
+          <p><strong>Motivo:</strong> Datos poco claros</p>
+          <p><strong>Usuario:</strong> usuario_test@gmail.com</p>
+          <p><strong>Tipo:</strong> Adoptante</p>
+          <p><strong>Estado:</strong> Pendiente</p>
+        </div>
+
+        <div class="admin-actions">
+          <button class="btn-approve">Mantener activo</button>
+          <button class="btn-reject">Bloquear</button>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="cta">
+    <h2>Control y seguridad de la plataforma</h2>
+    <p>
+      El administrador ayuda a mantener Huellink ordenado, confiable y seguro.
+    </p>
+    <a href="dashboard.html?rol=administrador" class="btn-primary">Volver al panel</a>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <p>© 2026 Huellink. Plataforma para adopción responsable y protección animal.</p>
+  </footer>
+
+  <script src="js/main.js"></script>
+</body>
+</html>

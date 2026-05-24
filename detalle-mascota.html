@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>Detalle de mascota | Huellink</title>
+
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+
+  <!-- ENCABEZADO -->
+  <header class="header">
+    <nav class="navbar">
+      <a href="index.html" class="logo-link">
+        <div class="logo">🐾 Huellink</div>
+      </a>
+
+      <ul class="nav-links">
+        <li><a href="index.html">Inicio</a></li>
+        <li><a href="adoptar.html">Adoptar</a></li>
+        <li><a href="reportes.html">Reportes</a></li>
+        <li><a href="refugios.html">Refugios</a></li>
+        <li><a href="dashboard.html">Panel</a></li>
+      </ul>
+
+      <a href="login.html" class="btn-login">Iniciar sesión</a>
+    </nav>
+  </header>
+
+  <!-- DETALLE -->
+  <main class="detalle-page">
+
+    <section class="detalle-card">
+
+      <div class="detalle-photo">
+        <div class="detalle-icon" id="detalleIcono">🐾</div>
+        <span id="detalleEstado" class="detalle-status">Disponible</span>
+      </div>
+
+      <div class="detalle-info">
+        <span class="tag">Ficha de adopción</span>
+
+        <h1 id="detalleNombre">Nombre de mascota</h1>
+
+        <p id="detalleResumen">
+          Información general de la mascota registrada en Huellink.
+        </p>
+
+        <div class="detalle-grid">
+
+          <div class="detalle-item">
+            <strong>Tipo</strong>
+            <span id="detalleTipo">-</span>
+          </div>
+
+          <div class="detalle-item">
+            <strong>Edad</strong>
+            <span id="detalleEdad">-</span>
+          </div>
+
+          <div class="detalle-item">
+            <strong>Tamaño</strong>
+            <span id="detalleTamano">-</span>
+          </div>
+
+          <div class="detalle-item">
+            <strong>Sexo</strong>
+            <span id="detalleSexo">-</span>
+          </div>
+
+          <div class="detalle-item">
+            <strong>Ciudad</strong>
+            <span id="detalleCiudad">-</span>
+          </div>
+
+          <div class="detalle-item">
+            <strong>Vacunas</strong>
+            <span id="detalleVacunas">-</span>
+          </div>
+
+        </div>
+
+        <div class="detalle-section">
+          <h3>Personalidad</h3>
+          <p id="detallePersonalidad">-</p>
+        </div>
+
+        <div class="detalle-section">
+          <h3>Historia</h3>
+          <p id="detalleHistoria">-</p>
+        </div>
+
+        <div class="detalle-section">
+          <h3>Responsable</h3>
+          <p id="detalleResponsable">-</p>
+        </div>
+
+        <div class="detalle-buttons">
+          <button class="btn-primary btn-detalle-adoptar" id="btnSolicitarDetalle">
+            Solicitar adopción
+          </button>
+
+          <a href="adoptar.html" class="btn-secondary">
+            Volver a mascotas
+          </a>
+        </div>
+
+      </div>
+
+    </section>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <p>© 2026 Huellink. Plataforma para adopción responsable y protección animal.</p>
+  </footer>
+
+  <script src="js/main.js"></script>
+</body>
+</html>

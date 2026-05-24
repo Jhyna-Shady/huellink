@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>Panel principal | Huellink</title>
+
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+
+  <!-- ENCABEZADO -->
+  <header class="header">
+    <nav class="navbar">
+      <a href="index.html" class="logo-link">
+        <div class="logo">🐾 Huellink</div>
+      </a>
+
+      <ul class="nav-links">
+        <li><a href="index.html">Inicio</a></li>
+        <li><a href="adoptar.html">Adoptar</a></li>
+        <li><a href="reportar-perdida.html">Reportar</a></li>
+        <li><a href="refugios.html">Refugios</a></li>
+        <li><a href="dashboard.html">Panel</a></li>
+      </ul>
+
+      <a href="login.html" class="btn-login">Cerrar sesión</a>
+    </nav>
+  </header>
+
+  <!-- DASHBOARD -->
+  <main class="dashboard">
+
+    <section class="dashboard-hero">
+      <div>
+        <span class="tag">Panel de usuario</span>
+        <h1 id="dashboardTitulo">Bienvenido a Huellink</h1>
+        <p id="dashboardDescripcion">
+          Gestiona adopciones, reportes, mascotas y solicitudes desde un solo lugar.
+        </p>
+      </div>
+
+      <div class="dashboard-profile">
+        <div class="profile-icon">🐾</div>
+        <h3 id="dashboardRol">Usuario</h3>
+        <p>Cuenta activa</p>
+      </div>
+    </section>
+
+    <!-- ESTADÍSTICAS -->
+    <section class="dashboard-stats">
+      <div class="dashboard-stat-card">
+        <h2 id="stat1">0</h2>
+        <p id="stat1Text">Solicitudes</p>
+      </div>
+
+      <div class="dashboard-stat-card">
+        <h2 id="stat2">0</h2>
+        <p id="stat2Text">Reportes</p>
+      </div>
+
+      <div class="dashboard-stat-card">
+        <h2 id="stat3">0</h2>
+        <p id="stat3Text">Mascotas</p>
+      </div>
+
+      <div class="dashboard-stat-card">
+        <h2 id="stat4">0</h2>
+        <p id="stat4Text">Pendientes</p>
+      </div>
+    </section>
+
+    <!-- ACCIONES -->
+    <section class="dashboard-section">
+      <div class="section-title">
+        <h2>Acciones disponibles</h2>
+        <p>Estas opciones cambian según el tipo de usuario.</p>
+      </div>
+
+      <div class="dashboard-grid" id="accionesDashboard">
+        <!-- Se llena con JavaScript -->
+      </div>
+    </section>
+
+    <!-- ACTIVIDAD RECIENTE -->
+    <section class="dashboard-section">
+      <div class="section-title">
+        <h2>Actividad reciente</h2>
+        <p>Resumen simulado de movimientos dentro de Huellink.</p>
+      </div>
+
+      <div class="activity-list" id="actividadDashboard">
+        <!-- Se llena con JavaScript -->
+      </div>
+    </section>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <p>© 2026 Huellink. Plataforma para adopción responsable y protección animal.</p>
+  </footer>
+
+  <script src="js/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>Reportes de mascotas | Huellink</title>
+
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+
+  <!-- ENCABEZADO -->
+  <header class="header">
+    <nav class="navbar">
+      <a href="index.html" class="logo-link">
+        <div class="logo">🐾 Huellink</div>
+      </a>
+
+      <ul class="nav-links">
+        <li><a href="index.html">Inicio</a></li>
+        <li><a href="adoptar.html">Adoptar</a></li>
+        <li><a href="reportes.html">Reportes</a></li>
+        <li><a href="refugios.html">Refugios</a></li>
+        <li><a href="dashboard.html">Panel</a></li>
+      </ul>
+
+      <a href="login.html" class="btn-login">Iniciar sesión</a>
+    </nav>
+  </header>
+
+  <!-- CABECERA -->
+  <section class="page-hero">
+    <span class="tag">Búsqueda y rescate</span>
+    <h1>Reportes de mascotas perdidas y encontradas</h1>
+    <p>
+      Consulta reportes registrados por ciudadanos, rescatistas y refugios.
+      Filtra por tipo, estado o ciudad para encontrar posibles coincidencias.
+    </p>
+  </section>
+
+  <!-- ACCIONES RÁPIDAS -->
+  <section class="quick-actions">
+    <a href="reportar-perdida.html" class="quick-card lost-action">
+      <h3>📍 Reportar perdida</h3>
+      <p>Registra una mascota extraviada.</p>
+    </a>
+
+    <a href="reportar-encontrada.html" class="quick-card found-action">
+      <h3>🔎 Reportar encontrada</h3>
+      <p>Publica una mascota hallada.</p>
+    </a>
+  </section>
+
+  <!-- FILTROS -->
+  <section class="filters-section">
+    <div class="filters-box reports-filter-box">
+
+      <div class="filter-group">
+        <label for="filtroReporteTipo">Tipo de mascota</label>
+        <select id="filtroReporteTipo">
+          <option value="todos">Todos</option>
+          <option value="perro">Perro</option>
+          <option value="gato">Gato</option>
+        </select>
+      </div>
+
+      <div class="filter-group">
+        <label for="filtroReporteEstado">Estado</label>
+        <select id="filtroReporteEstado">
+          <option value="todos">Todos</option>
+          <option value="perdida">Perdida</option>
+          <option value="encontrada">Encontrada</option>
+          <option value="coincidencia">Posible coincidencia</option>
+          <option value="reunida">Reunida con su dueño</option>
+        </select>
+      </div>
+
+      <div class="filter-group">
+        <label for="filtroReporteCiudad">Ciudad</label>
+        <select id="filtroReporteCiudad">
+          <option value="todos">Todas</option>
+          <option value="lima">Lima</option>
+          <option value="cajamarca">Cajamarca</option>
+          <option value="trujillo">Trujillo</option>
+        </select>
+      </div>
+
+      <button class="btn-filter" id="limpiarFiltrosReportes">
+        Limpiar filtros
+      </button>
+
+    </div>
+  </section>
+
+  <!-- LISTA DE REPORTES -->
+  <section class="section">
+    <div class="section-title">
+      <h2>Reportes registrados</h2>
+      <p>Listado simulado de mascotas perdidas y encontradas dentro de Huellink.</p>
+    </div>
+
+    <div class="reports-list" id="listaReportes">
+
+      <div class="report-item-card reporte" data-tipo="perro" data-estado="perdida" data-ciudad="cajamarca">
+        <div class="report-pet-icon">🐶</div>
+
+        <div class="report-content">
+          <div class="report-header">
+            <h3>Luna</h3>
+            <span class="report-badge badge-lost">Perdida</span>
+          </div>
+
+          <p><strong>Tipo:</strong> Perro · Mediana · Blanca con manchas marrones</p>
+          <p><strong>Zona:</strong> Baños del Inca, Cajamarca</p>
+          <p><strong>Fecha:</strong> 20/05/2026</p>
+          <p><strong>Descripción:</strong> Tiene collar rojo y responde al nombre de Luna.</p>
+
+          <button class="btn-match">Buscar coincidencias</button>
+        </div>
+      </div>
+
+      <div class="report-item-card reporte" data-tipo="perro" data-estado="encontrada" data-ciudad="cajamarca">
+        <div class="report-pet-icon">🐕</div>
+
+        <div class="report-content">
+          <div class="report-header">
+            <h3>Perro encontrado</h3>
+            <span class="report-badge badge-found">Encontrada</span>
+          </div>
+
+          <p><strong>Tipo:</strong> Perro · Mediano · Blanco con manchas marrones</p>
+          <p><strong>Zona:</strong> Cerca al mercado, Cajamarca</p>
+          <p><strong>Fecha:</strong> 21/05/2026</p>
+          <p><strong>Descripción:</strong> Se encontró con collar rojo y estaba asustado.</p>
+
+          <button class="btn-match">Buscar coincidencias</button>
+        </div>
+      </div>
+
+      <div class="report-item-card reporte" data-tipo="gato" data-estado="perdida" data-ciudad="lima">
+        <div class="report-pet-icon">🐱</div>
+
+        <div class="report-content">
+          <div class="report-header">
+            <h3>Michi</h3>
+            <span class="report-badge badge-lost">Perdida</span>
+          </div>
+
+          <p><strong>Tipo:</strong> Gato · Pequeño · Gris</p>
+          <p><strong>Zona:</strong> San Miguel, Lima</p>
+          <p><strong>Fecha:</strong> 18/05/2026</p>
+          <p><strong>Descripción:</strong> Gato gris, tranquilo, sin collar.</p>
+
+          <button class="btn-match">Buscar coincidencias</button>
+        </div>
+      </div>
+
+      <div class="report-item-card reporte" data-tipo="gato" data-estado="coincidencia" data-ciudad="lima">
+        <div class="report-pet-icon">🐈</div>
+
+        <div class="report-content">
+          <div class="report-header">
+            <h3>Gato encontrado</h3>
+            <span class="report-badge badge-match">Posible coincidencia</span>
+          </div>
+
+          <p><strong>Tipo:</strong> Gato · Pequeño · Gris</p>
+          <p><strong>Zona:</strong> Cerca de San Miguel, Lima</p>
+          <p><strong>Fecha:</strong> 19/05/2026</p>
+          <p><strong>Descripción:</strong> Coincide con un reporte de mascota perdida.</p>
+
+          <button class="btn-match">Ver coincidencia</button>
+        </div>
+      </div>
+
+      <div class="report-item-card reporte" data-tipo="perro" data-estado="reunida" data-ciudad="trujillo">
+        <div class="report-pet-icon">🦮</div>
+
+        <div class="report-content">
+          <div class="report-header">
+            <h3>Max</h3>
+            <span class="report-badge badge-reunited">Reunida</span>
+          </div>
+
+          <p><strong>Tipo:</strong> Perro · Pequeño · Marrón</p>
+          <p><strong>Zona:</strong> Centro de Trujillo</p>
+          <p><strong>Fecha:</strong> 16/05/2026</p>
+          <p><strong>Descripción:</strong> La mascota fue reunida con su familia.</p>
+
+          <button class="btn-match">Ver historial</button>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="no-results" id="noResultsReportes">
+      <h3>No encontramos reportes con esos filtros 🐾</h3>
+      <p>Prueba cambiando el tipo, ciudad o estado del reporte.</p>
+    </div>
+  </section>
+
+  <!-- POSIBLES COINCIDENCIAS -->
+  <section class="section match-section">
+    <div class="section-title">
+      <h2>Coincidencias sugeridas</h2>
+      <p>Ejemplo de cómo Huellink puede comparar mascotas perdidas y encontradas.</p>
+    </div>
+
+    <div class="match-card">
+      <div class="match-column">
+        <h3>📍 Reporte perdido</h3>
+        <p><strong>Luna</strong></p>
+        <p>Perro mediano, blanco con manchas marrones, collar rojo.</p>
+        <p>Zona: Baños del Inca, Cajamarca.</p>
+      </div>
+
+      <div class="match-center">
+        <span>↔</span>
+        <p>85% coincidencia</p>
+      </div>
+
+      <div class="match-column">
+        <h3>🔎 Reporte encontrado</h3>
+        <p><strong>Perro encontrado</strong></p>
+        <p>Perro mediano, blanco con manchas marrones, collar rojo.</p>
+        <p>Zona: mercado central, Cajamarca.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <p>© 2026 Huellink. Plataforma para adopción responsable y protección animal.</p>
+  </footer>
+
+  <script src="js/main.js"></script>
+</body>
+</html>

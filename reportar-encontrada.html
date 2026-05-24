@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>Reportar mascota encontrada | Huellink</title>
+
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+
+  <!-- ENCABEZADO -->
+  <header class="header">
+    <nav class="navbar">
+      <a href="index.html" class="logo-link">
+        <div class="logo">🐾 Huellink</div>
+      </a>
+
+      <ul class="nav-links">
+        <li><a href="index.html">Inicio</a></li>
+        <li><a href="adoptar.html">Adoptar</a></li>
+        <li><a href="reportar-perdida.html">Reportar</a></li>
+        <li><a href="#">Refugios</a></li>
+        <li><a href="index.html#funciona">Cómo funciona</a></li>
+      </ul>
+
+      <a href="login.html" class="btn-login">Iniciar sesión</a>
+    </nav>
+  </header>
+
+  <!-- CABECERA -->
+  <section class="page-hero">
+    <span class="tag">Mascota encontrada</span>
+    <h1>Reportar mascota encontrada</h1>
+    <p>
+      Si encontraste una mascota en la calle, registra sus características
+      y ubicación aproximada para ayudar a reunirla con su familia.
+    </p>
+  </section>
+
+  <!-- FORMULARIO -->
+  <section class="form-section">
+    <div class="form-container">
+
+      <div class="form-info">
+        <h2>Ayuda a encontrar a su familia</h2>
+        <p>
+          Publica un reporte claro para que el posible dueño, rescatistas
+          o refugios puedan identificar a la mascota encontrada.
+        </p>
+
+        <ul>
+          <li>✔ Sube una foto clara.</li>
+          <li>✔ Indica la zona donde la encontraste.</li>
+          <li>✔ Describe color, tamaño y estado físico.</li>
+          <li>✔ Señala si tenía collar o alguna marca especial.</li>
+        </ul>
+
+        <div class="info-box">
+          <h3>📍 Ubicación segura</h3>
+          <p>
+            No publiques la dirección exacta de tu casa. Usa una ubicación
+            aproximada, avenida, parque o punto de referencia.
+          </p>
+        </div>
+      </div>
+
+      <form class="report-form" id="formEncontrada">
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="tipoEncontrada">Tipo de mascota</label>
+            <select id="tipoEncontrada" required>
+              <option value="">Seleccionar</option>
+              <option value="perro">Perro</option>
+              <option value="gato">Gato</option>
+              <option value="otro">Otro</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="colorEncontrada">Color</label>
+            <input type="text" id="colorEncontrada" placeholder="Ejemplo: marrón con blanco" required>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="tamanoEncontrada">Tamaño</label>
+            <select id="tamanoEncontrada" required>
+              <option value="">Seleccionar</option>
+              <option value="pequeño">Pequeño</option>
+              <option value="mediano">Mediano</option>
+              <option value="grande">Grande</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="sexoEncontrada">Sexo</label>
+            <select id="sexoEncontrada">
+              <option value="">No sé / No especificar</option>
+              <option value="hembra">Hembra</option>
+              <option value="macho">Macho</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="estadoEncontrada">Estado físico</label>
+            <select id="estadoEncontrada" required>
+              <option value="">Seleccionar</option>
+              <option value="sano">Aparentemente sano</option>
+              <option value="herido">Herido</option>
+              <option value="asustado">Asustado</option>
+              <option value="desnutrido">Desnutrido</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="fechaEncontrada">Fecha encontrada</label>
+            <input type="date" id="fechaEncontrada" required>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="collarEncontrada">¿Tiene collar o identificación?</label>
+          <select id="collarEncontrada">
+            <option value="">Seleccionar</option>
+            <option value="si">Sí tiene collar o placa</option>
+            <option value="no">No tiene collar</option>
+            <option value="no-se">No estoy seguro/a</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="zonaEncontrada">Zona donde fue encontrada</label>
+          <input type="text" id="zonaEncontrada" placeholder="Ejemplo: Av. Hoyos Rubio, Cajamarca" required>
+        </div>
+
+        <div class="form-group">
+          <label for="referenciaEncontrada">Referencia</label>
+          <input type="text" id="referenciaEncontrada" placeholder="Ejemplo: cerca del parque, mercado o colegio">
+        </div>
+
+        <div class="form-group">
+          <label for="descripcionEncontrada">Descripción adicional</label>
+          <textarea id="descripcionEncontrada" rows="5" placeholder="Ejemplo: estaba cerca del parque, tenía collar azul, parecía asustada..." required></textarea>
+        </div>
+
+        <div class="form-group">
+          <label for="fotoEncontrada">Foto de la mascota</label>
+          <input type="file" id="fotoEncontrada" accept="image/*">
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="nombreReportante">Nombre de quien reporta</label>
+            <input type="text" id="nombreReportante" placeholder="Tu nombre" required>
+          </div>
+
+          <div class="form-group">
+            <label for="telefonoReportante">Celular</label>
+            <input type="tel" id="telefonoReportante" placeholder="Ejemplo: 987654321" required>
+          </div>
+        </div>
+
+        <button type="submit" class="btn-submit">
+          Publicar reporte encontrado
+        </button>
+
+      </form>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <p>© 2026 Huellink. Plataforma para adopción responsable y protección animal.</p>
+  </footer>
+
+  <script src="js/main.js"></script>
+</body>
+</html>

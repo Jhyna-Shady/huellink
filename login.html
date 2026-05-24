@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>Iniciar sesión | Huellink</title>
+
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+
+  <!-- ENCABEZADO -->
+  <header class="header">
+    <nav class="navbar">
+      <a href="index.html" class="logo-link">
+        <div class="logo">🐾 Huellink</div>
+      </a>
+
+      <ul class="nav-links">
+        <li><a href="index.html">Inicio</a></li>
+        <li><a href="adoptar.html">Adoptar</a></li>
+        <li><a href="reportar-perdida.html">Reportar</a></li>
+        <li><a href="refugios.html">Refugios</a></li>
+        <li><a href="index.html#funciona">Cómo funciona</a></li>
+      </ul>
+
+      <a href="registro.html" class="btn-login">Registrarse</a>
+    </nav>
+  </header>
+
+  <!-- LOGIN -->
+  <section class="auth-section">
+    <div class="auth-card">
+
+      <div class="auth-header">
+        <span class="auth-icon">🐾</span>
+        <h1>Iniciar sesión</h1>
+        <p>Accede a tu cuenta para gestionar adopciones, reportes o solicitudes.</p>
+      </div>
+
+      <form class="auth-form" id="formLogin">
+
+        <div class="form-group">
+          <label for="correoLogin">Correo electrónico</label>
+          <input type="email" id="correoLogin" placeholder="correo@ejemplo.com" required>
+        </div>
+
+        <div class="form-group">
+          <label for="passwordLogin">Contraseña</label>
+          <input type="password" id="passwordLogin" placeholder="Ingresa tu contraseña" required>
+        </div>
+
+        <div class="form-group">
+          <label for="rolLogin">Tipo de usuario</label>
+          <select id="rolLogin" required>
+            <option value="">Seleccionar</option>
+            <option value="ciudadano">Adoptante / Ciudadano</option>
+            <option value="rescatista">Rescatista</option>
+            <option value="refugio">Refugio</option>
+            <option value="administrador">Administrador</option>
+          </select>
+        </div>
+
+        <button type="submit" class="btn-submit">
+          Ingresar
+        </button>
+
+      </form>
+
+      <div class="auth-footer">
+        <p>¿Aún no tienes cuenta?</p>
+        <a href="registro.html">Crear cuenta nueva</a>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <p>© 2026 Huellink. Plataforma para adopción responsable y protección animal.</p>
+  </footer>
+
+  <script src="js/main.js"></script>
+</body>
+</html>

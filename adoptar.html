@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>Adoptar | Huellink</title>
+
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+
+  <!-- ENCABEZADO -->
+  <header class="header">
+    <nav class="navbar">
+      <a href="index.html" class="logo-link">
+        <div class="logo">🐾 Huellink</div>
+      </a>
+
+      <ul class="nav-links">
+        <li><a href="index.html">Inicio</a></li>
+        <li><a href="adoptar.html">Adoptar</a></li>
+        <li><a href="#">Reportar</a></li>
+        <li><a href="#">Refugios</a></li>
+        <li><a href="#">Cómo funciona</a></li>
+      </ul>
+
+      <a href="login.html" class="btn-login">Iniciar sesión</a>
+    </nav>
+  </header>
+
+  <!-- CABECERA DE PÁGINA -->
+  <section class="page-hero">
+    <span class="tag">Mascotas disponibles</span>
+    <h1>Encuentra una mascota para adoptar</h1>
+    <p>
+      Explora perros y gatos registrados por refugios y rescatistas.
+      Filtra por tipo, ciudad, tamaño y edad.
+    </p>
+  </section>
+
+  <!-- FILTROS -->
+  <section class="filters-section">
+    <div class="filters-box">
+      <div class="filter-group">
+        <label for="tipo">Tipo</label>
+        <select id="tipo">
+          <option value="todos">Todos</option>
+          <option value="perro">Perro</option>
+          <option value="gato">Gato</option>
+        </select>
+      </div>
+
+      <div class="filter-group">
+        <label for="ciudad">Ciudad</label>
+        <select id="ciudad">
+          <option value="todos">Todas</option>
+          <option value="lima">Lima</option>
+          <option value="cajamarca">Cajamarca</option>
+          <option value="trujillo">Trujillo</option>
+        </select>
+      </div>
+
+      <div class="filter-group">
+        <label for="tamano">Tamaño</label>
+        <select id="tamano">
+          <option value="todos">Todos</option>
+          <option value="pequeño">Pequeño</option>
+          <option value="mediano">Mediano</option>
+          <option value="grande">Grande</option>
+        </select>
+      </div>
+
+      <div class="filter-group">
+        <label for="edad">Edad</label>
+        <select id="edad">
+          <option value="todos">Todas</option>
+          <option="edad">Edad</label>
+        <select id="edad">
+          <option value="todos">Todas</option>
+          <option="edad">Edad</label>
+        <select id="edad">
+          <option value="todos">Todas</option>
+          <option value="cachorro">Cachorro</option>
+          <option value="adulto">Adulto</option>
+        </select>
+      </div>
+
+      <button class="btn-filter" id="limpiarFiltros">Limpiar filtros</button>
+    </div>
+  </section>
+
+  <!-- LISTA DE MASCOTAS -->
+  <section class="section">
+    <div class="section-title">
+      <h2>Mascotas que buscan hogar</h2>
+      <p>Estas mascotas están disponibles para iniciar un proceso de adopción responsable.</p>
+    </div>
+
+    <div class="pets-grid adoption-list">
+
+      <div class="pet-card mascota" data-tipo="perro" data-ciudad="lima" data-tamano="mediano" data-edad="adulto">
+        <div class="pet-photo">🐶</div>
+        <h3>Luna</h3>
+        <p>Perrita · 2 años · Lima</p>
+        <span>Vacunada</span>
+        <div class="pet-info">
+          <small>Mediana · Amigable con niños</small>
+        </div>
+        <button class="btn-detalle">Ver detalle</button>
+        <button class="btn-adoptar">Solicitar adopción</button>
+      </div>
+
+      <div class="pet-card mascota" data-tipo="gato" data-ciudad="cajamarca" data-tamano="pequeño" data-edad="adulto">
+        <div class="pet-photo">🐱</div>
+        <h3>Michi</h3>
+        <p>Gatito · 1 año · Cajamarca</p>
+        <span>Esterilizado</span>
+        <div class="pet-info">
+          <small>Pequeño · Tranquilo</small>
+        </div>
+        <button class="btn-detalle">Ver detalle</button>
+        <button class="btn-adoptar">Solicitar adopción</button>
+      </div>
+
+      <div class="pet-card mascota" data-tipo="perro" data-ciudad="trujillo" data-tamano="pequeño" data-edad="cachorro">
+        <div class="pet-photo">🐕</div>
+        <h3>Toby</h3>
+        <p>Perrito · 4 meses · Trujillo</p>
+        <span>Juguetón</span>
+        <div class="pet-info">
+          <small>Pequeño · Energético</small>
+        </div>
+        <button class="btn-detalle">Ver detalle</button>
+        <button class="btn-adoptar">Solicitar adopción</button>
+      </div>
+
+      <div class="pet-card mascota" data-tipo="perro" data-ciudad="cajamarca" data-tamano="grande" data-edad="adulto">
+        <div class="pet-photo">🐩</div>
+        <h3>Rocky</h3>
+        <p>Perro · 3 años · Cajamarca</p>
+        <span>En recuperación</span>
+        <div class="pet-info">
+          <small>Grande · Protector</small>
+        </div>
+        <button class="btn-detalle">Ver detalle</button>
+        <button class="btn-adoptar">Solicitar adopción</button>
+      </div>
+
+      <div class="pet-card mascota" data-tipo="gato" data-ciudad="lima" data-tamano="pequeño" data-edad="cachorro">
+        <div class="pet-photo">🐈</div>
+        <h3>Nala</h3>
+        <p>Gatita · 5 meses · Lima</p>
+        <span>Desparasitada</span>
+        <div class="pet-info">
+          <small>Pequeña · Cariñosa</small>
+        </div>
+        <button class="btn-detalle">Ver detalle</button>
+        <button class="btn-adoptar">Solicitar adopción</button>
+      </div>
+
+      <div class="pet-card mascota" data-tipo="perro" data-ciudad="lima" data-tamano="mediano" data-edad="cachorro">
+        <div class="pet-photo">🦮</div>
+        <h3>Max</h3>
+        <p>Perrito · 8 meses · Lima</p>
+        <span>Vacunado</span>
+        <div class="pet-info">
+          <small>Mediano · Sociable</small>
+        </div>
+        <button class="btn-detalle">Ver detalle</button>
+        <button class="btn-adoptar">Solicitar adopción</button>
+      </div>
+
+    </div>
+
+    <div class="no-results" id="noResults">
+      <h3>No encontramos mascotas con esos filtros 🐾</h3>
+      <p>Prueba cambiando la ciudad, tipo, tamaño o edad.</p>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="cta">
+    <h2>¿Encontraste una mascota ideal?</h2>
+    <p>
+      Inicia una solicitud de adopción y el refugio o rescatista revisará tu caso.
+    </p>
+    <a href="#" class="btn-primary">Completar solicitud</a>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <p>© 2026 Huellink. Plataforma para adopción responsable y protección animal.</p>
+  </footer>
+
+  <script src="js/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>Solicitud de adopción | Huellink</title>
+
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+
+  <!-- ENCABEZADO -->
+  <header class="header">
+    <nav class="navbar">
+      <a href="index.html" class="logo-link">
+        <div class="logo">🐾 Huellink</div>
+      </a>
+
+      <ul class="nav-links">
+        <li><a href="index.html">Inicio</a></li>
+        <li><a href="adoptar.html">Adoptar</a></li>
+        <li><a href="reportar-perdida.html">Reportar</a></li>
+        <li><a href="refugios.html">Refugios</a></li>
+        <li><a href="dashboard.html">Panel</a></li>
+      </ul>
+
+      <a href="login.html" class="btn-login">Iniciar sesión</a>
+    </nav>
+  </header>
+
+  <!-- CABECERA -->
+  <section class="page-hero">
+    <span class="tag">Adopción responsable</span>
+    <h1>Solicitud de adopción</h1>
+    <p>
+      Completa este formulario para que el refugio o rescatista pueda evaluar
+      si eres un buen hogar para la mascota.
+    </p>
+  </section>
+
+  <!-- FORMULARIO -->
+  <section class="form-section">
+    <div class="form-container">
+
+      <div class="form-info">
+        <h2>Antes de adoptar</h2>
+        <p>
+          Adoptar una mascota es un compromiso de cuidado, tiempo, alimentación,
+          salud y seguimiento. La información será revisada por el refugio o rescatista.
+        </p>
+
+        <ul>
+          <li>✔ Responde con sinceridad.</li>
+          <li>✔ Indica tu experiencia con mascotas.</li>
+          <li>✔ Describe tu vivienda y disponibilidad.</li>
+          <li>✔ Acepta el seguimiento post adopción.</li>
+        </ul>
+
+        <div class="info-box">
+          <h3>🐾 Seguimiento</h3>
+          <p>
+            Huellink promueve adopciones responsables. Por eso, después de la adopción,
+            el refugio o rescatista podrá solicitar fotos o controles de bienestar.
+          </p>
+        </div>
+      </div>
+
+      <form class="report-form" id="formSolicitudAdopcion">
+
+        <div class="form-group">
+          <label for="mascotaSolicitud">Mascota que deseas adoptar</label>
+          <input type="text" id="mascotaSolicitud" placeholder="Ejemplo: Luna" required>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="nombreAdoptante">Nombre completo</label>
+            <input type="text" id="nombreAdoptante" placeholder="Tu nombre completo" required>
+          </div>
+
+          <div class="form-group">
+            <label for="dniAdoptante">DNI</label>
+            <input type="text" id="dniAdoptante" placeholder="Ejemplo: 12345678" maxlength="8" required>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="correoAdoptante">Correo electrónico</label>
+            <input type="email" id="correoAdoptante" placeholder="correo@ejemplo.com" required>
+          </div>
+
+          <div class="form-group">
+            <label for="telefonoAdoptante">Celular</label>
+            <input type="tel" id="telefonoAdoptante" placeholder="Ejemplo: 987654321" required>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="ciudadAdoptante">Ciudad</label>
+            <input type="text" id="ciudadAdoptante" placeholder="Ejemplo: Cajamarca" required>
+          </div>
+
+          <div class="form-group">
+            <label for="distritoAdoptante">Distrito</label>
+            <input type="text" id="distritoAdoptante" placeholder="Ejemplo: Baños del Inca" required>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="tipoVivienda">Tipo de vivienda</label>
+          <select id="tipoVivienda" required>
+            <option value="">Seleccionar</option>
+            <option value="casa">Casa</option>
+            <option value="departamento">Departamento</option>
+            <option value="habitacion">Habitación alquilada</option>
+            <option value="otro">Otro</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="viviendaPropia">¿La vivienda es propia o alquilada?</label>
+          <select id="viviendaPropia" required>
+            <option value="">Seleccionar</option>
+            <option value="propia">Propia</option>
+            <option value="alquilada">Alquilada</option>
+            <option value="familiar">Familiar</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="otrasMascotas">¿Tienes otras mascotas?</label>
+          <select id="otrasMascotas" required>
+            <option value="">Seleccionar</option>
+            <option value="si">Sí</option>
+            <option value="no">No</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="experienciaMascotas">Experiencia con mascotas</label>
+          <textarea id="experienciaMascotas" rows="4" placeholder="Cuéntanos si antes tuviste perros, gatos u otras mascotas..." required></textarea>
+        </div>
+
+        <div class="form-group">
+          <label for="motivoAdopcion">¿Por qué deseas adoptar?</label>
+          <textarea id="motivoAdopcion" rows="5" placeholder="Explica brevemente tu motivo de adopción..." required></textarea>
+        </div>
+
+        <div class="form-group">
+          <label for="tiempoDisponible">Tiempo disponible para la mascota</label>
+          <select id="tiempoDisponible" required>
+            <option value="">Seleccionar</option>
+            <option value="alto">Alto: estoy varias horas en casa</option>
+            <option value="medio">Medio: trabajo/estudio, pero puedo cuidarla</option>
+            <option value="bajo">Bajo: casi no estoy en casa</option>
+          </select>
+        </div>
+
+        <div class="form-check">
+          <input type="checkbox" id="compromisoCuidado" required>
+          <label for="compromisoCuidado">
+            Me comprometo a brindar alimentación, atención veterinaria, cuidado y buen trato a la mascota.
+          </label>
+        </div>
+
+        <div class="form-check">
+          <input type="checkbox" id="aceptaSeguimiento" required>
+          <label for="aceptaSeguimiento">
+            Acepto el seguimiento post adopción por parte del refugio o rescatista responsable.
+          </label>
+        </div>
+
+        <button type="submit" class="btn-submit">
+          Enviar solicitud de adopción
+        </button>
+
+      </form>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <p>© 2026 Huellink. Plataforma para adopción responsable y protección animal.</p>
+  </footer>
+
+  <script src="js/main.js"></script>
+</body>
+</html>

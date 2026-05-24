@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>Seguimiento post adopción | Huellink</title>
+
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+
+  <!-- ENCABEZADO -->
+  <header class="header">
+    <nav class="navbar">
+      <a href="index.html" class="logo-link">
+        <div class="logo">🐾 Huellink</div>
+      </a>
+
+      <ul class="nav-links">
+        <li><a href="index.html">Inicio</a></li>
+        <li><a href="adoptar.html">Adoptar</a></li>
+        <li><a href="reportar-perdida.html">Reportar</a></li>
+        <li><a href="refugios.html">Refugios</a></li>
+        <li><a href="dashboard.html">Panel</a></li>
+      </ul>
+
+      <a href="login.html" class="btn-login">Cerrar sesión</a>
+    </nav>
+  </header>
+
+  <!-- CABECERA -->
+  <section class="page-hero">
+    <span class="tag">Adopción responsable</span>
+    <h1>Seguimiento post adopción</h1>
+    <p>
+      Registra controles después de la adopción para verificar el bienestar
+      de la mascota y mantener un historial responsable.
+    </p>
+  </section>
+
+  <!-- FORMULARIO -->
+  <section class="form-section">
+    <div class="form-container">
+
+      <div class="form-info">
+        <h2>¿Por qué hacer seguimiento?</h2>
+        <p>
+          El seguimiento permite verificar que la mascota se adapte bien a su nuevo hogar
+          y que reciba alimentación, cuidado, atención veterinaria y buen trato.
+        </p>
+
+        <ul>
+          <li>✔ Registra observaciones del adoptante.</li>
+          <li>✔ Controla el estado de bienestar.</li>
+          <li>✔ Programa próximas revisiones.</li>
+          <li>✔ Guarda evidencia fotográfica.</li>
+        </ul>
+
+        <div class="info-box">
+          <h3>✅ Control responsable</h3>
+          <p>
+            Esta función ayuda a reducir el riesgo de abandono o adopciones irresponsables.
+          </p>
+        </div>
+      </div>
+
+      <form class="report-form" id="formSeguimiento">
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="mascotaSeguimiento">Nombre de la mascota</label>
+            <input type="text" id="mascotaSeguimiento" placeholder="Ejemplo: Luna" required>
+          </div>
+
+          <div class="form-group">
+            <label for="adoptanteSeguimiento">Nombre del adoptante</label>
+            <input type="text" id="adoptanteSeguimiento" placeholder="Nombre del adoptante" required>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="fechaAdopcion">Fecha de adopción</label>
+            <input type="date" id="fechaAdopcion" required>
+          </div>
+
+          <div class="form-group">
+            <label for="fechaSeguimiento">Fecha de seguimiento</label>
+            <input type="date" id="fechaSeguimiento" required>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="tipoSeguimiento">Tipo de seguimiento</label>
+          <select id="tipoSeguimiento" required>
+            <option value="">Seleccionar</option>
+            <option value="primera-semana">Primera semana</option>
+            <option value="primer-mes">Primer mes</option>
+            <option value="tres-meses">Tres meses</option>
+            <option value="seis-meses">Seis meses</option>
+            <option value="extraordinario">Seguimiento extraordinario</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="estadoMascota">Estado actual de la mascota</label>
+          <select id="estadoMascota" required>
+            <option value="">Seleccionar</option>
+            <option value="excelente">Excelente</option>
+            <option value="bueno">Bueno</option>
+            <option value="regular">Regular</option>
+            <option value="requiere-atencion">Requiere atención</option>
+            <option value="riesgo">Situación de riesgo</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="alimentacionSeguimiento">Alimentación</label>
+          <select id="alimentacionSeguimiento" required>
+            <option value="">Seleccionar</option>
+            <option value="adecuada">Adecuada</option>
+            <option value="regular">Regular</option>
+            <option value="inadecuada">Inadecuada</option>
+            <option value="no-verificada">No verificada</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="saludSeguimiento">Salud y atención veterinaria</label>
+          <textarea id="saludSeguimiento" rows="4" placeholder="Ejemplo: está sano, recibió control veterinario, tiene vacunas pendientes..." required></textarea>
+        </div>
+
+        <div class="form-group">
+          <label for="adaptacionSeguimiento">Adaptación al hogar</label>
+          <textarea id="adaptacionSeguimiento" rows="4" placeholder="Ejemplo: se adaptó bien, convive con niños, juega con otras mascotas..." required></textarea>
+        </div>
+
+        <div class="form-group">
+          <label for="observacionesSeguimiento">Observaciones generales</label>
+          <textarea id="observacionesSeguimiento" rows="5" placeholder="Registra cualquier comentario importante del seguimiento..." required></textarea>
+        </div>
+
+        <div class="form-group">
+          <label for="proximaRevision">Próxima revisión</label>
+          <input type="date" id="proximaRevision">
+        </div>
+
+        <div class="form-group">
+          <label for="fotoSeguimiento">Foto de seguimiento</label>
+          <input type="file" id="fotoSeguimiento" accept="image/*">
+        </div>
+
+        <button type="submit" class="btn-submit">
+          Guardar seguimiento
+        </button>
+
+      </form>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <p>© 2026 Huellink. Plataforma para adopción responsable y protección animal.</p>
+  </footer>
+
+  <script src="js/main.js"></script>
+</body>
+</html>

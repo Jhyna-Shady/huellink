@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>Registrarse | Huellink</title>
+
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+
+  <!-- ENCABEZADO -->
+  <header class="header">
+    <nav class="navbar">
+      <a href="index.html" class="logo-link">
+        <div class="logo">🐾 Huellink</div>
+      </a>
+
+      <ul class="nav-links">
+        <li><a href="index.html">Inicio</a></li>
+        <li><a href="adoptar.html">Adoptar</a></li>
+        <li><a href="reportar-perdida.html">Reportar</a></li>
+        <li><a href="refugios.html">Refugios</a></li>
+        <li><a href="index.html#funciona">Cómo funciona</a></li>
+      </ul>
+
+      <a href="login.html" class="btn-login">Iniciar sesión</a>
+    </nav>
+  </header>
+
+  <!-- REGISTRO -->
+  <section class="auth-section">
+    <div class="auth-card auth-card-large">
+
+      <div class="auth-header">
+        <span class="auth-icon">🐶</span>
+        <h1>Crear cuenta</h1>
+        <p>Regístrate para adoptar, reportar mascotas o participar como aliado.</p>
+      </div>
+
+      <form class="auth-form" id="formRegistro">
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="nombreRegistro">Nombre completo</label>
+            <input type="text" id="nombreRegistro" placeholder="Tu nombre" required>
+          </div>
+
+          <div class="form-group">
+            <label for="correoRegistro">Correo electrónico</label>
+            <input type="email" id="correoRegistro" placeholder="correo@ejemplo.com" required>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="telefonoRegistro">Celular</label>
+            <input type="tel" id="telefonoRegistro" placeholder="Ejemplo: 987654321" required>
+          </div>
+
+          <div class="form-group">
+            <label for="ciudadRegistro">Ciudad</label>
+            <input type="text" id="ciudadRegistro" placeholder="Ejemplo: Cajamarca" required>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="rolRegistro">Tipo de usuario</label>
+          <select id="rolRegistro" required>
+            <option value="">Seleccionar</option>
+            <option value="ciudadano">Adoptante / Ciudadano</option>
+            <option value="rescatista">Rescatista</option>
+            <option value="refugio">Refugio</option>
+          </select>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="passwordRegistro">Contraseña</label>
+            <input type="password" id="passwordRegistro" placeholder="Crear contraseña" required>
+          </div>
+
+          <div class="form-group">
+            <label for="confirmarPassword">Confirmar contraseña</label>
+            <input type="password" id="confirmarPassword" placeholder="Repetir contraseña" required>
+          </div>
+        </div>
+
+        <div class="form-check">
+          <input type="checkbox" id="terminosRegistro" required>
+          <label for="terminosRegistro">
+            Acepto que mis datos sean usados para gestionar adopciones, reportes y comunicación dentro de Huellink.
+          </label>
+        </div>
+
+        <button type="submit" class="btn-submit">
+          Crear cuenta
+        </button>
+
+      </form>
+
+      <div class="auth-footer">
+        <p>¿Ya tienes una cuenta?</p>
+        <a href="login.html">Iniciar sesión</a>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <p>© 2026 Huellink. Plataforma para adopción responsable y protección animal.</p>
+  </footer>
+
+  <script src="js/main.js"></script>
+</body>
+</html>

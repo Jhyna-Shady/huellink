@@ -240,48 +240,121 @@ if (formAliado) {
     window.location.href = "index.html";
   });
 }
-// FORMULARIO LOGIN
+// FORMULARIO LOGIN CON SUPABASE AUTH
 const formLogin = document.getElementById("formLogin");
 
 if (formLogin) {
-  formLogin.addEventListener("submit", (e) => {
+  formLogin.addEventListener("submit", async (e) => {
     e.preventDefault();
 
+    if (typeof db === "undefined") {
+      alert("Supabase no está cargado. Revisa los scripts en login.html");
+      return;
+    }
+
     const correoLogin = document.getElementById("correoLogin").value;
-    const rolLogin = document.getElementById("rolLogin").value;
+    const passwordLogin = document.getElementById("passwordLogin").value;
 
-    localStorage.setItem("huellinkCorreo", correoLogin);
-    localStorage.setItem("huellinkRol", rolLogin);
+    const { data, error } = await db.auth.signInWithPassword({
+      email: correoLogin,
+      password: passwordLogin
+    });
 
-    window.location.href = `dashboard.html?rol=${rolLogin}`;
+    if (error) {
+      alert("Error al iniciar sesión: " + error.message);
+      return;
+    }
+
+    const user = data.user;
+
+    const { data: perfil, error: errorPerfil } = await db
+      .from("perfiles")
+      .select("*")
+      .eq("id", user.id)
+      .single();
+
+    if (errorPerfil) {
+      alert("No se pudo cargar el perfil del usuario: " + errorPerfil.message);
+      return;
+    }
+
+    localStorage.setItem("huellinkCorreo", perfil.correo);
+    localStorage.setItem("huellinkRol", perfil.rol);
+    localStorage.setItem("huellinkNombre", perfil.nombre);
+
+    window.location.href = `dashboard.html?rol=${perfil.rol}`;
   });
 }
-// FORMULARIO REGISTRO
+// FORMULARIO REGISTRO CON SUPABASE AUTH
 const formRegistro = document.getElementById("formRegistro");
 
 if (formRegistro) {
-  formRegistro.addEventListener("submit", (e) => {
+  formRegistro.addEventListener("submit", async (e) => {
     e.preventDefault();
 
-    const nombreRegistro = document.getElementById("nombreRegistro").value;
-    const correoRegistro = document.getElementById("correoRegistro").value;
-    const rolRegistro = document.getElementById("rolRegistro").value;
-    const passwordRegistro = document.getElementById("passwordRegistro").value;
+    if (typeof db === "undefined") {
+      alert("Supabase no está cargado. Revisa los scripts en registro.html");
+      return;
+    }
+
+    const nombre = document.getElementById("nombreRegistro").value;
+    const correo = document.getElementById("correoRegistro").value;
+    const telefono = document.getElementById("telefonoRegistro").value;
+    const ciudad = document.getElementById("ciudadRegistro").value;
+    const rol = document.getElementById("rolRegistro").value;
+    const password = document.getElementById("passwordRegistro").value;
     const confirmarPassword = document.getElementById("confirmarPassword").value;
 
-    if (passwordRegistro !== confirmarPassword) {
+    if (password !== confirmarPassword) {
       alert("Las contraseñas no coinciden. Intenta nuevamente.");
       return;
     }
 
+    const { data, error } = await db.auth.signUp({
+      email: correo,
+      password: password
+    });
+
+    if (error) {
+      alert("Error al registrar usuario: " + error.message);
+      return;
+    }
+
+    const user = data.user;
+
+    if (!user) {
+      alert("Usuario creado, pero falta confirmar el correo. Revisa tu email.");
+      return;
+    }
+
+    const nuevoPerfil = {
+      id: user.id,
+      nombre,
+      correo,
+      telefono,
+      ciudad,
+      rol,
+      estado: "activo"
+    };
+
+    const { error: errorPerfil } = await db
+      .from("perfiles")
+      .insert([nuevoPerfil]);
+
+    if (errorPerfil) {
+      alert("Usuario creado, pero ocurrió un error al guardar el perfil: " + errorPerfil.message);
+      return;
+    }
+
     alert(
-      `Registro creado correctamente 🐾\n\nNombre: ${nombreRegistro}\nCorreo: ${correoRegistro}\nRol: ${rolRegistro}\n\nTu cuenta fue registrada de manera simulada.`
+      `Registro creado correctamente 🐾\n\nNombre: ${nombre}\nCorreo: ${correo}\nRol: ${rol}`
     );
 
     formRegistro.reset();
+
+    window.location.href = "login.html";
   });
 }
-
 // DASHBOARD SEGÚN ROL
 const accionesDashboard = document.getElementById("accionesDashboard");
 const actividadDashboard = document.getElementById("actividadDashboard");

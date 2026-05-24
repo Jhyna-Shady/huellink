@@ -26,7 +26,7 @@
         <li><a href="#funciona">Cómo funciona</a></li>
       </ul>
 
-      <a href="login.html" class="btn-login">Iniciar sesión</a>
+      <a href="login.html" class="btn-login" id="btnLoginHome">Iniciar sesión</a>
     </nav>
   </header>
 
@@ -61,26 +61,26 @@
 
   <!-- ESTADÍSTICAS -->
   <section class="stats">
-    <div class="stat-box">
-      <h2>+120</h2>
-      <p>Mascotas registradas</p>
-    </div>
+  <div class="stat-box">
+    <h2 id="homeTotalMascotas">0</h2>
+    <p>Mascotas registradas</p>
+  </div>
 
-    <div class="stat-box">
-      <h2>+45</h2>
-      <p>Adopciones logradas</p>
-    </div>
+  <div class="stat-box">
+    <h2 id="homeAdopciones">0</h2>
+    <p>Adopciones logradas</p>
+  </div>
 
-    <div class="stat-box">
-      <h2>+30</h2>
-      <p>Reportes atendidos</p>
-    </div>
+  <div class="stat-box">
+    <h2 id="homeReportes">0</h2>
+    <p>Reportes atendidos</p>
+  </div>
 
-    <div class="stat-box">
-      <h2>+15</h2>
-      <p>Rescatistas aliados</p>
-    </div>
-  </section>
+  <div class="stat-box">
+    <h2 id="homeAliados">0</h2>
+    <p>Rescatistas aliados</p>
+  </div>
+</section>
 
   <!-- FUNCIONES PRINCIPALES -->
   <section class="section" id="funciona">
@@ -128,39 +128,21 @@
     </div>
   </section>
 
-  <!-- MASCOTAS EN ADOPCIÓN -->
-  <section class="section adoption" id="adoptar">
-    <div class="section-title">
-      <h2>Mascotas en adopción</h2>
-      <p>Conoce algunas mascotas que esperan un hogar responsable.</p>
-    </div>
+ <!-- MASCOTAS EN ADOPCIÓN -->
+<section class="section adoption" id="adoptar">
+  <div class="section-title">
+    <h2>Mascotas en adopción</h2>
+    <p>Conoce algunas mascotas que esperan un hogar responsable.</p>
+  </div>
 
-    <div class="pets-grid">
-      <div class="pet-card">
-        <div class="pet-photo">🐶</div>
-        <h3>Luna</h3>
-        <p>Perrita · 2 años · Lima</p>
-        <span>Vacunada</span>
-        <button>Ver detalle</button>
-      </div>
+  <div class="pets-grid" id="mascotasInicio">
+    <!-- Se carga desde Supabase -->
+  </div>
 
-      <div class="pet-card">
-        <div class="pet-photo">🐱</div>
-        <h3>Michi</h3>
-        <p>Gatito · 1 año · Cajamarca</p>
-        <span>Esterilizado</span>
-        <button>Ver detalle</button>
-      </div>
-
-      <div class="pet-card">
-        <div class="pet-photo">🐕</div>
-        <h3>Toby</h3>
-        <p>Perrito · 4 meses · Trujillo</p>
-        <span>Juguetón</span>
-        <button>Ver detalle</button>
-      </div>
-    </div>
-  </section>
+  <div class="center-button">
+    <a href="adoptar.html" class="btn-primary">Ver todas las mascotas</a>
+  </div>
+</section>
 
   <!-- REPORTES -->
   <section class="section reports" id="reportar">
@@ -176,7 +158,7 @@
           Registra una mascota extraviada con foto, ubicación aproximada,
           fecha y características.
         </p>
-        <a href="#">Reportar perdida</a>
+        <a href="reportar-perdida.html">Reportar perdida</a>
       </div>
 
       <div class="report-card found">
@@ -185,7 +167,7 @@
           Publica información de una mascota encontrada para ayudar a ubicar
           a su familia.
         </p>
-        <a href="#">Reportar encontrada</a>
+        <a href="reportar-encontrada.html">Reportar encontrada</a>
       </div>
     </div>
   </section>
@@ -207,7 +189,7 @@
           <li>✔ Realiza seguimiento post adopción</li>
         </ul>
 
-        <a href="#" class="btn-primary">Registrarme como aliado</a>
+        <a href="refugios.html" class="btn-primary">Registrarme como aliado</a>
       </div>
 
       <div class="ally-box">
@@ -234,6 +216,8 @@
     <p>© 2026 Huellink. Plataforma para adopción responsable y protección animal.</p>
   </footer>
 
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/supabase-config.js"></script>
   <script src="js/main.js"></script>
 </body>
 </html>

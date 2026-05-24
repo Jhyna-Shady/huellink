@@ -1955,3 +1955,158 @@ document.addEventListener("click", async (e) => {
     alert(`Publicación ${formatearEstadoPublicacion(nuevoEstado).toLowerCase()} correctamente 🐾`);
   }
 });
+// ESTADÍSTICAS REALES EN LA PÁGINA DE INICIO
+async function obtenerConteoHome(tabla, filtroCampo = null, filtroValor = null) {
+  if (typeof db === "undefined") {
+    console.warn("Supabase no está cargado en index.html");
+    return 0;
+  }
+
+  let consulta = db
+    .from(tabla)
+    .select("id", { count: "exact", head: true });
+
+  if (filtroCampo && filtroValor) {
+    consulta = consulta.eq(filtroCampo, filtroValor);
+  }
+
+  const { count, error } = await consulta;
+
+  console.log(`Conteo ${tabla}:`, count);
+  console.log(`Error ${tabla}:`, error);
+
+  if (error) {
+    console.error(`Error contando ${tabla}:`, error);
+    return 0;
+  }
+
+  return count || 0;
+}
+
+async function cargarEstadisticasInicio() {
+  const homeTotalMascotas = document.getElementById("homeTotalMascotas");
+  const homeAdopciones = document.getElementById("homeAdopciones");
+  const homeReportes = document.getElementById("homeReportes");
+  const homeAliados = document.getElementById("homeAliados");
+
+  if (!homeTotalMascotas || !homeAdopciones || !homeReportes || !homeAliados) {
+    console.warn("No se encontraron los elementos de estadísticas en index.html");
+    return;
+  }
+
+  const totalMascotas = await obtenerConteoHome(
+    "mascotas",
+    "estado_publicacion",
+    "aprobada"
+  );
+
+  const adopcionesLogradas = await obtenerConteoHome(
+    "solicitudes_adopcion",
+    "estado_solicitud",
+    "aprobada"
+  );
+
+  const reportesAtendidos = await obtenerConteoHome("reportes_mascotas");
+
+  const aliadosAprobados = await obtenerConteoHome(
+    "aliados",
+    "estado_validacion",
+    "aprobado"
+  );
+
+  homeTotalMascotas.textContent = `+${totalMascotas}`;
+  homeAdopciones.textContent = `+${adopcionesLogradas}`;
+  homeReportes.textContent = `+${reportesAtendidos}`;
+  homeAliados.textContent = `+${aliadosAprobados}`;
+}
+
+cargarEstadisticasInicio();
+
+
+// CAMBIAR BOTÓN DE LOGIN SI EL USUARIO YA INICIÓ SESIÓN
+async function actualizarBotonLoginHome() {
+  const btnLoginHome = document.getElementById("btnLoginHome");
+
+  if (!btnLoginHome) return;
+
+  if (typeof db === "undefined") return;
+
+  const { data } = await db.auth.getSession();
+
+  if (data.session) {
+    btnLoginHome.textContent = "Mi panel";
+    btnLoginHome.href = "dashboard.html";
+  } else {
+    btnLoginHome.textContent = "Iniciar sesión";
+    btnLoginHome.href = "login.html";
+  }
+}
+
+actualizarBotonLoginHome();
+
+// CARGAR MASCOTAS DESTACADAS EN INDEX DESDE SUPABASE
+const mascotasInicio = document.getElementById("mascotasInicio");
+
+async function cargarMascotasInicio() {
+  if (!mascotasInicio) return;
+
+  if (typeof db === "undefined") {
+    console.warn("Supabase no está cargado en index.html");
+    return;
+  }
+
+  const { data: mascotas, error } = await db
+    .from("mascotas")
+    .select("*")
+    .eq("estado_publicacion", "aprobada")
+    .order("created_at", { ascending: false })
+    .limit(3);
+
+  console.log("Mascotas inicio:", mascotas);
+  console.log("Error mascotas inicio:", error);
+
+  if (error) {
+    mascotasInicio.innerHTML = `
+      <div class="no-results" style="display: block;">
+        <h3>No se pudieron cargar las mascotas 🐾</h3>
+        <p>Intenta nuevamente más tarde.</p>
+      </div>
+    `;
+    return;
+  }
+
+  mascotasInicio.innerHTML = "";
+
+  if (!mascotas || mascotas.length === 0) {
+    mascotasInicio.innerHTML = `
+      <div class="no-results" style="display: block;">
+        <h3>Aún no hay mascotas aprobadas 🐾</h3>
+        <p>Cuando el administrador apruebe publicaciones, aparecerán aquí.</p>
+      </div>
+    `;
+    return;
+  }
+
+  mascotas.forEach((mascota) => {
+    mascotasInicio.innerHTML += `
+      <div class="pet-card mascota"
+        data-id="${mascota.id}"
+        data-tipo="${mascota.tipo}"
+        data-ciudad="${mascota.ciudad}"
+        data-tamano="${mascota.tamano}">
+
+        <div class="pet-photo">${mascota.icono || "🐾"}</div>
+
+        <h3>${mascota.nombre}</h3>
+
+        <p>${mascota.tipo} · ${mascota.edad} · ${mascota.ciudad}</p>
+
+        <span>${mascota.vacunas || "Sin información"}</span>
+
+        <button class="btn-detalle">Ver detalle</button>
+      </div>
+    `;
+  });
+}
+
+cargarMascotasInicio();

@@ -1549,3 +1549,8 @@ body {
     font-size: 110px;
   }
 }
+
+.center-button {
+  text-align: center;
+  margin-top: 35px;
+}

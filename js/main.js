@@ -190,22 +190,54 @@ if (formEncontrada) {
     window.location.href = "reportes.html";
   });
 }
-// FORMULARIO DE REGISTRO DE REFUGIO O RESCATISTA
+// FORMULARIO DE REGISTRO DE REFUGIO O RESCATISTA EN SUPABASE
 const formAliado = document.getElementById("formAliado");
 
 if (formAliado) {
-  formAliado.addEventListener("submit", (e) => {
+  formAliado.addEventListener("submit", async (e) => {
     e.preventDefault();
 
-    const tipoAliado = document.getElementById("tipoAliado").value;
-    const nombreAliado = document.getElementById("nombreAliado").value;
-    const ciudadAliado = document.getElementById("ciudadAliado").value;
+    if (typeof db === "undefined") {
+      alert("Supabase no está cargado. Revisa los scripts en refugios.html");
+      return;
+    }
+
+    const nuevoAliado = {
+      tipo_aliado: document.getElementById("tipoAliado").value,
+      nombre_aliado: document.getElementById("nombreAliado").value,
+      responsable: document.getElementById("responsableAliado").value,
+      correo: document.getElementById("correoAliado").value,
+      telefono: document.getElementById("telefonoAliado").value,
+      ciudad: document.getElementById("ciudadAliado").value,
+      distrito: document.getElementById("distritoAliado").value,
+      direccion_zona: document.getElementById("direccionAliado").value,
+      redes: document.getElementById("redesAliado").value,
+      cantidad_mascotas: document.getElementById("cantidadMascotas").value || null,
+      experiencia_anios: document.getElementById("experienciaAliado").value || null,
+      descripcion: document.getElementById("descripcionAliado").value,
+      estado_validacion: "pendiente"
+    };
+
+    const { data, error } = await db
+      .from("aliados")
+      .insert([nuevoAliado])
+      .select();
+
+    console.log("Aliado registrado:", data);
+    console.log("Error aliado:", error);
+
+    if (error) {
+      alert("Error al registrar aliado: " + error.message);
+      return;
+    }
 
     alert(
-      `Solicitud enviada correctamente 🐾\n\nTipo: ${tipoAliado}\nNombre: ${nombreAliado}\nCiudad: ${ciudadAliado}\n\nTu registro quedará pendiente de validación por el administrador.`
+      `Solicitud enviada correctamente 🐾\n\nTipo: ${nuevoAliado.tipo_aliado}\nNombre: ${nuevoAliado.nombre_aliado}\nCiudad: ${nuevoAliado.ciudad}\n\nTu registro quedó pendiente de validación por el administrador.`
     );
 
     formAliado.reset();
+
+    window.location.href = "index.html";
   });
 }
 // FORMULARIO LOGIN
@@ -1260,3 +1292,120 @@ async function buscarCoincidenciasReporte(idReporte) {
 
   alert(mensaje);
 }
+
+// CARGAR ALIADOS DESDE SUPABASE EN admin.html
+const contenedorAliados = document.getElementById("contenedorAliados");
+
+function formatearEstadoAliado(estado) {
+  if (estado === "aprobado") return "Aprobado";
+  if (estado === "rechazado") return "Rechazado";
+  return "Pendiente";
+}
+
+async function cargarAliadosDesdeBD() {
+  if (!contenedorAliados) return;
+
+  if (typeof db === "undefined") {
+    alert("Supabase no está cargado. Revisa los scripts en admin.html");
+    return;
+  }
+
+  const { data: aliadosBD, error } = await db
+    .from("aliados")
+    .select("*")
+    .order("created_at", { ascending: false });
+
+  console.log("Aliados desde Supabase:", aliadosBD);
+  console.log("Error aliados:", error);
+
+  if (error) {
+    alert("No se pudieron cargar los aliados: " + error.message);
+    return;
+  }
+
+  contenedorAliados.innerHTML = "";
+
+  if (!aliadosBD || aliadosBD.length === 0) {
+    contenedorAliados.innerHTML = `
+      <div class="no-results" style="display: block;">
+        <h3>Aún no hay aliados registrados 🐾</h3>
+        <p>Cuando un refugio o rescatista se registre, aparecerá aquí.</p>
+      </div>
+    `;
+    return;
+  }
+
+  aliadosBD.forEach((aliado) => {
+    const estado = aliado.estado_validacion || "pendiente";
+
+    contenedorAliados.innerHTML += `
+      <div class="admin-card aliado-card ${estado}" data-id="${aliado.id}">
+        <div>
+          <h3>${aliado.nombre_aliado}</h3>
+          <p><strong>Tipo:</strong> ${aliado.tipo_aliado}</p>
+          <p><strong>Responsable:</strong> ${aliado.responsable}</p>
+          <p><strong>Correo:</strong> ${aliado.correo}</p>
+          <p><strong>Celular:</strong> ${aliado.telefono}</p>
+          <p><strong>Ciudad:</strong> ${aliado.ciudad}</p>
+          <p><strong>Distrito:</strong> ${aliado.distrito}</p>
+          <p><strong>Zona:</strong> ${aliado.direccion_zona || "No especificada"}</p>
+          <p><strong>Redes:</strong> ${aliado.redes || "No registradas"}</p>
+          <p><strong>Mascotas a cargo:</strong> ${aliado.cantidad_mascotas || "No especificado"}</p>
+          <p><strong>Años de experiencia:</strong> ${aliado.experiencia_anios || "No especificado"}</p>
+          <p><strong>Descripción:</strong> ${aliado.descripcion}</p>
+          <p><strong>Estado:</strong> <span class="estado-aliado">${formatearEstadoAliado(estado)}</span></p>
+        </div>
+
+        <div class="admin-actions">
+          <button class="btn-approve btn-aprobar-aliado">Aprobar</button>
+          <button class="btn-reject btn-rechazar-aliado">Rechazar</button>
+        </div>
+      </div>
+    `;
+  });
+}
+
+cargarAliadosDesdeBD();
+
+// ACTUALIZAR ESTADO DE ALIADO EN SUPABASE
+document.addEventListener("click", async (e) => {
+  if (
+    e.target.classList.contains("btn-aprobar-aliado") ||
+    e.target.classList.contains("btn-rechazar-aliado")
+  ) {
+    const tarjeta = e.target.closest(".aliado-card");
+
+    if (!tarjeta) return;
+
+    const idAliado = tarjeta.dataset.id;
+
+    let nuevoEstado = "pendiente";
+
+    if (e.target.classList.contains("btn-aprobar-aliado")) {
+      nuevoEstado = "aprobado";
+    }
+
+    if (e.target.classList.contains("btn-rechazar-aliado")) {
+      nuevoEstado = "rechazado";
+    }
+
+    const { error } = await db
+      .from("aliados")
+      .update({ estado_validacion: nuevoEstado })
+      .eq("id", idAliado);
+
+    if (error) {
+      alert("No se pudo actualizar el aliado: " + error.message);
+      return;
+    }
+
+    const estadoTexto = tarjeta.querySelector(".estado-aliado");
+
+    tarjeta.classList.remove("pendiente", "aprobado", "rechazado");
+    tarjeta.classList.add(nuevoEstado);
+
+    estadoTexto.textContent = formatearEstadoAliado(nuevoEstado);
+
+    alert(`Aliado ${formatearEstadoAliado(nuevoEstado).toLowerCase()} correctamente ✅`);
+  }
+});

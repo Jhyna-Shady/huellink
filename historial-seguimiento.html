@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>Historial de seguimiento | Huellink</title>
+
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+
+  <!-- ENCABEZADO -->
+  <header class="header">
+    <nav class="navbar">
+      <a href="index.html" class="logo-link">
+        <div class="logo">🐾 Huellink</div>
+      </a>
+
+      <ul class="nav-links">
+        <li><a href="index.html">Inicio</a></li>
+        <li><a href="adoptar.html">Adoptar</a></li>
+        <li><a href="reportes.html">Reportes</a></li>
+        <li><a href="refugios.html">Refugios</a></li>
+        <li><a href="dashboard.html">Panel</a></li>
+      </ul>
+
+      <a href="login.html" class="btn-login">Cerrar sesión</a>
+    </nav>
+  </header>
+
+  <!-- CABECERA -->
+  <section class="page-hero">
+    <span class="tag">Control post adopción</span>
+    <h1>Historial de seguimiento</h1>
+    <p>
+      Consulta los seguimientos registrados después de una adopción para verificar
+      el bienestar de las mascotas.
+    </p>
+  </section>
+
+  <!-- ESTADÍSTICAS -->
+  <section class="dashboard-stats admin-stats">
+    <div class="dashboard-stat-card">
+      <h2 id="totalSeguimientos">0</h2>
+      <p>Seguimientos registrados</p>
+    </div>
+
+    <div class="dashboard-stat-card">
+      <h2 id="seguimientosBuenos">0</h2>
+      <p>Estado bueno/excelente</p>
+    </div>
+
+    <div class="dashboard-stat-card">
+      <h2 id="seguimientosAtencion">0</h2>
+      <p>Requieren atención</p>
+    </div>
+
+    <div class="dashboard-stat-card">
+      <h2 id="proximasRevisiones">0</h2>
+      <p>Próximas revisiones</p>
+    </div>
+  </section>
+
+  <!-- LISTA -->
+  <section class="section">
+    <div class="section-title">
+      <h2>Registros de seguimiento</h2>
+      <p>Listado de controles realizados a mascotas adoptadas.</p>
+    </div>
+
+    <div class="admin-list" id="contenedorHistorialSeguimiento">
+      <!-- Se llena con JavaScript -->
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="cta">
+    <h2>Registrar nuevo seguimiento</h2>
+    <p>
+      Agrega un nuevo control para mantener actualizado el bienestar de la mascota.
+    </p>
+    <a href="seguimiento.html" class="btn-primary">Nuevo seguimiento</a>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <p>© 2026 Huellink. Plataforma para adopción responsable y protección animal.</p>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/supabase-config.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>

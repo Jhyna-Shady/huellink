@@ -369,13 +369,21 @@ if (accionesDashboard && actividadDashboard) {
           texto: "Registra controles, fotos y observaciones después de la adopción.",
           link: "seguimiento.html",
           boton: "Dar seguimiento"
-        }
+        },
+        {
+          icono: "📁",
+          titulo: "Historial de seguimiento",
+          texto: "Consulta los controles registrados después de las adopciones.",
+          link: "historial-seguimiento.html",
+          boton: "Ver historial"
+       }
       ],
       actividad: [
         ["🐶", "Mascota publicada", "Publicaste a Toby como disponible para adopción."],
         ["📋", "Nueva solicitud", "Un ciudadano solicitó adoptar a Max."],
         ["✅", "Seguimiento pendiente", "Debes registrar el control de primera semana."]
       ]
+      
     },
     refugio: {
     titulo: "Panel del refugio",
@@ -411,6 +419,13 @@ if (accionesDashboard && actividadDashboard) {
         texto: "Registra controles de bienestar después de una adopción.",
         link: "seguimiento.html",
         boton: "Registrar seguimiento"
+        },
+        {
+        icono: "📁",
+        titulo: "Historial de seguimiento",
+        texto: "Revisa los seguimientos registrados por el refugio.",
+        link: "historial-seguimiento.html",
+        boton: "Ver historial"
         }
     ],
 
@@ -1440,3 +1455,100 @@ document.addEventListener("click", async (e) => {
     alert(`Aliado ${formatearEstadoAliado(nuevoEstado).toLowerCase()} correctamente ✅`);
   }
 });
+
+// CARGAR HISTORIAL DE SEGUIMIENTO DESDE SUPABASE
+const contenedorHistorialSeguimiento = document.getElementById("contenedorHistorialSeguimiento");
+
+const totalSeguimientos = document.getElementById("totalSeguimientos");
+const seguimientosBuenos = document.getElementById("seguimientosBuenos");
+const seguimientosAtencion = document.getElementById("seguimientosAtencion");
+const proximasRevisiones = document.getElementById("proximasRevisiones");
+
+async function cargarHistorialSeguimiento() {
+  if (!contenedorHistorialSeguimiento) return;
+
+  if (typeof db === "undefined") {
+    alert("Supabase no está cargado. Revisa los scripts en historial-seguimiento.html");
+    return;
+  }
+
+  const { data: seguimientos, error } = await db
+    .from("seguimientos_adopcion")
+    .select("*")
+    .order("created_at", { ascending: false });
+
+  console.log("Seguimientos desde Supabase:", seguimientos);
+  console.log("Error seguimientos:", error);
+
+  if (error) {
+    alert("No se pudieron cargar los seguimientos: " + error.message);
+    return;
+  }
+
+  contenedorHistorialSeguimiento.innerHTML = "";
+
+  if (!seguimientos || seguimientos.length === 0) {
+    contenedorHistorialSeguimiento.innerHTML = `
+      <div class="no-results" style="display: block;">
+        <h3>Aún no hay seguimientos registrados 🐾</h3>
+        <p>Cuando registres un seguimiento post adopción, aparecerá aquí.</p>
+      </div>
+    `;
+
+    if (totalSeguimientos) totalSeguimientos.textContent = "0";
+    if (seguimientosBuenos) seguimientosBuenos.textContent = "0";
+    if (seguimientosAtencion) seguimientosAtencion.textContent = "0";
+    if (proximasRevisiones) proximasRevisiones.textContent = "0";
+
+    return;
+  }
+
+  const total = seguimientos.length;
+
+  const buenos = seguimientos.filter((item) =>
+    item.estado_mascota === "bueno" || item.estado_mascota === "excelente"
+  ).length;
+
+  const atencion = seguimientos.filter((item) =>
+    item.estado_mascota === "requiere-atencion" || item.estado_mascota === "riesgo"
+  ).length;
+
+  const conProximaRevision = seguimientos.filter((item) =>
+    item.proxima_revision
+  ).length;
+
+  if (totalSeguimientos) totalSeguimientos.textContent = total;
+  if (seguimientosBuenos) seguimientosBuenos.textContent = buenos;
+  if (seguimientosAtencion) seguimientosAtencion.textContent = atencion;
+  if (proximasRevisiones) proximasRevisiones.textContent = conProximaRevision;
+
+  seguimientos.forEach((item) => {
+    contenedorHistorialSeguimiento.innerHTML += `
+      <div class="admin-card">
+        <div>
+          <h3>Seguimiento de ${item.mascota_nombre}</h3>
+
+          <p><strong>Adoptante:</strong> ${item.adoptante_nombre}</p>
+          <p><strong>Fecha de adopción:</strong> ${item.fecha_adopcion}</p>
+          <p><strong>Fecha de seguimiento:</strong> ${item.fecha_seguimiento}</p>
+          <p><strong>Tipo de seguimiento:</strong> ${item.tipo_seguimiento}</p>
+
+          <p><strong>Estado de la mascota:</strong> ${item.estado_mascota}</p>
+          <p><strong>Alimentación:</strong> ${item.alimentacion}</p>
+          <p><strong>Salud:</strong> ${item.salud}</p>
+          <p><strong>Adaptación:</strong> ${item.adaptacion}</p>
+          <p><strong>Observaciones:</strong> ${item.observaciones}</p>
+
+          <p><strong>Próxima revisión:</strong> ${item.proxima_revision || "No definida"}</p>
+          <p><strong>Estado del registro:</strong> ${item.estado_registro}</p>
+        </div>
+
+        <div class="admin-actions">
+          <a href="seguimiento.html" class="btn-primary">Nuevo control</a>
+        </div>
+      </div>
+    `;
+  });
+}
+
+cargarHistorialSeguimiento();

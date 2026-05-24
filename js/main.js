@@ -1552,3 +1552,108 @@ async function cargarHistorialSeguimiento() {
 }
 
 cargarHistorialSeguimiento();
+// ESTADÍSTICAS REALES DEL DASHBOARD DESDE SUPABASE
+async function obtenerConteo(tabla, filtroCampo = null, filtroValor = null) {
+  let consulta = db
+    .from(tabla)
+    .select("*", { count: "exact", head: true });
+
+  if (filtroCampo && filtroValor) {
+    consulta = consulta.eq(filtroCampo, filtroValor);
+  }
+
+  const { count, error } = await consulta;
+
+  if (error) {
+    console.error(`Error contando ${tabla}:`, error);
+    return 0;
+  }
+
+  return count || 0;
+}
+
+async function cargarEstadisticasDashboard() {
+  if (!document.getElementById("stat1")) return;
+
+  if (typeof db === "undefined") {
+    console.warn("Supabase no está cargado para estadísticas.");
+    return;
+  }
+
+  const params = new URLSearchParams(window.location.search);
+  const rolUrl = params.get("rol");
+  const rolGuardado = localStorage.getItem("huellinkRol");
+  const rol = rolUrl || rolGuardado || "ciudadano";
+
+  const totalMascotas = await obtenerConteo("mascotas");
+  const totalSolicitudes = await obtenerConteo("solicitudes_adopcion");
+  const solicitudesPendientes = await obtenerConteo("solicitudes_adopcion", "estado_solicitud", "pendiente");
+  const solicitudesAprobadas = await obtenerConteo("solicitudes_adopcion", "estado_solicitud", "aprobada");
+
+  const totalReportes = await obtenerConteo("reportes_mascotas");
+  const reportesPerdidos = await obtenerConteo("reportes_mascotas", "tipo_reporte", "perdida");
+  const reportesEncontrados = await obtenerConteo("reportes_mascotas", "tipo_reporte", "encontrada");
+
+  const totalAliados = await obtenerConteo("aliados");
+  const aliadosPendientes = await obtenerConteo("aliados", "estado_validacion", "pendiente");
+
+  const totalSeguimientos = await obtenerConteo("seguimientos_adopcion");
+
+  if (rol === "ciudadano") {
+    stat1.textContent = totalSolicitudes;
+    stat1Text.textContent = "Solicitudes";
+
+    stat2.textContent = totalReportes;
+    stat2Text.textContent = "Reportes";
+
+    stat3.textContent = reportesEncontrados;
+    stat3Text.textContent = "Encontradas";
+
+    stat4.textContent = reportesPerdidos;
+    stat4Text.textContent = "Perdidas";
+  }
+
+  if (rol === "rescatista") {
+    stat1.textContent = totalMascotas;
+    stat1Text.textContent = "Mascotas";
+
+    stat2.textContent = totalSolicitudes;
+    stat2Text.textContent = "Solicitudes";
+
+    stat3.textContent = totalSeguimientos;
+    stat3Text.textContent = "Seguimientos";
+
+    stat4.textContent = totalReportes;
+    stat4Text.textContent = "Reportes";
+  }
+
+  if (rol === "refugio") {
+    stat1.textContent = totalMascotas;
+    stat1Text.textContent = "Mascotas";
+
+    stat2.textContent = solicitudesPendientes;
+    stat2Text.textContent = "Solicitudes pendientes";
+
+    stat3.textContent = solicitudesAprobadas;
+    stat3Text.textContent = "Adopciones aprobadas";
+
+    stat4.textContent = totalReportes;
+    stat4Text.textContent = "Reportes";
+  }
+
+  if (rol === "administrador") {
+    stat1.textContent = aliadosPendientes;
+    stat1Text.textContent = "Validaciones pendientes";
+
+    stat2.textContent = totalAliados;
+    stat2Text.textContent = "Aliados registrados";
+
+    stat3.textContent = totalMascotas;
+    stat3Text.textContent = "Mascotas publicadas";
+
+    stat4.textContent = totalReportes;
+    stat4Text.textContent = "Reportes";
+  }
+}
+
+cargarEstadisticasDashboard();

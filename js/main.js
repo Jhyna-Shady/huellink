@@ -562,7 +562,7 @@ if (formPublicarMascota) {
       zona,
       responsable,
       icono,
-      estado_publicacion: "aprobada"
+      estado_publicacion: "pendiente"
     };
 
     const { data, error } = await db
@@ -1657,3 +1657,117 @@ async function cargarEstadisticasDashboard() {
 }
 
 cargarEstadisticasDashboard();
+// CARGAR PUBLICACIONES DE MASCOTAS EN admin.html
+const contenedorPublicaciones = document.getElementById("contenedorPublicaciones");
+
+function formatearEstadoPublicacion(estado) {
+  if (estado === "aprobada") return "Aprobada";
+  if (estado === "rechazada") return "Rechazada";
+  return "Pendiente";
+}
+
+async function cargarPublicacionesMascotas() {
+  if (!contenedorPublicaciones) return;
+
+  if (typeof db === "undefined") {
+    alert("Supabase no está cargado. Revisa los scripts en admin.html");
+    return;
+  }
+
+  const { data: mascotasBD, error } = await db
+    .from("mascotas")
+    .select("*")
+    .order("created_at", { ascending: false });
+
+  console.log("Publicaciones de mascotas:", mascotasBD);
+  console.log("Error publicaciones:", error);
+
+  if (error) {
+    alert("No se pudieron cargar las publicaciones: " + error.message);
+    return;
+  }
+
+  contenedorPublicaciones.innerHTML = "";
+
+  if (!mascotasBD || mascotasBD.length === 0) {
+    contenedorPublicaciones.innerHTML = `
+      <div class="no-results" style="display: block;">
+        <h3>Aún no hay mascotas publicadas 🐾</h3>
+        <p>Cuando un refugio o rescatista publique una mascota, aparecerá aquí.</p>
+      </div>
+    `;
+    return;
+  }
+
+  mascotasBD.forEach((mascota) => {
+    const estadoPublicacion = mascota.estado_publicacion || "pendiente";
+
+    contenedorPublicaciones.innerHTML += `
+      <div class="admin-card mascota-admin-card ${estadoPublicacion}" data-id="${mascota.id}">
+        <div>
+          <h3>${mascota.icono || "🐾"} ${mascota.nombre}</h3>
+          <p><strong>Tipo:</strong> ${mascota.tipo}</p>
+          <p><strong>Edad:</strong> ${mascota.edad}</p>
+          <p><strong>Tamaño:</strong> ${mascota.tamano}</p>
+          <p><strong>Sexo:</strong> ${mascota.sexo || "No especificado"}</p>
+          <p><strong>Ciudad:</strong> ${mascota.ciudad}</p>
+          <p><strong>Zona:</strong> ${mascota.zona || "No especificada"}</p>
+          <p><strong>Vacunas:</strong> ${mascota.vacunas || "Sin información"}</p>
+          <p><strong>Salud:</strong> ${mascota.salud || "Sin información"}</p>
+          <p><strong>Comportamiento:</strong> ${mascota.comportamiento || "Sin descripción"}</p>
+          <p><strong>Responsable:</strong> ${mascota.responsable || "No especificado"}</p>
+          <p><strong>Estado de publicación:</strong> <span class="estado-publicacion">${formatearEstadoPublicacion(estadoPublicacion)}</span></p>
+        </div>
+
+        <div class="admin-actions">
+          <button class="btn-approve btn-aprobar-mascota">Aprobar</button>
+          <button class="btn-reject btn-rechazar-mascota">Rechazar</button>
+        </div>
+      </div>
+    `;
+  });
+}
+
+cargarPublicacionesMascotas();
+// APROBAR O RECHAZAR PUBLICACIONES DE MASCOTAS
+document.addEventListener("click", async (e) => {
+  if (
+    e.target.classList.contains("btn-aprobar-mascota") ||
+    e.target.classList.contains("btn-rechazar-mascota")
+  ) {
+    const tarjeta = e.target.closest(".mascota-admin-card");
+
+    if (!tarjeta) return;
+
+    const idMascota = tarjeta.dataset.id;
+
+    let nuevoEstado = "pendiente";
+
+    if (e.target.classList.contains("btn-aprobar-mascota")) {
+      nuevoEstado = "aprobada";
+    }
+
+    if (e.target.classList.contains("btn-rechazar-mascota")) {
+      nuevoEstado = "rechazada";
+    }
+
+    const { error } = await db
+      .from("mascotas")
+      .update({ estado_publicacion: nuevoEstado })
+      .eq("id", idMascota);
+
+    if (error) {
+      alert("No se pudo actualizar la publicación: " + error.message);
+      return;
+    }
+
+    const estadoTexto = tarjeta.querySelector(".estado-publicacion");
+
+    tarjeta.classList.remove("pendiente", "aprobada", "rechazada");
+    tarjeta.classList.add(nuevoEstado);
+
+    estadoTexto.textContent = formatearEstadoPublicacion(nuevoEstado);
+
+    alert(`Publicación ${formatearEstadoPublicacion(nuevoEstado).toLowerCase()} correctamente 🐾`);
+  }
+});

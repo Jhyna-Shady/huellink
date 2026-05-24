@@ -1,40 +1,38 @@
 console.log("Huellink cargado correctamente 🐾");
 
-// ALERTAS DE BOTONES
-const botonesDetalle = document.querySelectorAll(".btn-detalle");
-const botonesAdoptar = document.querySelectorAll(".btn-adoptar");
 
-botonesDetalle.forEach((boton) => {
-  boton.addEventListener("click", () => {
-    const tarjetaMascota = boton.closest(".pet-card");
+// BOTONES DE MASCOTAS: VER DETALLE Y SOLICITAR ADOPCIÓN
+document.addEventListener("click", (e) => {
+  if (e.target.classList.contains("btn-detalle")) {
+    const tarjetaMascota = e.target.closest(".pet-card");
     const nombreMascota = tarjetaMascota.querySelector("h3").textContent;
 
     window.location.href = `detalle-mascota.html?mascota=${encodeURIComponent(nombreMascota)}`;
-  });
-});
+  }
 
-botonesAdoptar.forEach((boton) => {
-  boton.addEventListener("click", () => {
-    const tarjetaMascota = boton.closest(".pet-card");
+  if (e.target.classList.contains("btn-adoptar")) {
+    const tarjetaMascota = e.target.closest(".pet-card");
     const nombreMascota = tarjetaMascota.querySelector("h3").textContent;
 
     window.location.href = `solicitud-adopcion.html?mascota=${encodeURIComponent(nombreMascota)}`;
-  });
+  }
 });
 
-// FILTROS DE MASCOTAS
+
+/// FILTROS DE MASCOTAS
 const filtroTipo = document.getElementById("tipo");
 const filtroCiudad = document.getElementById("ciudad");
 const filtroTamano = document.getElementById("tamano");
 const filtroEdad = document.getElementById("edad");
 const limpiarFiltros = document.getElementById("limpiarFiltros");
-const mascotas = document.querySelectorAll(".mascota");
 const noResults = document.getElementById("noResults");
 
 function filtrarMascotas() {
   if (!filtroTipo || !filtroCiudad || !filtroTamano || !filtroEdad) {
     return;
   }
+
+  const mascotas = document.querySelectorAll(".mascota");
 
   const tipo = filtroTipo.value;
   const ciudad = filtroCiudad.value;
@@ -793,3 +791,69 @@ if (detalleNombre) {
     window.location.href = `solicitud-adopcion.html?mascota=${encodeURIComponent(datos.nombre)}`;
   });
 }
+
+// CARGAR MASCOTAS DESDE SUPABASE EN adoptar.html
+const contenedorMascotas = document.getElementById("contenedorMascotas");
+
+async function cargarMascotasDesdeBD() {
+  if (!contenedorMascotas) return;
+
+  const { data: mascotas, error } = await db
+    .from("mascotas")
+    .select("*")
+    .eq("estado_publicacion", "aprobada")
+    .order("created_at", { ascending: false });
+
+  if (error) {
+    console.error("Error al cargar mascotas:", error);
+    alert("No se pudieron cargar las mascotas desde la base de datos.");
+    return;
+  }
+
+  contenedorMascotas.innerHTML = "";
+
+  if (!mascotas || mascotas.length === 0) {
+    contenedorMascotas.innerHTML = `
+      <div class="no-results" style="display: block;">
+        <h3>Aún no hay mascotas registradas 🐾</h3>
+        <p>Publica una mascota desde el panel de refugio o rescatista.</p>
+      </div>
+    `;
+    return;
+  }
+
+  mascotas.forEach((mascota) => {
+    const edadTexto = mascota.edad ? mascota.edad.toLowerCase() : "";
+    const edadFiltro = edadTexto.includes("mes") || edadTexto.includes("cachorro")
+      ? "cachorro"
+      : "adulto";
+
+    contenedorMascotas.innerHTML += `
+      <div class="pet-card mascota"
+        data-tipo="${mascota.tipo}"
+        data-ciudad="${mascota.ciudad.toLowerCase()}"
+        data-tamano="${mascota.tamano}"
+        data-edad="${edadFiltro}">
+
+        <div class="pet-photo">${mascota.icono || "🐾"}</div>
+
+        <h3>${mascota.nombre}</h3>
+
+        <p>${mascota.tipo} · ${mascota.edad} · ${mascota.ciudad}</p>
+
+        <span>${mascota.vacunas || "Sin información"}</span>
+
+        <div class="pet-info">
+          <small>${mascota.tamano} · ${mascota.comportamiento || "Sin descripción"}</small>
+        </div>
+
+        <button class="btn-detalle">Ver detalle</button>
+        <button class="btn-adoptar">Solicitar adopción</button>
+      </div>
+    `;
+  });
+
+  filtrarMascotas();
+}
+
+cargarMascotasDesdeBD();

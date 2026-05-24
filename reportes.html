@@ -79,10 +79,9 @@
       <div class="filter-group">
         <label for="filtroReporteCiudad">Ciudad</label>
         <select id="filtroReporteCiudad">
-          <option value="todos">Todas</option>
-          <option value="lima">Lima</option>
-          <option value="cajamarca">Cajamarca</option>
-          <option value="trujillo">Trujillo</option>
+         <option value="todos">Todas</option>
+         <option value="puno">Puno</option>
+         <option value="juliaca">Juliaca</option>
         </select>
       </div>
 
@@ -100,7 +99,7 @@
       <p>Listado simulado de mascotas perdidas y encontradas dentro de Huellink.</p>
     </div>
 
-    <div class="reports-list" id="listaReportes">
+    <div class="reports-list" id="contenedorReportes">
 
       <div class="report-item-card reporte" data-tipo="perro" data-estado="perdida" data-ciudad="cajamarca">
         <div class="report-pet-icon">🐶</div>
@@ -234,6 +233,8 @@
     <p>© 2026 Huellink. Plataforma para adopción responsable y protección animal.</p>
   </footer>
 
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/supabase-config.js"></script>
   <script src="js/main.js"></script>
 </body>
 </html>

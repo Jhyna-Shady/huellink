@@ -87,42 +87,109 @@ if (limpiarFiltros) {
   });
 }
 
-// FORMULARIO DE MASCOTA PERDIDA
+// FORMULARIO DE MASCOTA PERDIDA EN SUPABASE
 const formPerdida = document.getElementById("formPerdida");
 
 if (formPerdida) {
-  formPerdida.addEventListener("submit", (e) => {
+  formPerdida.addEventListener("submit", async (e) => {
     e.preventDefault();
 
-    const nombreMascota = document.getElementById("nombreMascota").value;
-    const zonaPerdida = document.getElementById("zonaPerdida").value;
+    if (typeof db === "undefined") {
+      alert("Supabase no está cargado. Revisa los scripts en reportar-perdida.html");
+      return;
+    }
+
+    const nuevoReporte = {
+      tipo_reporte: "perdida",
+      nombre_mascota: document.getElementById("nombreMascota").value,
+      tipo_mascota: document.getElementById("tipoMascota").value,
+      color: document.getElementById("colorMascota").value,
+      tamano: document.getElementById("tamanoMascota").value,
+      sexo: document.getElementById("sexoMascota").value,
+      fecha_reporte: document.getElementById("fechaPerdida").value,
+      zona: document.getElementById("zonaPerdida").value,
+      referencia: document.getElementById("referenciaPerdida").value,
+      descripcion: document.getElementById("descripcionMascota").value,
+      contacto_nombre: document.getElementById("nombreContacto").value,
+      contacto_telefono: document.getElementById("telefonoContacto").value,
+      estado_reporte: "activo"
+    };
+
+    const { data, error } = await db
+      .from("reportes_mascotas")
+      .insert([nuevoReporte])
+      .select();
+
+    console.log("Reporte perdido guardado:", data);
+    console.log("Error reporte perdido:", error);
+
+    if (error) {
+      alert("Error al registrar reporte: " + error.message);
+      return;
+    }
 
     alert(
-      `Reporte registrado correctamente 🐾\n\nMascota: ${nombreMascota}\nZona: ${zonaPerdida}\n\nEste reporte quedará pendiente de revisión.`
+      `Reporte registrado correctamente 🐾\n\nMascota: ${nuevoReporte.nombre_mascota}\nZona: ${nuevoReporte.zona}\n\nEl reporte quedó publicado como mascota perdida.`
     );
 
     formPerdida.reset();
+
+    window.location.href = "reportes.html";
   });
 }
 
-// FORMULARIO DE MASCOTA ENCONTRADA
+// FORMULARIO DE MASCOTA ENCONTRADA EN SUPABASE
 const formEncontrada = document.getElementById("formEncontrada");
 
 if (formEncontrada) {
-  formEncontrada.addEventListener("submit", (e) => {
+  formEncontrada.addEventListener("submit", async (e) => {
     e.preventDefault();
 
-    const tipoEncontrada = document.getElementById("tipoEncontrada").value;
-    const zonaEncontrada = document.getElementById("zonaEncontrada").value;
+    if (typeof db === "undefined") {
+      alert("Supabase no está cargado. Revisa los scripts en reportar-encontrada.html");
+      return;
+    }
+
+    const nuevoReporte = {
+      tipo_reporte: "encontrada",
+      nombre_mascota: "Mascota encontrada",
+      tipo_mascota: document.getElementById("tipoEncontrada").value,
+      color: document.getElementById("colorEncontrada").value,
+      tamano: document.getElementById("tamanoEncontrada").value,
+      sexo: document.getElementById("sexoEncontrada").value,
+      estado_fisico: document.getElementById("estadoEncontrada").value,
+      fecha_reporte: document.getElementById("fechaEncontrada").value,
+      collar_identificacion: document.getElementById("collarEncontrada").value,
+      zona: document.getElementById("zonaEncontrada").value,
+      referencia: document.getElementById("referenciaEncontrada").value,
+      descripcion: document.getElementById("descripcionEncontrada").value,
+      contacto_nombre: document.getElementById("nombreReportante").value,
+      contacto_telefono: document.getElementById("telefonoReportante").value,
+      estado_reporte: "activo"
+    };
+
+    const { data, error } = await db
+      .from("reportes_mascotas")
+      .insert([nuevoReporte])
+      .select();
+
+    console.log("Reporte encontrado guardado:", data);
+    console.log("Error reporte encontrado:", error);
+
+    if (error) {
+      alert("Error al registrar reporte: " + error.message);
+      return;
+    }
 
     alert(
-      `Reporte registrado correctamente 🐾\n\nTipo: ${tipoEncontrada}\nZona: ${zonaEncontrada}\n\nEste reporte quedará pendiente de revisión.`
+      `Reporte registrado correctamente 🐾\n\nTipo: ${nuevoReporte.tipo_mascota}\nZona: ${nuevoReporte.zona}\n\nEl reporte quedó publicado como mascota encontrada.`
     );
 
     formEncontrada.reset();
+
+    window.location.href = "reportes.html";
   });
 }
-
 // FORMULARIO DE REGISTRO DE REFUGIO O RESCATISTA
 const formAliado = document.getElementById("formAliado");
 
@@ -561,18 +628,20 @@ if (formSeguimiento) {
     formSeguimiento.reset();
   });
 }
-// FILTROS DE REPORTES
+// FILTROS Y CARGA DE REPORTES DESDE SUPABASE
 const filtroReporteTipo = document.getElementById("filtroReporteTipo");
 const filtroReporteEstado = document.getElementById("filtroReporteEstado");
 const filtroReporteCiudad = document.getElementById("filtroReporteCiudad");
 const limpiarFiltrosReportes = document.getElementById("limpiarFiltrosReportes");
-const reportes = document.querySelectorAll(".reporte");
 const noResultsReportes = document.getElementById("noResultsReportes");
+const contenedorReportes = document.getElementById("contenedorReportes");
 
 function filtrarReportes() {
   if (!filtroReporteTipo || !filtroReporteEstado || !filtroReporteCiudad) {
     return;
   }
+
+  const reportes = document.querySelectorAll(".reporte");
 
   const tipo = filtroReporteTipo.value;
   const estado = filtroReporteEstado.value;
@@ -613,17 +682,150 @@ if (limpiarFiltrosReportes) {
   });
 }
 
-// BOTONES DE COINCIDENCIA
-const botonesMatch = document.querySelectorAll(".btn-match");
+function obtenerCiudadDesdeZona(zona) {
+  const zonaTexto = zona ? zona.toLowerCase() : "";
 
-botonesMatch.forEach((boton) => {
-  boton.addEventListener("click", () => {
+  if (zonaTexto.includes("juliaca")) {
+    return "juliaca";
+  }
+
+  if (zonaTexto.includes("puno")) {
+    return "puno";
+  }
+
+  return "";
+}
+
+function obtenerIconoReporte(tipoMascota) {
+  if (tipoMascota === "perro") {
+    return "🐶";
+  }
+
+  if (tipoMascota === "gato") {
+    return "🐱";
+  }
+
+  return "🐾";
+}
+
+function obtenerBadgeReporte(tipoReporte, estadoReporte) {
+  if (estadoReporte === "reunida") {
+    return `<span class="report-badge badge-reunited">Reunida</span>`;
+  }
+
+  if (tipoReporte === "perdida") {
+    return `<span class="report-badge badge-lost">Perdida</span>`;
+  }
+
+  if (tipoReporte === "encontrada") {
+    return `<span class="report-badge badge-found">Encontrada</span>`;
+  }
+
+  return `<span class="report-badge badge-match">Reporte</span>`;
+}
+
+async function cargarReportesDesdeBD() {
+  if (!contenedorReportes) return;
+
+  if (typeof db === "undefined") {
+    alert("Supabase no está cargado. Revisa los scripts en reportes.html");
+    return;
+  }
+
+  const { data: reportesBD, error } = await db
+    .from("reportes_mascotas")
+    .select("*")
+    .order("created_at", { ascending: false });
+
+  console.log("Reportes desde Supabase:", reportesBD);
+  console.log("Error reportes:", error);
+
+  if (error) {
+    alert("No se pudieron cargar los reportes: " + error.message);
+    return;
+  }
+
+  contenedorReportes.innerHTML = "";
+
+  if (!reportesBD || reportesBD.length === 0) {
+    contenedorReportes.innerHTML = `
+      <div class="no-results" style="display: block;">
+        <h3>Aún no hay reportes registrados 🐾</h3>
+        <p>Cuando se reporte una mascota perdida o encontrada, aparecerá aquí.</p>
+      </div>
+    `;
+    return;
+  }
+
+  reportesBD.forEach((reporte) => {
+    const tipoMascota = reporte.tipo_mascota ? reporte.tipo_mascota.toLowerCase() : "";
+    const tipoReporte = reporte.tipo_reporte ? reporte.tipo_reporte.toLowerCase() : "";
+    const ciudadFiltro = obtenerCiudadDesdeZona(reporte.zona);
+    const estadoFiltro = reporte.estado_reporte === "reunida" ? "reunida" : tipoReporte;
+
+    const nombreVisible =
+      tipoReporte === "perdida"
+        ? reporte.nombre_mascota || "Mascota perdida"
+        : "Mascota encontrada";
+
+    const botonTexto =
+      tipoReporte === "perdida"
+        ? "Buscar coincidencias"
+        : "Ver posibles dueños";
+
+    contenedorReportes.innerHTML += `
+      <div class="report-item-card reporte"
+        data-id="${reporte.id}"
+        data-tipo="${tipoMascota}"
+        data-estado="${estadoFiltro}"
+        data-ciudad="${ciudadFiltro}">
+
+        <div class="report-pet-icon">${obtenerIconoReporte(tipoMascota)}</div>
+
+        <div class="report-content">
+          <div class="report-header">
+            <h3>${nombreVisible}</h3>
+            ${obtenerBadgeReporte(tipoReporte, reporte.estado_reporte)}
+          </div>
+
+          <p><strong>Tipo:</strong> ${reporte.tipo_mascota} · ${reporte.tamano} · ${reporte.color}</p>
+          <p><strong>Zona:</strong> ${reporte.zona}</p>
+          <p><strong>Referencia:</strong> ${reporte.referencia || "Sin referencia"}</p>
+          <p><strong>Fecha:</strong> ${reporte.fecha_reporte}</p>
+          <p><strong>Descripción:</strong> ${reporte.descripcion}</p>
+          <p><strong>Contacto:</strong> ${reporte.contacto_nombre} · ${reporte.contacto_telefono}</p>
+
+          ${
+            reporte.estado_fisico
+              ? `<p><strong>Estado físico:</strong> ${reporte.estado_fisico}</p>`
+              : ""
+          }
+
+          ${
+            reporte.collar_identificacion
+              ? `<p><strong>Collar/identificación:</strong> ${reporte.collar_identificacion}</p>`
+              : ""
+          }
+
+          <button class="btn-match">${botonTexto}</button>
+        </div>
+      </div>
+    `;
+  });
+
+  filtrarReportes();
+}
+
+cargarReportesDesdeBD();
+
+// BOTONES DE COINCIDENCIA DE REPORTES
+document.addEventListener("click", (e) => {
+  if (e.target.classList.contains("btn-match")) {
     alert(
       "Huellink analizará características como tipo, color, tamaño, zona y fecha para sugerir posibles coincidencias 🐾"
     );
-  });
+  }
 });
-
 // BOTONES DEL PANEL ADMINISTRADOR
 const botonesAprobar = document.querySelectorAll(".btn-approve");
 const botonesRechazar = document.querySelectorAll(".btn-reject");

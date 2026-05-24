@@ -1,5 +1,116 @@
 console.log("Huellink cargado correctamente 🐾");
 
+// SESIÓN, PROTECCIÓN DE PÁGINAS Y CIERRE DE SESIÓN
+const paginasProtegidas = [
+  "dashboard.html",
+  "admin.html",
+  "publicar-mascota.html",
+  "solicitudes.html",
+  "seguimiento.html",
+  "historial-seguimiento.html"
+];
+
+const permisosPorPagina = {
+  "admin.html": ["administrador"],
+  "publicar-mascota.html": ["rescatista", "refugio", "administrador"],
+  "solicitudes.html": ["rescatista", "refugio", "administrador"],
+  "seguimiento.html": ["rescatista", "refugio", "administrador"],
+  "historial-seguimiento.html": ["rescatista", "refugio", "administrador"],
+  "dashboard.html": ["ciudadano", "rescatista", "refugio", "administrador"]
+};
+
+async function obtenerPerfilActual(userId) {
+  const { data: perfil, error } = await db
+    .from("perfiles")
+    .select("*")
+    .eq("id", userId)
+    .single();
+
+  if (error) {
+    console.error("Error al obtener perfil:", error);
+    return null;
+  }
+
+  return perfil;
+}
+
+async function verificarSesionYPermisos() {
+  const paginaActual = window.location.pathname.split("/").pop();
+
+  if (!paginasProtegidas.includes(paginaActual)) {
+    return;
+  }
+
+  if (typeof db === "undefined") {
+    alert("Supabase no está cargado. Revisa los scripts de esta página.");
+    window.location.href = "login.html";
+    return;
+  }
+
+  const { data, error } = await db.auth.getSession();
+
+  if (error) {
+    console.error("Error al verificar sesión:", error);
+    window.location.href = "login.html";
+    return;
+  }
+
+  const session = data.session;
+
+  if (!session) {
+    alert("Debes iniciar sesión para acceder a esta página.");
+    window.location.href = "login.html";
+    return;
+  }
+
+  const perfil = await obtenerPerfilActual(session.user.id);
+
+  if (!perfil) {
+    alert("No se encontró el perfil del usuario.");
+    await db.auth.signOut();
+    localStorage.clear();
+    window.location.href = "login.html";
+    return;
+  }
+
+  localStorage.setItem("huellinkCorreo", perfil.correo);
+  localStorage.setItem("huellinkRol", perfil.rol);
+  localStorage.setItem("huellinkNombre", perfil.nombre);
+
+  const rolesPermitidos = permisosPorPagina[paginaActual];
+
+  if (rolesPermitidos && !rolesPermitidos.includes(perfil.rol)) {
+    alert("No tienes permiso para acceder a esta página.");
+    window.location.href = `dashboard.html?rol=${perfil.rol}`;
+    return;
+  }
+
+  const dashboardUsuario = document.getElementById("dashboardUsuario");
+
+  if (dashboardUsuario) {
+    dashboardUsuario.textContent = `Hola, ${perfil.nombre}`;
+  }
+}
+
+verificarSesionYPermisos();
+
+// CERRAR SESIÓN REAL
+document.addEventListener("click", async (e) => {
+  if (e.target.classList.contains("btn-logout")) {
+    e.preventDefault();
+
+    if (typeof db !== "undefined") {
+      await db.auth.signOut();
+    }
+
+    localStorage.removeItem("huellinkCorreo");
+    localStorage.removeItem("huellinkRol");
+    localStorage.removeItem("huellinkNombre");
+
+    alert("Sesión cerrada correctamente 🐾");
+    window.location.href = "login.html";
+  }
+});
 
 // BOTONES DE MASCOTAS: VER DETALLE Y SOLICITAR ADOPCIÓN
 document.addEventListener("click", (e) => {

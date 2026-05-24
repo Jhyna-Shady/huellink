@@ -821,9 +821,10 @@ cargarReportesDesdeBD();
 // BOTONES DE COINCIDENCIA DE REPORTES
 document.addEventListener("click", (e) => {
   if (e.target.classList.contains("btn-match")) {
-    alert(
-      "Huellink analizará características como tipo, color, tamaño, zona y fecha para sugerir posibles coincidencias 🐾"
-    );
+    const tarjetaReporte = e.target.closest(".reporte");
+    const idReporte = tarjetaReporte.dataset.id;
+
+    buscarCoincidenciasReporte(idReporte);
   }
 });
 // BOTONES DEL PANEL ADMINISTRADOR
@@ -1187,3 +1188,75 @@ document.addEventListener("click", async (e) => {
     filtrarSolicitudes();
   }
 });
+
+
+// BUSCAR COINCIDENCIAS BÁSICAS ENTRE REPORTES
+async function buscarCoincidenciasReporte(idReporte) {
+  if (typeof db === "undefined") {
+    alert("Supabase no está cargado.");
+    return;
+  }
+
+  const { data: reporteBase, error: errorBase } = await db
+    .from("reportes_mascotas")
+    .select("*")
+    .eq("id", idReporte)
+    .single();
+
+  if (errorBase) {
+    alert("No se pudo obtener el reporte seleccionado: " + errorBase.message);
+    return;
+  }
+
+  const tipoContrario =
+    reporteBase.tipo_reporte === "perdida" ? "encontrada" : "perdida";
+
+  const { data: posibles, error } = await db
+    .from("reportes_mascotas")
+    .select("*")
+    .eq("tipo_reporte", tipoContrario)
+    .eq("tipo_mascota", reporteBase.tipo_mascota)
+    .eq("tamano", reporteBase.tamano);
+
+  if (error) {
+    alert("No se pudieron buscar coincidencias: " + error.message);
+    return;
+  }
+
+  const coincidencias = posibles.filter((reporte) => {
+    const colorBase = reporteBase.color.toLowerCase();
+    const colorComparado = reporte.color.toLowerCase();
+
+    const zonaBase = reporteBase.zona.toLowerCase();
+    const zonaComparada = reporte.zona.toLowerCase();
+
+    const coincideColor =
+      colorBase.includes(colorComparado) ||
+      colorComparado.includes(colorBase) ||
+      colorBase.split(" ").some((palabra) => colorComparado.includes(palabra));
+
+    const coincideZona =
+      zonaBase.includes("puno") && zonaComparada.includes("puno") ||
+      zonaBase.includes("juliaca") && zonaComparada.includes("juliaca");
+
+    return coincideColor || coincideZona;
+  });
+
+  if (coincidencias.length === 0) {
+    alert("No se encontraron coincidencias cercanas para este reporte 🐾");
+    return;
+  }
+
+  let mensaje = `Se encontraron ${coincidencias.length} posible(s) coincidencia(s):\n\n`;
+
+  coincidencias.forEach((item, index) => {
+    mensaje += `${index + 1}. ${item.nombre_mascota || "Mascota encontrada"}\n`;
+    mensaje += `Tipo: ${item.tipo_mascota}\n`;
+    mensaje += `Color: ${item.color}\n`;
+    mensaje += `Tamaño: ${item.tamano}\n`;
+    mensaje += `Zona: ${item.zona}\n`;
+    mensaje += `Fecha: ${item.fecha_reporte}\n\n`;
+  });
+
+  alert(mensaje);
+}

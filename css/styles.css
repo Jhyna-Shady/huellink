@@ -1554,3 +1554,89 @@ body {
   text-align: center;
   margin-top: 35px;
 }
+
+/* CARRUSEL HERO DE MASCOTAS */
+
+.hero-carousel {
+  position: relative;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.hero-carousel .pet-card-main {
+  cursor: pointer;
+  transition: transform 0.25s ease, opacity 0.25s ease;
+}
+
+.hero-carousel .pet-card-main:hover {
+  transform: scale(1.02);
+}
+
+.carousel-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: #1b7f6b;
+  color: white;
+  border: none;
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  font-size: 30px;
+  font-weight: 700;
+  cursor: pointer;
+  z-index: 5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.carousel-btn:hover {
+  background: #126553;
+}
+
+.carousel-prev {
+  left: -20px;
+}
+
+.carousel-next {
+  right: -20px;
+}
+
+.carousel-dots {
+  position: absolute;
+  bottom: -35px;
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+}
+
+.carousel-dot {
+  width: 10px;
+  height: 10px;
+  background: #cdebe3;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.carousel-dot.active {
+  background: #1b7f6b;
+}
+
+@media (max-width: 700px) {
+  .carousel-prev {
+    left: -10px;
+  }
+
+  .carousel-next {
+    right: -10px;
+  }
+
+  .carousel-btn {
+    width: 36px;
+    height: 36px;
+    font-size: 24px;
+  }
+}

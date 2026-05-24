@@ -2110,3 +2110,182 @@ async function cargarMascotasInicio() {
 }
 
 cargarMascotasInicio();
+
+// CARRUSEL DE MASCOTAS DESTACADAS EN EL HERO DESDE SUPABASE
+const mascotaHero = document.getElementById("mascotaHero");
+const btnMascotaAnterior = document.getElementById("btnMascotaAnterior");
+const btnMascotaSiguiente = document.getElementById("btnMascotaSiguiente");
+const heroDots = document.getElementById("heroDots");
+
+let mascotasHero = [];
+let indiceMascotaHero = 0;
+let intervaloMascotaHero = null;
+
+async function cargarCarruselMascotasHero() {
+  if (!mascotaHero) return;
+
+  if (typeof db === "undefined") {
+    console.warn("Supabase no está cargado en index.html");
+    return;
+  }
+
+  const { data: mascotas, error } = await db
+    .from("mascotas")
+    .select("*")
+    .eq("estado_publicacion", "aprobada")
+    .order("created_at", { ascending: false })
+    .limit(5);
+
+  console.log("Mascotas carrusel hero:", mascotas);
+  console.log("Error carrusel hero:", error);
+
+  if (error) {
+    document.getElementById("heroNombre").textContent = "Mascota busca hogar";
+    document.getElementById("heroDescripcion").textContent = "No se pudo cargar la información.";
+    document.getElementById("heroEstado").textContent = "Disponible para adopción";
+    return;
+  }
+
+  if (!mascotas || mascotas.length === 0) {
+    document.getElementById("heroIcono").textContent = "🐾";
+    document.getElementById("heroNombre").textContent = "Mascota busca hogar";
+    document.getElementById("heroDescripcion").textContent = "Pronto mostraremos mascotas disponibles.";
+    document.getElementById("heroEstado").textContent = "Pendiente de publicación";
+
+    if (btnMascotaAnterior) btnMascotaAnterior.style.display = "none";
+    if (btnMascotaSiguiente) btnMascotaSiguiente.style.display = "none";
+    if (heroDots) heroDots.innerHTML = "";
+
+    return;
+  }
+
+  mascotasHero = mascotas;
+  indiceMascotaHero = 0;
+
+  pintarMascotaHero();
+  crearDotsHero();
+
+  if (mascotasHero.length <= 1) {
+    if (btnMascotaAnterior) btnMascotaAnterior.style.display = "none";
+    if (btnMascotaSiguiente) btnMascotaSiguiente.style.display = "none";
+  }
+
+  iniciarAutoCarruselHero();
+}
+
+function pintarMascotaHero() {
+  if (!mascotasHero.length) return;
+
+  const mascota = mascotasHero[indiceMascotaHero];
+
+  document.getElementById("heroIcono").textContent = mascota.icono || "🐾";
+  document.getElementById("heroNombre").textContent = `${mascota.nombre} busca hogar`;
+
+  document.getElementById("heroDescripcion").textContent =
+    `${mascota.edad || "Edad no registrada"} · ${mascota.vacunas || "Sin información"} · ${mascota.ciudad || "Ciudad no registrada"}`;
+
+  document.getElementById("heroEstado").textContent = "Disponible para adopción";
+
+  actualizarDotsHero();
+}
+
+function mostrarMascotaAnterior() {
+  if (!mascotasHero.length) return;
+
+  indiceMascotaHero--;
+
+  if (indiceMascotaHero < 0) {
+    indiceMascotaHero = mascotasHero.length - 1;
+  }
+
+  pintarMascotaHero();
+  reiniciarAutoCarruselHero();
+}
+
+function mostrarMascotaSiguiente() {
+  if (!mascotasHero.length) return;
+
+  indiceMascotaHero++;
+
+  if (indiceMascotaHero >= mascotasHero.length) {
+    indiceMascotaHero = 0;
+  }
+
+  pintarMascotaHero();
+  reiniciarAutoCarruselHero();
+}
+
+function crearDotsHero() {
+  if (!heroDots) return;
+
+  heroDots.innerHTML = "";
+
+  mascotasHero.forEach((_, index) => {
+    heroDots.innerHTML += `
+      <span class="carousel-dot" data-index="${index}"></span>
+    `;
+  });
+
+  actualizarDotsHero();
+}
+
+function actualizarDotsHero() {
+  if (!heroDots) return;
+
+  const dots = heroDots.querySelectorAll(".carousel-dot");
+
+  dots.forEach((dot, index) => {
+    dot.classList.toggle("active", index === indiceMascotaHero);
+  });
+}
+
+function iniciarAutoCarruselHero() {
+  if (mascotasHero.length <= 1) return;
+
+  intervaloMascotaHero = setInterval(() => {
+    mostrarMascotaSiguiente();
+  }, 5000);
+}
+
+function reiniciarAutoCarruselHero() {
+  if (intervaloMascotaHero) {
+    clearInterval(intervaloMascotaHero);
+  }
+
+  iniciarAutoCarruselHero();
+}
+
+if (btnMascotaAnterior) {
+  btnMascotaAnterior.addEventListener("click", (e) => {
+    e.stopPropagation();
+    mostrarMascotaAnterior();
+  });
+}
+
+if (btnMascotaSiguiente) {
+  btnMascotaSiguiente.addEventListener("click", (e) => {
+    e.stopPropagation();
+    mostrarMascotaSiguiente();
+  });
+}
+
+if (heroDots) {
+  heroDots.addEventListener("click", (e) => {
+    if (e.target.classList.contains("carousel-dot")) {
+      indiceMascotaHero = Number(e.target.dataset.index);
+      pintarMascotaHero();
+      reiniciarAutoCarruselHero();
+    }
+  });
+}
+
+if (mascotaHero) {
+  mascotaHero.addEventListener("click", () => {
+    if (!mascotasHero.length) return;
+
+    const mascota = mascotasHero[indiceMascotaHero];
+    window.location.href = `detalle-mascota.html?id=${mascota.id}`;
+  });
+}
+
+cargarCarruselMascotasHero();

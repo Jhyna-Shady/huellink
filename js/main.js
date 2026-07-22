@@ -7,15 +7,24 @@ const paginasProtegidas = [
   "publicar-mascota.html",
   "solicitudes.html",
   "seguimiento.html",
-  "historial-seguimiento.html"
+  "historial-seguimiento.html",
+  "reportar-perdida.html",
+  "reportar-encontrada.html",
+  "solicitud-adopcion.html"
 ];
 
 const permisosPorPagina = {
   "admin.html": ["administrador"],
+
   "publicar-mascota.html": ["rescatista", "refugio", "administrador"],
   "solicitudes.html": ["rescatista", "refugio", "administrador"],
   "seguimiento.html": ["rescatista", "refugio", "administrador"],
   "historial-seguimiento.html": ["rescatista", "refugio", "administrador"],
+
+  "reportar-perdida.html": ["ciudadano", "rescatista", "refugio", "administrador"],
+  "reportar-encontrada.html": ["ciudadano", "rescatista", "refugio", "administrador"],
+  "solicitud-adopcion.html": ["ciudadano", "rescatista", "refugio", "administrador"],
+
   "dashboard.html": ["ciudadano", "rescatista", "refugio", "administrador"]
 };
 
@@ -59,7 +68,7 @@ async function verificarSesionYPermisos() {
 
   if (!session) {
     alert("Debes iniciar sesión para acceder a esta página.");
-    window.location.href = "login.html";
+    window.location.href = `login.html?redirect=${encodeURIComponent(paginaActual)}`;
     return;
   }
 
@@ -198,6 +207,53 @@ if (limpiarFiltros) {
   });
 }
 
+async function subirFotoReporte(inputId, carpeta) {
+  const input = document.getElementById(inputId);
+
+  if (!input || !input.files || input.files.length === 0) {
+    return null;
+  }
+
+  const archivo = input.files[0];
+
+  const tiposPermitidos = ["image/jpeg", "image/png", "image/webp"];
+  const pesoMaximo = 5 * 1024 * 1024;
+
+  if (!tiposPermitidos.includes(archivo.type)) {
+    throw new Error("Solo se permiten imágenes JPG, PNG o WEBP.");
+  }
+
+  if (archivo.size > pesoMaximo) {
+    throw new Error("La imagen no debe superar los 5 MB.");
+  }
+
+  const { data: sesionData } = await db.auth.getSession();
+  const usuarioId = sesionData.session?.user?.id;
+
+  if (!usuarioId) {
+    throw new Error("Debes iniciar sesión para subir una foto.");
+  }
+
+  const extension = archivo.name.split(".").pop().toLowerCase();
+  const nombreArchivo = `${carpeta}/${usuarioId}-${Date.now()}.${extension}`;
+
+  const { error: uploadError } = await db.storage
+    .from("reportes-mascotas")
+    .upload(nombreArchivo, archivo, {
+      cacheControl: "3600",
+      upsert: false
+    });
+
+  if (uploadError) {
+    throw uploadError;
+  }
+
+  const { data } = db.storage
+    .from("reportes-mascotas")
+    .getPublicUrl(nombreArchivo);
+
+  return data.publicUrl;
+}
 // FORMULARIO DE MASCOTA PERDIDA EN SUPABASE
 const formPerdida = document.getElementById("formPerdida");
 
@@ -205,47 +261,67 @@ if (formPerdida) {
   formPerdida.addEventListener("submit", async (e) => {
     e.preventDefault();
 
-    if (typeof db === "undefined") {
-      alert("Supabase no está cargado. Revisa los scripts en reportar-perdida.html");
-      return;
+    try {
+      if (typeof db === "undefined") {
+        alert("Supabase no está cargado. Revisa los scripts en reportar-perdida.html");
+        return;
+      }
+      const { data: sesionData } = await db.auth.getSession();
+      const usuarioId = sesionData.session?.user?.id;
+
+      if (!usuarioId) {
+        alert("Debes iniciar sesión para publicar un reporte.");
+        window.location.href = "login.html?redirect=reportar-perdida.html";
+        return;
+      }
+
+
+      const fotoUrl = await subirFotoReporte("fotoMascota", "perdidas");
+
+      const nuevoReporte = {
+        tipo_reporte: "perdida",
+        nombre_mascota: document.getElementById("nombreMascota").value.trim(),
+        tipo_mascota: document.getElementById("tipoMascota").value,
+        color: document.getElementById("colorMascota").value.trim(),
+        tamano: document.getElementById("tamanoMascota").value,
+        sexo: document.getElementById("sexoMascota").value,
+        fecha_reporte: document.getElementById("fechaPerdida").value,
+        zona: document.getElementById("zonaPerdida").value.trim(),
+        referencia: document.getElementById("referenciaPerdida").value.trim(),
+        descripcion: document.getElementById("descripcionMascota").value.trim(),
+        contacto_nombre: document.getElementById("nombreContacto").value.trim(),
+        contacto_telefono: document.getElementById("telefonoContacto").value.trim(),
+        estado_fisico: "",
+        collar_identificacion: "",
+        estado_reporte: "activo",
+        foto_url: fotoUrl,
+        usuario_id: usuarioId
+      };
+
+      const { data, error } = await db
+        .from("reportes_mascotas")
+        .insert([nuevoReporte])
+        .select();
+
+      console.log("Reporte perdido guardado:", data);
+      console.log("Error reporte perdido:", error);
+
+      if (error) {
+        alert("Error al registrar reporte: " + error.message);
+        return;
+      }
+
+      alert(
+        `Reporte registrado correctamente 🐾\n\nMascota: ${nuevoReporte.nombre_mascota}\nZona: ${nuevoReporte.zona}\n\nEl reporte quedó publicado como mascota perdida.`
+      );
+
+      formPerdida.reset();
+      window.location.href = "reportes.html";
+
+    } catch (error) {
+      console.error("Error al subir o registrar reporte perdido:", error);
+      alert(error.message || "Ocurrió un error al publicar el reporte.");
     }
-
-    const nuevoReporte = {
-      tipo_reporte: "perdida",
-      nombre_mascota: document.getElementById("nombreMascota").value,
-      tipo_mascota: document.getElementById("tipoMascota").value,
-      color: document.getElementById("colorMascota").value,
-      tamano: document.getElementById("tamanoMascota").value,
-      sexo: document.getElementById("sexoMascota").value,
-      fecha_reporte: document.getElementById("fechaPerdida").value,
-      zona: document.getElementById("zonaPerdida").value,
-      referencia: document.getElementById("referenciaPerdida").value,
-      descripcion: document.getElementById("descripcionMascota").value,
-      contacto_nombre: document.getElementById("nombreContacto").value,
-      contacto_telefono: document.getElementById("telefonoContacto").value,
-      estado_reporte: "activo"
-    };
-
-    const { data, error } = await db
-      .from("reportes_mascotas")
-      .insert([nuevoReporte])
-      .select();
-
-    console.log("Reporte perdido guardado:", data);
-    console.log("Error reporte perdido:", error);
-
-    if (error) {
-      alert("Error al registrar reporte: " + error.message);
-      return;
-    }
-
-    alert(
-      `Reporte registrado correctamente 🐾\n\nMascota: ${nuevoReporte.nombre_mascota}\nZona: ${nuevoReporte.zona}\n\nEl reporte quedó publicado como mascota perdida.`
-    );
-
-    formPerdida.reset();
-
-    window.location.href = "reportes.html";
   });
 }
 
@@ -256,51 +332,70 @@ if (formEncontrada) {
   formEncontrada.addEventListener("submit", async (e) => {
     e.preventDefault();
 
-    if (typeof db === "undefined") {
-      alert("Supabase no está cargado. Revisa los scripts en reportar-encontrada.html");
-      return;
+    try {
+      if (typeof db === "undefined") {
+        alert("Supabase no está cargado. Revisa los scripts en reportar-encontrada.html");
+        return;
+      }
+      const { data: sesionData } = await db.auth.getSession();
+      const usuarioId = sesionData.session?.user?.id;
+
+      if (!usuarioId) {
+        alert("Debes iniciar sesión para publicar un reporte.");
+        window.location.href = "login.html?redirect=reportar-encontrada.html";
+        return;
+      }
+    
+
+      const fotoUrl = await subirFotoReporte("fotoEncontrada", "encontradas");
+
+      const nuevoReporte = {
+        tipo_reporte: "encontrada",
+        nombre_mascota: "Mascota encontrada",
+        tipo_mascota: document.getElementById("tipoEncontrada").value,
+        color: document.getElementById("colorEncontrada").value.trim(),
+        tamano: document.getElementById("tamanoEncontrada").value,
+        sexo: document.getElementById("sexoEncontrada").value,
+        estado_fisico: document.getElementById("estadoEncontrada").value,
+        fecha_reporte: document.getElementById("fechaEncontrada").value,
+        collar_identificacion: document.getElementById("collarEncontrada").value,
+        zona: document.getElementById("zonaEncontrada").value.trim(),
+        referencia: document.getElementById("referenciaEncontrada").value.trim(),
+        descripcion: document.getElementById("descripcionEncontrada").value.trim(),
+        contacto_nombre: document.getElementById("nombreReportante").value.trim(),
+        contacto_telefono: document.getElementById("telefonoReportante").value.trim(),
+        estado_reporte: "activo",
+        foto_url: fotoUrl,
+        usuario_id: usuarioId
+      };
+
+      const { data, error } = await db
+        .from("reportes_mascotas")
+        .insert([nuevoReporte])
+        .select();
+
+      console.log("Reporte encontrado guardado:", data);
+      console.log("Error reporte encontrado:", error);
+
+      if (error) {
+        alert("Error al registrar reporte: " + error.message);
+        return;
+      }
+
+      alert(
+        `Reporte registrado correctamente 🐾\n\nTipo: ${nuevoReporte.tipo_mascota}\nZona: ${nuevoReporte.zona}\n\nEl reporte quedó publicado como mascota encontrada.`
+      );
+
+      formEncontrada.reset();
+      window.location.href = "reportes.html";
+
+    } catch (error) {
+      console.error("Error al subir o registrar reporte encontrado:", error);
+      alert(error.message || "Ocurrió un error al publicar el reporte.");
     }
-
-    const nuevoReporte = {
-      tipo_reporte: "encontrada",
-      nombre_mascota: "Mascota encontrada",
-      tipo_mascota: document.getElementById("tipoEncontrada").value,
-      color: document.getElementById("colorEncontrada").value,
-      tamano: document.getElementById("tamanoEncontrada").value,
-      sexo: document.getElementById("sexoEncontrada").value,
-      estado_fisico: document.getElementById("estadoEncontrada").value,
-      fecha_reporte: document.getElementById("fechaEncontrada").value,
-      collar_identificacion: document.getElementById("collarEncontrada").value,
-      zona: document.getElementById("zonaEncontrada").value,
-      referencia: document.getElementById("referenciaEncontrada").value,
-      descripcion: document.getElementById("descripcionEncontrada").value,
-      contacto_nombre: document.getElementById("nombreReportante").value,
-      contacto_telefono: document.getElementById("telefonoReportante").value,
-      estado_reporte: "activo"
-    };
-
-    const { data, error } = await db
-      .from("reportes_mascotas")
-      .insert([nuevoReporte])
-      .select();
-
-    console.log("Reporte encontrado guardado:", data);
-    console.log("Error reporte encontrado:", error);
-
-    if (error) {
-      alert("Error al registrar reporte: " + error.message);
-      return;
-    }
-
-    alert(
-      `Reporte registrado correctamente 🐾\n\nTipo: ${nuevoReporte.tipo_mascota}\nZona: ${nuevoReporte.zona}\n\nEl reporte quedó publicado como mascota encontrada.`
-    );
-
-    formEncontrada.reset();
-
-    window.location.href = "reportes.html";
   });
 }
+
 // FORMULARIO DE REGISTRO DE REFUGIO O RESCATISTA EN SUPABASE
 const formAliado = document.getElementById("formAliado");
 
@@ -393,7 +488,14 @@ if (formLogin) {
     localStorage.setItem("huellinkRol", perfil.rol);
     localStorage.setItem("huellinkNombre", perfil.nombre);
 
-    window.location.href = `dashboard.html?rol=${perfil.rol}`;
+    const params = new URLSearchParams(window.location.search);
+    let destino = params.get("redirect");
+
+    if (!destino || destino.includes("://") || destino.startsWith("//")) {
+      destino = `dashboard.html?rol=${perfil.rol}`;
+    }
+
+    window.location.href = destino;
   });
 }
 // FORMULARIO REGISTRO CON SUPABASE AUTH
@@ -1042,7 +1144,11 @@ async function cargarReportesDesdeBD() {
         data-estado="${estadoFiltro}"
         data-ciudad="${ciudadFiltro}">
 
-        <div class="report-pet-icon">${obtenerIconoReporte(tipoMascota)}</div>
+        ${
+          reporte.foto_url
+            ? `<img src="${reporte.foto_url}" alt="Foto de mascota reportada" class="reporte-foto">`
+            : `<div class="report-pet-icon">${obtenerIconoReporte(tipoMascota)}</div>`
+        }
 
         <div class="report-content">
           <div class="report-header">
@@ -2289,3 +2395,4 @@ if (mascotaHero) {
 }
 
 cargarCarruselMascotasHero();
+

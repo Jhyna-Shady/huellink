@@ -2153,3 +2153,400 @@ textarea {
     text-align: center;
   }
 }
+
+/* =========================================================
+   RESPONSIVE GENERAL HUELLINK
+   Celular, tablet, laptop y escritorio
+   ========================================================= */
+
+/* Evita desbordes horizontales */
+html,
+body {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+/* Contenedores fluidos */
+.container,
+.page-container,
+.section-container,
+main {
+  width: min(92%, 1200px);
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* Imágenes responsive */
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+/* Textos adaptables */
+h1 {
+  font-size: clamp(2rem, 5vw, 4rem);
+}
+
+h2 {
+  font-size: clamp(1.6rem, 4vw, 2.8rem);
+}
+
+h3 {
+  font-size: clamp(1.2rem, 3vw, 1.8rem);
+}
+
+p,
+label,
+input,
+select,
+textarea,
+button,
+a {
+  font-size: clamp(0.9rem, 2.5vw, 1rem);
+}
+
+/* =========================================================
+   HEADER / NAVBAR RESPONSIVE
+   ========================================================= */
+
+.navbar,
+.header,
+.site-header {
+  width: 100%;
+  background-color: #ffffff;
+  position: relative;
+  z-index: 10;
+}
+
+.navbar .container,
+.header .container,
+.site-header .container,
+.nav-container {
+  width: min(92%, 1200px);
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+  padding: 14px 0;
+}
+
+/* Logo */
+.logo,
+.nav-logo,
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: clamp(1.3rem, 4vw, 1.9rem);
+  font-weight: 800;
+  color: #0b7f66;
+  text-decoration: none;
+  line-height: 1;
+}
+
+.logo img,
+.nav-logo img,
+.brand img {
+  width: clamp(32px, 8vw, 46px);
+  height: auto;
+}
+
+/* Botón login: nunca ocupará toda la pantalla */
+.btn-login {
+  width: auto !important;
+  min-width: auto;
+  max-width: max-content;
+  padding: 9px 16px !important;
+  font-size: clamp(0.8rem, 2.6vw, 0.95rem) !important;
+  border-radius: 12px;
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Evita que botones del header se hagan gigantes */
+.navbar button,
+.header button,
+.site-header button,
+.navbar .btn-login,
+.header .btn-login,
+.site-header .btn-login {
+  width: auto !important;
+}
+
+/* =========================================================
+   GRIDS RESPONSIVE
+   ========================================================= */
+
+.pet-grid,
+.pets-grid,
+.cards-grid,
+.dashboard-grid,
+.dashboard-actions,
+.reports-grid,
+.admin-grid,
+.stats-grid,
+.features-grid,
+.mascotas-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(260px, 100%), 1fr));
+  gap: 24px;
+}
+
+/* Las tarjetas nunca deben salirse */
+.card,
+.pet-card,
+.admin-card,
+.dashboard-action-card,
+.report-item-card,
+.form-card,
+.login-card,
+.register-card,
+.stat-card,
+.dashboard-stat {
+  width: 100%;
+  max-width: 100%;
+}
+
+/* =========================================================
+   FORMULARIOS RESPONSIVE
+   ========================================================= */
+
+form {
+  width: 100%;
+  max-width: 760px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+input,
+select,
+textarea {
+  width: 100%;
+  max-width: 100%;
+}
+
+/* Formularios en columnas si existe grid */
+.form-grid,
+.form-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(260px, 100%), 1fr));
+  gap: 18px;
+}
+
+/* =========================================================
+   BOTONES RESPONSIVE
+   ========================================================= */
+
+/* Botones normales */
+button,
+.btn-primary,
+.btn-secondary,
+.btn-adoptar,
+.btn-detalle,
+.btn-match,
+.btn-review,
+.btn-approve,
+.btn-reject,
+input[type="submit"] {
+  max-width: 100%;
+}
+
+/* En tarjetas sí pueden ocupar ancho completo si se ve mejor */
+.pet-card .btn-adoptar,
+.pet-card .btn-detalle,
+.report-item-card .btn-match,
+.form-actions button,
+form button[type="submit"],
+form input[type="submit"] {
+  width: 100%;
+}
+
+/* Pero login y botones pequeños no */
+.btn-login,
+button.close,
+.close {
+  width: auto !important;
+}
+
+/* =========================================================
+   HERO RESPONSIVE
+   ========================================================= */
+
+.hero,
+.home-hero {
+  padding: clamp(40px, 8vw, 90px) 0;
+}
+
+.hero-content,
+.hero-card,
+.mascota-hero-card {
+  width: 100%;
+  max-width: 100%;
+}
+
+/* Si tienes hero dividido en dos columnas */
+.hero-container,
+.hero-wrapper {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(300px, 100%), 1fr));
+  gap: 32px;
+  align-items: center;
+}
+
+/* =========================================================
+   REPORTES RESPONSIVE
+   ========================================================= */
+
+.report-item-card {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 18px;
+}
+
+.reporte-foto {
+  width: 100%;
+  max-height: 260px;
+  object-fit: cover;
+}
+
+/* =========================================================
+   TABLAS O LISTADOS
+   ========================================================= */
+
+.table-responsive,
+.responsive-table {
+  width: 100%;
+  overflow-x: auto;
+}
+
+/* =========================================================
+   TABLET
+   ========================================================= */
+
+@media (max-width: 1024px) {
+  section {
+    padding: 50px 0;
+  }
+
+  .pet-grid,
+  .pets-grid,
+  .cards-grid,
+  .dashboard-grid,
+  .dashboard-actions,
+  .reports-grid,
+  .admin-grid,
+  .stats-grid,
+  .features-grid,
+  .mascotas-grid {
+    gap: 20px;
+  }
+}
+
+/* =========================================================
+   CELULAR
+   ========================================================= */
+
+@media (max-width: 768px) {
+  .navbar .container,
+  .header .container,
+  .site-header .container,
+  .nav-container {
+    width: 92%;
+    flex-wrap: nowrap;
+    gap: 10px;
+  }
+
+  .logo,
+  .nav-logo,
+  .brand {
+    font-size: 1.4rem;
+  }
+
+  .btn-login {
+    padding: 8px 13px !important;
+    font-size: 0.85rem !important;
+    border-radius: 10px;
+  }
+
+  section {
+    padding: 40px 0;
+  }
+
+  .pet-card,
+  .admin-card,
+  .dashboard-action-card,
+  .report-item-card,
+  .form-card,
+  form {
+    padding: 22px;
+  }
+
+  .pet-photo {
+    min-height: 120px;
+    font-size: 52px;
+  }
+
+  .dashboard-stat,
+  .stat-card {
+    padding: 22px;
+  }
+}
+
+/* =========================================================
+   CELULAR PEQUEÑO
+   ========================================================= */
+
+@media (max-width: 480px) {
+  .navbar .container,
+  .header .container,
+  .site-header .container,
+  .nav-container {
+    width: 94%;
+  }
+
+  .logo,
+  .nav-logo,
+  .brand {
+    font-size: 1.25rem;
+  }
+
+  .logo img,
+  .nav-logo img,
+  .brand img {
+    width: 32px;
+  }
+
+  .btn-login {
+    padding: 7px 11px !important;
+    font-size: 0.78rem !important;
+  }
+
+  .pet-card,
+  .admin-card,
+  .dashboard-action-card,
+  .report-item-card,
+  .form-card,
+  form {
+    padding: 18px;
+    border-radius: 16px;
+  }
+
+  .pet-photo {
+    min-height: 100px;
+    font-size: 46px;
+  }
+
+  .report-badge,
+  .badge-lost,
+  .badge-found,
+  .badge-reunited,
+  .badge-match {
+    font-size: 0.75rem;
+    padding: 5px 9px;
+  }
+}

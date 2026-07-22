@@ -2578,3 +2578,61 @@ input[readonly] {
   color: #555555;
   cursor: not-allowed;
 }
+
+/* =========================================================
+   NAVBAR RESPONSIVE PARA APK / CELULAR
+   ========================================================= */
+
+@media (max-width: 768px) {
+  .nav-container {
+    width: 94%;
+    margin: 0 auto;
+    display: grid !important;
+    grid-template-columns: 1fr auto;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 0;
+  }
+
+  .logo {
+    grid-column: 1 / 2;
+    font-size: 1.35rem;
+    white-space: nowrap;
+  }
+
+  .btn-login {
+    grid-column: 2 / 3;
+    width: auto !important;
+    max-width: max-content;
+    padding: 8px 12px !important;
+    font-size: 0.8rem !important;
+    border-radius: 10px;
+    white-space: nowrap;
+  }
+
+  .nav-container nav {
+    grid-column: 1 / -1;
+    display: flex !important;
+    gap: 18px;
+    overflow-x: auto;
+    white-space: nowrap;
+    padding: 8px 0 4px;
+    scrollbar-width: none;
+  }
+
+  .nav-container nav::-webkit-scrollbar {
+    display: none;
+  }
+
+  .nav-container nav a {
+    flex: 0 0 auto;
+    font-size: 0.9rem;
+    color: #111111;
+    text-decoration: none;
+    font-weight: 500;
+  }
+
+  .nav-container nav a:hover {
+    color: #0b7f66;
+  }
+}

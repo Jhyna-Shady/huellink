@@ -191,6 +191,13 @@ if (accionesDashboard && actividadDashboard) {
           texto: "Publica un reporte para ayudar a reunirla con su familia.",
           link: "reportar-encontrada.html",
           boton: "Reportar encontrada"
+        },
+        {
+          icono: "📁",
+          titulo: "Mis reportes",
+          texto: "Consulta los reportes de mascotas perdidas o encontradas que publicaste.",
+          link: "mis-reportes.html",
+          boton: "Ver mis reportes"
         }
       ],
       actividad: [

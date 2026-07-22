@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mis reportes | Huellink</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+  <header class="navbar">
+    <div class="nav-container">
+      <a href="index.html" class="logo">🐾 Huellink</a>
+
+      <nav>
+        <a href="dashboard.html">Mi panel</a>
+        <a href="reportes.html">Reportes</a>
+        <a href="reportar-perdida.html">Reportar pérdida</a>
+        <a href="reportar-encontrada.html">Reportar encontrada</a>
+        <a href="#" class="btn-login btn-logout">Cerrar sesión</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="page-container">
+
+    <section class="page-header">
+      <h1>Mis reportes 🐾</h1>
+      <p>Aquí puedes revisar los reportes de mascotas perdidas o encontradas que publicaste en Huellink.</p>
+    </section>
+
+    <section class="filters-container">
+      <div class="form-grid">
+        <div class="form-group">
+          <label for="filtroMisReportesTipo">Tipo de mascota</label>
+          <select id="filtroMisReportesTipo">
+            <option value="todos">Todos</option>
+            <option value="perro">Perros</option>
+            <option value="gato">Gatos</option>
+            <option value="otro">Otros</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="filtroMisReportesEstado">Estado</label>
+          <select id="filtroMisReportesEstado">
+            <option value="todos">Todos</option>
+            <option value="perdida">Perdidas</option>
+            <option value="encontrada">Encontradas</option>
+            <option value="reunida">Reunidas</option>
+          </select>
+        </div>
+      </div>
+
+      <button id="limpiarFiltrosMisReportes" class="btn-secondary">Limpiar filtros</button>
+    </section>
+
+    <section>
+      <div id="contenedorMisReportes" class="reports-grid"></div>
+
+      <div id="noResultsMisReportes" class="no-results" style="display: none;">
+        <h3>No se encontraron reportes 🐾</h3>
+        <p>Prueba cambiando los filtros o registra un nuevo reporte.</p>
+      </div>
+    </section>
+
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/supabase-config.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/mis-reportes.js"></script>
+</body>
+</html>

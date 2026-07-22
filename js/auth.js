@@ -10,7 +10,8 @@ const AUTH_PAGINAS_PROTEGIDAS = [
   "historial-seguimiento.html",
   "reportar-perdida.html",
   "reportar-encontrada.html",
-  "solicitud-adopcion.html"
+  "solicitud-adopcion.html",
+
 ];
 
 // PERMISOS POR ROL

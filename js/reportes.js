@@ -1,6 +1,9 @@
 console.log("reportes.js cargado correctamente 📍🐾");
 
-// DATOS DEL USUARIO PARA REPORTES
+/* =========================================================
+   DATOS DEL USUARIO PARA REPORTES
+   ========================================================= */
+
 let usuarioIdReporte = null;
 let perfilReporteActual = null;
 
@@ -68,7 +71,7 @@ function completarCampoReporte(idCampo, valor, bloquear = false) {
   }
 }
 
-// MOSTRAR AVISO EN FORMULARIO DE REPORTE
+// MOSTRAR AVISO EN FORMULARIO
 function mostrarAvisoDatosReporte(formulario) {
   if (!formulario) return;
 
@@ -129,7 +132,10 @@ async function autocompletarContactoReporte(tipoReporte) {
 autocompletarContactoReporte("perdida");
 autocompletarContactoReporte("encontrada");
 
-// SUBIR FOTO DE REPORTE A SUPABASE STORAGE
+/* =========================================================
+   SUBIR FOTO DE REPORTE A SUPABASE STORAGE
+   ========================================================= */
+
 async function subirFotoReporte(inputId, carpeta) {
   const input = document.getElementById(inputId);
 
@@ -178,7 +184,10 @@ async function subirFotoReporte(inputId, carpeta) {
   return data.publicUrl;
 }
 
-// FORMULARIO DE MASCOTA PERDIDA
+/* =========================================================
+   FORMULARIO DE MASCOTA PERDIDA
+   ========================================================= */
+
 const formPerdida = document.getElementById("formPerdida");
 
 if (formPerdida) {
@@ -249,7 +258,10 @@ if (formPerdida) {
   });
 }
 
-// FORMULARIO DE MASCOTA ENCONTRADA
+/* =========================================================
+   FORMULARIO DE MASCOTA ENCONTRADA
+   ========================================================= */
+
 const formEncontrada = document.getElementById("formEncontrada");
 
 if (formEncontrada) {
@@ -320,7 +332,10 @@ if (formEncontrada) {
   });
 }
 
-// FILTROS DE REPORTES
+/* =========================================================
+   FILTROS DE REPORTES PÚBLICOS
+   ========================================================= */
+
 const filtroReporteTipo = document.getElementById("filtroReporteTipo");
 const filtroReporteEstado = document.getElementById("filtroReporteEstado");
 const filtroReporteCiudad = document.getElementById("filtroReporteCiudad");
@@ -374,7 +389,10 @@ if (limpiarFiltrosReportes) {
   });
 }
 
-// FUNCIONES AUXILIARES DE REPORTES
+/* =========================================================
+   FUNCIONES AUXILIARES
+   ========================================================= */
+
 function obtenerCiudadDesdeZona(zona) {
   const zonaTexto = zona ? zona.toLowerCase() : "";
 
@@ -384,6 +402,10 @@ function obtenerCiudadDesdeZona(zona) {
 
   if (zonaTexto.includes("puno")) {
     return "puno";
+  }
+
+  if (zonaTexto.includes("cajamarca")) {
+    return "cajamarca";
   }
 
   return "";
@@ -417,7 +439,18 @@ function obtenerBadgeReporte(tipoReporte, estadoReporte) {
   return `<span class="report-badge badge-match">Reporte</span>`;
 }
 
-// CARGAR REPORTES DESDE SUPABASE
+function textoSeguro(valor, fallback = "No registrado") {
+  if (valor === null || valor === undefined || valor === "") {
+    return fallback;
+  }
+
+  return String(valor);
+}
+
+/* =========================================================
+   CARGAR TODOS LOS REPORTES PÚBLICOS
+   ========================================================= */
+
 async function cargarReportesDesdeBD() {
   if (!contenedorReportes) return;
 
@@ -431,8 +464,8 @@ async function cargarReportesDesdeBD() {
     .select("*")
     .order("created_at", { ascending: false });
 
-  console.log("Reportes desde Supabase:", reportesBD);
-  console.log("Error reportes:", error);
+  console.log("Reportes públicos desde Supabase:", reportesBD);
+  console.log("Error reportes públicos:", error);
 
   if (error) {
     alert("No se pudieron cargar los reportes: " + error.message);
@@ -459,7 +492,7 @@ async function cargarReportesDesdeBD() {
 
     const nombreVisible =
       tipoReporte === "perdida"
-        ? reporte.nombre_mascota || "Mascota perdida"
+        ? textoSeguro(reporte.nombre_mascota, "Mascota perdida")
         : "Mascota encontrada";
 
     const botonTexto =
@@ -486,12 +519,12 @@ async function cargarReportesDesdeBD() {
             ${obtenerBadgeReporte(tipoReporte, reporte.estado_reporte)}
           </div>
 
-          <p><strong>Tipo:</strong> ${reporte.tipo_mascota} · ${reporte.tamano} · ${reporte.color}</p>
-          <p><strong>Zona:</strong> ${reporte.zona}</p>
-          <p><strong>Referencia:</strong> ${reporte.referencia || "Sin referencia"}</p>
-          <p><strong>Fecha:</strong> ${reporte.fecha_reporte}</p>
-          <p><strong>Descripción:</strong> ${reporte.descripcion}</p>
-          <p><strong>Contacto:</strong> ${reporte.contacto_nombre} · ${reporte.contacto_telefono}</p>
+          <p><strong>Tipo:</strong> ${textoSeguro(reporte.tipo_mascota)} · ${textoSeguro(reporte.tamano)} · ${textoSeguro(reporte.color)}</p>
+          <p><strong>Zona:</strong> ${textoSeguro(reporte.zona)}</p>
+          <p><strong>Referencia:</strong> ${textoSeguro(reporte.referencia, "Sin referencia")}</p>
+          <p><strong>Fecha:</strong> ${textoSeguro(reporte.fecha_reporte)}</p>
+          <p><strong>Descripción:</strong> ${textoSeguro(reporte.descripcion)}</p>
+          <p><strong>Contacto:</strong> ${textoSeguro(reporte.contacto_nombre)} · ${textoSeguro(reporte.contacto_telefono)}</p>
 
           ${
             reporte.estado_fisico
@@ -516,18 +549,26 @@ async function cargarReportesDesdeBD() {
 
 cargarReportesDesdeBD();
 
-// BOTÓN PARA BUSCAR COINCIDENCIAS
+/* =========================================================
+   BOTÓN PARA BUSCAR COINCIDENCIAS
+   ========================================================= */
+
 document.addEventListener("click", (e) => {
   if (e.target.classList.contains("btn-match")) {
     const tarjetaReporte = e.target.closest(".reporte");
+
     if (!tarjetaReporte) return;
 
     const idReporte = tarjetaReporte.dataset.id;
+
     buscarCoincidenciasReporte(idReporte);
   }
 });
 
-// BUSCAR COINCIDENCIAS BÁSICAS ENTRE REPORTES
+/* =========================================================
+   BUSCAR COINCIDENCIAS BÁSICAS ENTRE REPORTES
+   ========================================================= */
+
 async function buscarCoincidenciasReporte(idReporte) {
   if (typeof db === "undefined") {
     alert("Supabase no está cargado.");
@@ -561,20 +602,21 @@ async function buscarCoincidenciasReporte(idReporte) {
   }
 
   const coincidencias = posibles.filter((reporte) => {
-    const colorBase = reporteBase.color.toLowerCase();
-    const colorComparado = reporte.color.toLowerCase();
+    const colorBase = reporteBase.color ? reporteBase.color.toLowerCase() : "";
+    const colorComparado = reporte.color ? reporte.color.toLowerCase() : "";
 
-    const zonaBase = reporteBase.zona.toLowerCase();
-    const zonaComparada = reporte.zona.toLowerCase();
+    const zonaBase = reporteBase.zona ? reporteBase.zona.toLowerCase() : "";
+    const zonaComparada = reporte.zona ? reporte.zona.toLowerCase() : "";
 
     const coincideColor =
       colorBase.includes(colorComparado) ||
       colorComparado.includes(colorBase) ||
-      colorBase.split(" ").some((palabra) => colorComparado.includes(palabra));
+      colorBase.split(" ").some((palabra) => palabra && colorComparado.includes(palabra));
 
     const coincideZona =
       (zonaBase.includes("puno") && zonaComparada.includes("puno")) ||
-      (zonaBase.includes("juliaca") && zonaComparada.includes("juliaca"));
+      (zonaBase.includes("juliaca") && zonaComparada.includes("juliaca")) ||
+      (zonaBase.includes("cajamarca") && zonaComparada.includes("cajamarca"));
 
     return coincideColor || coincideZona;
   });
@@ -592,13 +634,17 @@ async function buscarCoincidenciasReporte(idReporte) {
     mensaje += `Color: ${item.color}\n`;
     mensaje += `Tamaño: ${item.tamano}\n`;
     mensaje += `Zona: ${item.zona}\n`;
-    mensaje += `Fecha: ${item.fecha_reporte}\n\n`;
+    mensaje += `Fecha: ${item.fecha_reporte}\n`;
+    mensaje += `Contacto: ${item.contacto_nombre} - ${item.contacto_telefono}\n\n`;
   });
 
   alert(mensaje);
 }
 
-// DISPONIBLE PARA OTROS ARCHIVOS SI SE NECESITA
+/* =========================================================
+   FUNCIONES DISPONIBLES PARA OTROS ARCHIVOS
+   ========================================================= */
+
 window.subirFotoReporte = subirFotoReporte;
 window.cargarReportesDesdeBD = cargarReportesDesdeBD;
 window.buscarCoincidenciasReporte = buscarCoincidenciasReporte;

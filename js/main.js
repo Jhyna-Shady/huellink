@@ -1,11 +1,11 @@
-console.log("Huellink cargado correctamente 🐾");
-
-
+console.log("main.js cargado correctamente 🐾");
 
 // BOTONES DE MASCOTAS: VER DETALLE Y SOLICITAR ADOPCIÓN
 document.addEventListener("click", (e) => {
   if (e.target.classList.contains("btn-detalle")) {
     const tarjetaMascota = e.target.closest(".pet-card");
+    if (!tarjetaMascota) return;
+
     const idMascota = tarjetaMascota.dataset.id;
     const nombreMascota = tarjetaMascota.querySelector("h3").textContent;
 
@@ -17,20 +17,21 @@ document.addEventListener("click", (e) => {
   }
 
   if (e.target.classList.contains("btn-adoptar")) {
-  const tarjetaMascota = e.target.closest(".pet-card");
-  const idMascota = tarjetaMascota.dataset.id;
-  const nombreMascota = tarjetaMascota.querySelector("h3").textContent;
+    const tarjetaMascota = e.target.closest(".pet-card");
+    if (!tarjetaMascota) return;
 
-  if (idMascota) {
-    window.location.href = `solicitud-adopcion.html?id=${idMascota}&mascota=${encodeURIComponent(nombreMascota)}`;
-  } else {
-    window.location.href = `solicitud-adopcion.html?mascota=${encodeURIComponent(nombreMascota)}`;
+    const idMascota = tarjetaMascota.dataset.id;
+    const nombreMascota = tarjetaMascota.querySelector("h3").textContent;
+
+    if (idMascota) {
+      window.location.href = `solicitud-adopcion.html?id=${idMascota}&mascota=${encodeURIComponent(nombreMascota)}`;
+    } else {
+      window.location.href = `solicitud-adopcion.html?mascota=${encodeURIComponent(nombreMascota)}`;
+    }
   }
-}
 });
 
-
-/// FILTROS DE MASCOTAS
+// FILTROS DE MASCOTAS
 const filtroTipo = document.getElementById("tipo");
 const filtroCiudad = document.getElementById("ciudad");
 const filtroTamano = document.getElementById("tamano");
@@ -88,9 +89,7 @@ if (limpiarFiltros) {
   });
 }
 
-
-
-// FORMULARIO DE REGISTRO DE REFUGIO O RESCATISTA EN SUPABASE
+// REGISTRO DE REFUGIO O RESCATISTA
 const formAliado = document.getElementById("formAliado");
 
 if (formAliado) {
@@ -136,306 +135,10 @@ if (formAliado) {
     );
 
     formAliado.reset();
-
     window.location.href = "index.html";
   });
 }
 
-console.log("auth.js cargado correctamente 🔐🐾");
-
-// PÁGINAS QUE REQUIEREN SESIÓN
-const AUTH_PAGINAS_PROTEGIDAS = [
-  "dashboard.html",
-  "admin.html",
-  "publicar-mascota.html",
-  "solicitudes.html",
-  "seguimiento.html",
-  "historial-seguimiento.html",
-  "reportar-perdida.html",
-  "reportar-encontrada.html",
-  "solicitud-adopcion.html"
-];
-
-// PERMISOS POR ROL
-const AUTH_PERMISOS_POR_PAGINA = {
-  "admin.html": ["administrador"],
-
-  "publicar-mascota.html": ["rescatista", "refugio", "administrador"],
-  "solicitudes.html": ["rescatista", "refugio", "administrador"],
-  "seguimiento.html": ["rescatista", "refugio", "administrador"],
-  "historial-seguimiento.html": ["rescatista", "refugio", "administrador"],
-
-  "reportar-perdida.html": ["ciudadano", "rescatista", "refugio", "administrador"],
-  "reportar-encontrada.html": ["ciudadano", "rescatista", "refugio", "administrador"],
-  "solicitud-adopcion.html": ["ciudadano", "rescatista", "refugio", "administrador"],
-
-  "dashboard.html": ["ciudadano", "rescatista", "refugio", "administrador"]
-};
-
-// OBTENER PERFIL ACTUAL DESDE SUPABASE
-async function obtenerPerfilActual(userId) {
-  if (typeof db === "undefined") {
-    console.error("Supabase no está cargado.");
-    return null;
-  }
-
-  const { data: perfil, error } = await db
-    .from("perfiles")
-    .select("*")
-    .eq("id", userId)
-    .single();
-
-  if (error) {
-    console.error("Error al obtener perfil:", error);
-    return null;
-  }
-
-  return perfil;
-}
-
-// GUARDAR PERFIL EN LOCALSTORAGE
-function guardarPerfilLocal(perfil) {
-  if (!perfil) return;
-
-  localStorage.setItem("huellinkCorreo", perfil.correo || "");
-  localStorage.setItem("huellinkRol", perfil.rol || "");
-  localStorage.setItem("huellinkNombre", perfil.nombre || "");
-}
-
-// LIMPIAR SESIÓN LOCAL
-function limpiarSesionLocal() {
-  localStorage.removeItem("huellinkCorreo");
-  localStorage.removeItem("huellinkRol");
-  localStorage.removeItem("huellinkNombre");
-}
-
-// VERIFICAR SESIÓN Y PERMISOS
-async function verificarSesionYPermisos() {
-  const paginaActual = window.location.pathname.split("/").pop() || "index.html";
-  const destinoActual = `${paginaActual}${window.location.search || ""}`;
-
-  if (!AUTH_PAGINAS_PROTEGIDAS.includes(paginaActual)) {
-    return;
-  }
-
-  if (typeof db === "undefined") {
-    alert("Supabase no está cargado. Revisa los scripts de esta página.");
-    window.location.href = "login.html";
-    return;
-  }
-
-  const { data, error } = await db.auth.getSession();
-
-  if (error) {
-    console.error("Error al verificar sesión:", error);
-    window.location.href = "login.html";
-    return;
-  }
-
-  const session = data.session;
-
-  if (!session) {
-    alert("Debes iniciar sesión para acceder a esta página.");
-    window.location.href = `login.html?redirect=${encodeURIComponent(destinoActual)}`;
-    return;
-  }
-
-  const perfil = await obtenerPerfilActual(session.user.id);
-
-  if (!perfil) {
-    alert("No se encontró el perfil del usuario.");
-    await db.auth.signOut();
-    limpiarSesionLocal();
-    window.location.href = "login.html";
-    return;
-  }
-
-  guardarPerfilLocal(perfil);
-
-  const rolesPermitidos = AUTH_PERMISOS_POR_PAGINA[paginaActual];
-
-  if (rolesPermitidos && !rolesPermitidos.includes(perfil.rol)) {
-    alert("No tienes permiso para acceder a esta página.");
-    window.location.href = `dashboard.html?rol=${perfil.rol}`;
-    return;
-  }
-
-  const dashboardUsuario = document.getElementById("dashboardUsuario");
-
-  if (dashboardUsuario) {
-    dashboardUsuario.textContent = `Hola, ${perfil.nombre}`;
-  }
-}
-
-// CAMBIAR BOTÓN DE INICIAR SESIÓN CUANDO YA HAY SESIÓN
-async function actualizarBotonesSesion() {
-  const botonesLogin = document.querySelectorAll(".btn-login");
-
-  if (!botonesLogin.length) return;
-  if (typeof db === "undefined") return;
-
-  const { data } = await db.auth.getSession();
-  const session = data.session;
-
-  botonesLogin.forEach((boton) => {
-    if (boton.classList.contains("btn-logout")) {
-      return;
-    }
-
-    if (session) {
-      boton.textContent = "Mi panel";
-      boton.href = "dashboard.html";
-    } else {
-      boton.textContent = "Iniciar sesión";
-      boton.href = "login.html";
-    }
-  });
-}
-
-// CERRAR SESIÓN
-document.addEventListener("click", async (e) => {
-  if (e.target.classList.contains("btn-logout")) {
-    e.preventDefault();
-
-    if (typeof db !== "undefined") {
-      await db.auth.signOut();
-    }
-
-    limpiarSesionLocal();
-
-    alert("Sesión cerrada correctamente 🐾");
-    window.location.href = "login.html";
-  }
-});
-
-// LOGIN
-const authFormLogin = document.getElementById("formLogin");
-
-if (authFormLogin) {
-  authFormLogin.addEventListener("submit", async (e) => {
-    e.preventDefault();
-
-    if (typeof db === "undefined") {
-      alert("Supabase no está cargado. Revisa los scripts en login.html");
-      return;
-    }
-
-    const correoLogin = document.getElementById("correoLogin").value.trim();
-    const passwordLogin = document.getElementById("passwordLogin").value;
-
-    const { data, error } = await db.auth.signInWithPassword({
-      email: correoLogin,
-      password: passwordLogin
-    });
-
-    if (error) {
-      alert("Error al iniciar sesión: " + error.message);
-      return;
-    }
-
-    const user = data.user;
-
-    const perfil = await obtenerPerfilActual(user.id);
-
-    if (!perfil) {
-      alert("No se pudo cargar el perfil del usuario.");
-      return;
-    }
-
-    guardarPerfilLocal(perfil);
-
-    const params = new URLSearchParams(window.location.search);
-    let destino = params.get("redirect");
-
-    if (!destino || destino.includes("://") || destino.startsWith("//")) {
-      destino = `dashboard.html?rol=${perfil.rol}`;
-    }
-
-    window.location.href = destino;
-  });
-}
-
-// REGISTRO
-const authFormRegistro = document.getElementById("formRegistro");
-
-if (authFormRegistro) {
-  authFormRegistro.addEventListener("submit", async (e) => {
-    e.preventDefault();
-
-    if (typeof db === "undefined") {
-      alert("Supabase no está cargado. Revisa los scripts en registro.html");
-      return;
-    }
-
-    const nombre = document.getElementById("nombreRegistro").value.trim();
-    const correo = document.getElementById("correoRegistro").value.trim();
-    const telefono = document.getElementById("telefonoRegistro").value.trim();
-    const ciudad = document.getElementById("ciudadRegistro").value.trim();
-    const rol = document.getElementById("rolRegistro").value;
-    const password = document.getElementById("passwordRegistro").value;
-    const confirmarPassword = document.getElementById("confirmarPassword").value;
-
-    if (password !== confirmarPassword) {
-      alert("Las contraseñas no coinciden. Intenta nuevamente.");
-      return;
-    }
-
-    const { data, error } = await db.auth.signUp({
-      email: correo,
-      password: password
-    });
-
-    if (error) {
-      alert("Error al registrar usuario: " + error.message);
-      return;
-    }
-
-    const user = data.user;
-
-    if (!user) {
-      alert("Usuario creado, pero falta confirmar el correo. Revisa tu email.");
-      return;
-    }
-
-    const nuevoPerfil = {
-      id: user.id,
-      nombre,
-      correo,
-      telefono,
-      ciudad,
-      rol,
-      estado: "activo"
-    };
-
-    const { error: errorPerfil } = await db
-      .from("perfiles")
-      .insert([nuevoPerfil]);
-
-    if (errorPerfil) {
-      alert("Usuario creado, pero ocurrió un error al guardar el perfil: " + errorPerfil.message);
-      return;
-    }
-
-    alert(
-      `Registro creado correctamente 🐾\n\nNombre: ${nombre}\nCorreo: ${correo}\nRol: ${rol}`
-    );
-
-    authFormRegistro.reset();
-
-    window.location.href = "login.html";
-  });
-}
-
-// EJECUTAR FUNCIONES DE AUTH
-verificarSesionYPermisos();
-actualizarBotonesSesion();
-
-// DEJAR FUNCIONES DISPONIBLES PARA OTROS ARCHIVOS
-window.obtenerPerfilActual = obtenerPerfilActual;
-window.guardarPerfilLocal = guardarPerfilLocal;
-window.limpiarSesionLocal = limpiarSesionLocal;
-window.verificarSesionYPermisos = verificarSesionYPermisos;
-window.actualizarBotonesSesion = actualizarBotonesSesion;
 // DASHBOARD SEGÚN ROL
 const accionesDashboard = document.getElementById("accionesDashboard");
 const actividadDashboard = document.getElementById("actividadDashboard");
@@ -491,9 +194,9 @@ if (accionesDashboard && actividadDashboard) {
         }
       ],
       actividad: [
-        ["📋", "Solicitud enviada", "Tu solicitud para adoptar a Luna está en revisión."],
-        ["📍", "Reporte publicado", "Registraste una mascota perdida en Cajamarca."],
-        ["🔔", "Posible coincidencia", "Hay una mascota encontrada parecida a tu reporte."]
+        ["📋", "Solicitud enviada", "Tu solicitud de adopción está en revisión."],
+        ["📍", "Reporte publicado", "Puedes registrar mascotas perdidas o encontradas."],
+        ["🔔", "Posible coincidencia", "Revisa los reportes publicados en Huellink."]
       ]
     },
 
@@ -530,64 +233,62 @@ if (accionesDashboard && actividadDashboard) {
           texto: "Consulta los controles registrados después de las adopciones.",
           link: "historial-seguimiento.html",
           boton: "Ver historial"
-       }
+        }
       ],
       actividad: [
-        ["🐶", "Mascota publicada", "Publicaste a Toby como disponible para adopción."],
-        ["📋", "Nueva solicitud", "Un ciudadano solicitó adoptar a Max."],
-        ["✅", "Seguimiento pendiente", "Debes registrar el control de primera semana."]
+        ["🐶", "Mascota publicada", "Publicaste una mascota como disponible para adopción."],
+        ["📋", "Nueva solicitud", "Un ciudadano puede solicitar adoptar una mascota."],
+        ["✅", "Seguimiento pendiente", "Recuerda registrar controles post adopción."]
       ]
-      
     },
+
     refugio: {
-    titulo: "Panel del refugio",
-    descripcion: "Administra mascotas, solicitudes, reportes recibidos y adopciones desde tu refugio.",
-    rolTexto: "Refugio",
-    stats: ["18", "Mascotas", "9", "Solicitudes", "7", "Adopciones", "4", "Reportes"],
-
-    acciones: [
+      titulo: "Panel del refugio",
+      descripcion: "Administra mascotas, solicitudes, reportes recibidos y adopciones desde tu refugio.",
+      rolTexto: "Refugio",
+      stats: ["18", "Mascotas", "9", "Solicitudes", "7", "Adopciones", "4", "Reportes"],
+      acciones: [
         {
-        icono: "🐕",
-        titulo: "Gestionar mascotas",
-        texto: "Administra las mascotas publicadas por el refugio.",
-        link: "publicar-mascota.html",
-        boton: "Gestionar"
+          icono: "🐕",
+          titulo: "Gestionar mascotas",
+          texto: "Administra las mascotas publicadas por el refugio.",
+          link: "publicar-mascota.html",
+          boton: "Gestionar"
         },
         {
-        icono: "📋",
-        titulo: "Solicitudes de adopción",
-        texto: "Revisa, aprueba o rechaza solicitudes recibidas.",
-        link: "solicitudes.html",
-        boton: "Revisar"
+          icono: "📋",
+          titulo: "Solicitudes de adopción",
+          texto: "Revisa, aprueba o rechaza solicitudes recibidas.",
+          link: "solicitudes.html",
+          boton: "Revisar"
         },
         {
-        icono: "📍",
-        titulo: "Reportes cercanos",
-        texto: "Consulta mascotas perdidas o encontradas en tu zona.",
-        link: "reportes.html",
-        boton: "Ver reportes"
+          icono: "📍",
+          titulo: "Reportes cercanos",
+          texto: "Consulta mascotas perdidas o encontradas en tu zona.",
+          link: "reportes.html",
+          boton: "Ver reportes"
         },
         {
-        icono: "✅",
-        titulo: "Seguimiento post adopción",
-        texto: "Registra controles de bienestar después de una adopción.",
-        link: "seguimiento.html",
-        boton: "Registrar seguimiento"
+          icono: "✅",
+          titulo: "Seguimiento post adopción",
+          texto: "Registra controles de bienestar después de una adopción.",
+          link: "seguimiento.html",
+          boton: "Registrar seguimiento"
         },
         {
-        icono: "📁",
-        titulo: "Historial de seguimiento",
-        texto: "Revisa los seguimientos registrados por el refugio.",
-        link: "historial-seguimiento.html",
-        boton: "Ver historial"
+          icono: "📁",
+          titulo: "Historial de seguimiento",
+          texto: "Revisa los seguimientos registrados por el refugio.",
+          link: "historial-seguimiento.html",
+          boton: "Ver historial"
         }
-    ],
-
-    actividad: [
+      ],
+      actividad: [
         ["🐾", "Nueva mascota registrada", "Se agregó una nueva mascota al refugio."],
         ["📋", "Solicitud aprobada", "Una solicitud de adopción fue aprobada."],
-        ["📊", "Estadística actualizada", "El refugio registra 7 adopciones logradas."]
-    ]
+        ["📊", "Estadística actualizada", "El refugio actualiza sus datos de adopción."]
+      ]
     },
 
     administrador: {
@@ -619,8 +320,8 @@ if (accionesDashboard && actividadDashboard) {
         }
       ],
       actividad: [
-        ["✅", "Registro pendiente", "Hay 3 refugios pendientes de validación."],
-        ["⚠️", "Publicación reportada", "Un usuario reportó contenido sospechoso."],
+        ["✅", "Registro pendiente", "Hay aliados pendientes de validación."],
+        ["⚠️", "Publicación reportada", "Revisa publicaciones sospechosas."],
         ["📊", "Resumen actualizado", "Las estadísticas generales fueron actualizadas."]
       ]
     }
@@ -672,7 +373,7 @@ if (accionesDashboard && actividadDashboard) {
   });
 }
 
-// FORMULARIO PARA PUBLICAR MASCOTA EN SUPABASE
+// PUBLICAR MASCOTA
 const formPublicarMascota = document.getElementById("formPublicarMascota");
 
 if (formPublicarMascota) {
@@ -695,11 +396,8 @@ if (formPublicarMascota) {
 
     let icono = "🐾";
 
-    if (tipo === "perro") {
-      icono = "🐶";
-    } else if (tipo === "gato") {
-      icono = "🐱";
-    }
+    if (tipo === "perro") icono = "🐶";
+    if (tipo === "gato") icono = "🐱";
 
     const nuevaMascota = {
       nombre,
@@ -724,10 +422,12 @@ if (formPublicarMascota) {
       .insert([nuevaMascota])
       .select();
 
+    console.log("Mascota registrada:", data);
+    console.log("Error mascota:", error);
+
     if (error) {
-   console.error("Error Supabase:", error);
-    alert("Error al registrar mascota: " + error.message);
-    return;
+      alert("Error al registrar mascota: " + error.message);
+      return;
     }
 
     alert(
@@ -738,79 +438,7 @@ if (formPublicarMascota) {
   });
 }
 
-// FORMULARIO DE SOLICITUD DE ADOPCIÓN EN SUPABASE
-const formSolicitudAdopcion = document.getElementById("formSolicitudAdopcion");
-const mascotaSolicitud = document.getElementById("mascotaSolicitud");
-
-let mascotaIdSolicitud = null;
-
-if (mascotaSolicitud) {
-  const params = new URLSearchParams(window.location.search);
-  const mascota = params.get("mascota");
-  const id = params.get("id");
-
-  if (mascota) {
-    mascotaSolicitud.value = mascota;
-  }
-
-  if (id) {
-    mascotaIdSolicitud = Number(id);
-  }
-}
-
-if (formSolicitudAdopcion) {
-  formSolicitudAdopcion.addEventListener("submit", async (e) => {
-    e.preventDefault();
-
-    if (typeof db === "undefined") {
-      alert("Supabase no está cargado. Revisa los scripts en solicitud-adopcion.html");
-      return;
-    }
-
-    const nuevaSolicitud = {
-      mascota_id: mascotaIdSolicitud,
-      mascota_nombre: document.getElementById("mascotaSolicitud").value,
-      nombre_adoptante: document.getElementById("nombreAdoptante").value,
-      dni: document.getElementById("dniAdoptante").value,
-      correo: document.getElementById("correoAdoptante").value,
-      telefono: document.getElementById("telefonoAdoptante").value,
-      ciudad: document.getElementById("ciudadAdoptante").value,
-      distrito: document.getElementById("distritoAdoptante").value,
-      tipo_vivienda: document.getElementById("tipoVivienda").value,
-      vivienda_propiedad: document.getElementById("viviendaPropia").value,
-      otras_mascotas: document.getElementById("otrasMascotas").value,
-      experiencia: document.getElementById("experienciaMascotas").value,
-      motivo: document.getElementById("motivoAdopcion").value,
-      tiempo_disponible: document.getElementById("tiempoDisponible").value,
-      compromiso_cuidado: document.getElementById("compromisoCuidado").checked,
-      acepta_seguimiento: document.getElementById("aceptaSeguimiento").checked,
-      estado_solicitud: "pendiente"
-    };
-
-    const { data, error } = await db
-      .from("solicitudes_adopcion")
-      .insert([nuevaSolicitud])
-      .select();
-
-    console.log("Solicitud guardada:", data);
-    console.log("Error solicitud:", error);
-
-    if (error) {
-      alert("Error al registrar solicitud: " + error.message);
-      return;
-    }
-
-    alert(
-      `Solicitud enviada correctamente 🐾\n\nMascota: ${nuevaSolicitud.mascota_nombre}\nAdoptante: ${nuevaSolicitud.nombre_adoptante}\nCiudad: ${nuevaSolicitud.ciudad}\n\nTu solicitud quedó pendiente de revisión.`
-    );
-
-    formSolicitudAdopcion.reset();
-
-    window.location.href = "adoptar.html";
-  });
-}
-
-// FORMULARIO DE SEGUIMIENTO POST ADOPCIÓN EN SUPABASE
+// SEGUIMIENTO POST ADOPCIÓN
 const formSeguimiento = document.getElementById("formSeguimiento");
 
 if (formSeguimiento) {
@@ -825,17 +453,14 @@ if (formSeguimiento) {
     const nuevoSeguimiento = {
       mascota_nombre: document.getElementById("mascotaSeguimiento").value,
       adoptante_nombre: document.getElementById("adoptanteSeguimiento").value,
-
       fecha_adopcion: document.getElementById("fechaAdopcion").value,
       fecha_seguimiento: document.getElementById("fechaSeguimiento").value,
       tipo_seguimiento: document.getElementById("tipoSeguimiento").value,
-
       estado_mascota: document.getElementById("estadoMascota").value,
       alimentacion: document.getElementById("alimentacionSeguimiento").value,
       salud: document.getElementById("saludSeguimiento").value,
       adaptacion: document.getElementById("adaptacionSeguimiento").value,
       observaciones: document.getElementById("observacionesSeguimiento").value,
-
       proxima_revision: document.getElementById("proximaRevision").value || null,
       estado_registro: "registrado"
     };
@@ -854,88 +479,14 @@ if (formSeguimiento) {
     }
 
     alert(
-      `Seguimiento registrado correctamente 🐾\n\nMascota: ${nuevoSeguimiento.mascota_nombre}\nAdoptante: ${nuevoSeguimiento.adoptante_nombre}\nEstado: ${nuevoSeguimiento.estado_mascota}\n\nEl seguimiento quedó guardado en Supabase.`
+      `Seguimiento registrado correctamente 🐾\n\nMascota: ${nuevoSeguimiento.mascota_nombre}\nAdoptante: ${nuevoSeguimiento.adoptante_nombre}\nEstado: ${nuevoSeguimiento.estado_mascota}`
     );
 
     formSeguimiento.reset();
   });
 }
 
-
-// BOTONES DEL PANEL ADMINISTRADOR
-const botonesAprobar = document.querySelectorAll(".btn-approve");
-const botonesRechazar = document.querySelectorAll(".btn-reject");
-
-botonesAprobar.forEach((boton) => {
-  boton.addEventListener("click", () => {
-    const tarjeta = boton.closest(".admin-card");
-    tarjeta.style.opacity = "0.6";
-
-    alert("Acción aprobada correctamente por el administrador ✅");
-  });
-});
-
-botonesRechazar.forEach((boton) => {
-  boton.addEventListener("click", () => {
-    const tarjeta = boton.closest(".admin-card");
-    tarjeta.style.opacity = "0.6";
-
-    alert("Acción rechazada o eliminada por el administrador ⚠️");
-  });
-});
-
-// FILTROS DE SOLICITUDES
-const filtroSolicitudEstado = document.getElementById("filtroSolicitudEstado");
-const filtroSolicitudMascota = document.getElementById("filtroSolicitudMascota");
-const limpiarFiltrosSolicitudes = document.getElementById("limpiarFiltrosSolicitudes");
-const noResultsSolicitudes = document.getElementById("noResultsSolicitudes");
-
-function filtrarSolicitudes() {
-  if (!filtroSolicitudEstado || !filtroSolicitudMascota) {
-    return;
-  }
-
-  const solicitudes = document.querySelectorAll(".solicitud-card");
-
-  const estado = filtroSolicitudEstado.value;
-  const mascota = filtroSolicitudMascota.value;
-
-  let visibles = 0;
-
-  solicitudes.forEach((solicitud) => {
-    const coincideEstado = estado === "todos" || solicitud.dataset.estado === estado;
-    const coincideMascota = mascota === "todos" || solicitud.dataset.mascota === mascota;
-
-    if (coincideEstado && coincideMascota) {
-      solicitud.style.display = "grid";
-      visibles++;
-    } else {
-      solicitud.style.display = "none";
-    }
-  });
-
-  if (noResultsSolicitudes) {
-    noResultsSolicitudes.style.display = visibles === 0 ? "block" : "none";
-  }
-}
-
-if (filtroSolicitudEstado && filtroSolicitudMascota) {
-  filtroSolicitudEstado.addEventListener("change", filtrarSolicitudes);
-  filtroSolicitudMascota.addEventListener("change", filtrarSolicitudes);
-}
-
-if (limpiarFiltrosSolicitudes) {
-  limpiarFiltrosSolicitudes.addEventListener("click", () => {
-    filtroSolicitudEstado.value = "todos";
-    filtroSolicitudMascota.value = "todos";
-    filtrarSolicitudes();
-  });
-}
-
-// BOTONES DE SOLICITUDES
-
-
-// DETALLE DE MASCOTA DESDE SUPABASE
+// DETALLE DE MASCOTA
 const detalleNombre = document.getElementById("detalleNombre");
 
 if (detalleNombre) {
@@ -1012,14 +563,15 @@ if (detalleNombre) {
 
     if (btnSolicitarDetalle) {
       btnSolicitarDetalle.addEventListener("click", () => {
-       window.location.href = `solicitud-adopcion.html?id=${mascota.id}&mascota=${encodeURIComponent(mascota.nombre)}`;
-        });
+        window.location.href = `solicitud-adopcion.html?id=${mascota.id}&mascota=${encodeURIComponent(mascota.nombre)}`;
+      });
     }
   }
 
   cargarDetalleMascota();
 }
-// CARGAR MASCOTAS DESDE SUPABASE EN adoptar.html
+
+// CARGAR MASCOTAS EN ADOPTAR
 const contenedorMascotas = document.getElementById("contenedorMascotas");
 
 async function cargarMascotasDesdeBD() {
@@ -1051,24 +603,22 @@ async function cargarMascotasDesdeBD() {
 
   mascotas.forEach((mascota) => {
     const edadTexto = mascota.edad ? mascota.edad.toLowerCase() : "";
+
     const edadFiltro = edadTexto.includes("mes") || edadTexto.includes("cachorro")
       ? "cachorro"
       : "adulto";
 
     contenedorMascotas.innerHTML += `
       <div class="pet-card mascota"
-       data-id="${mascota.id}"
-       data-tipo="${mascota.tipo}"
-       data-ciudad="${mascota.ciudad}"
-       data-tamano="${mascota.tamano}"
-       data-edad="${edadFiltro}">
+        data-id="${mascota.id}"
+        data-tipo="${mascota.tipo}"
+        data-ciudad="${mascota.ciudad}"
+        data-tamano="${mascota.tamano}"
+        data-edad="${edadFiltro}">
 
         <div class="pet-photo">${mascota.icono || "🐾"}</div>
-
         <h3>${mascota.nombre}</h3>
-
         <p>${mascota.tipo} · ${mascota.edad} · ${mascota.ciudad}</p>
-
         <span>${mascota.vacunas || "Sin información"}</span>
 
         <div class="pet-info">
@@ -1086,146 +636,7 @@ async function cargarMascotasDesdeBD() {
 
 cargarMascotasDesdeBD();
 
-// CARGAR SOLICITUDES DESDE SUPABASE EN solicitudes.html
-const contenedorSolicitudes = document.getElementById("contenedorSolicitudes");
-
-function formatearEstadoSolicitud(estado) {
-  if (estado === "revision") return "En revisión";
-  if (estado === "aprobada") return "Aprobada";
-  if (estado === "rechazada") return "Rechazada";
-  return "Pendiente";
-}
-
-async function cargarSolicitudesDesdeBD() {
-  if (!contenedorSolicitudes) return;
-
-  if (typeof db === "undefined") {
-    alert("Supabase no está cargado. Revisa los scripts en solicitudes.html");
-    return;
-  }
-
-  const { data: solicitudesBD, error } = await db
-    .from("solicitudes_adopcion")
-    .select("*")
-    .order("created_at", { ascending: false });
-
-  console.log("Solicitudes desde Supabase:", solicitudesBD);
-  console.log("Error solicitudes:", error);
-
-  if (error) {
-    alert("No se pudieron cargar las solicitudes: " + error.message);
-    return;
-  }
-
-  contenedorSolicitudes.innerHTML = "";
-
-  if (!solicitudesBD || solicitudesBD.length === 0) {
-    contenedorSolicitudes.innerHTML = `
-      <div class="no-results" style="display: block;">
-        <h3>Aún no hay solicitudes registradas 🐾</h3>
-        <p>Cuando un usuario solicite adoptar una mascota, aparecerá aquí.</p>
-      </div>
-    `;
-    return;
-  }
-
-  solicitudesBD.forEach((solicitud) => {
-    const estado = solicitud.estado_solicitud || "pendiente";
-    const mascotaFiltro = solicitud.mascota_nombre
-      ? solicitud.mascota_nombre.toLowerCase()
-      : "";
-
-    contenedorSolicitudes.innerHTML += `
-      <div class="admin-card solicitud-card ${estado}" 
-        data-id="${solicitud.id}"
-        data-estado="${estado}" 
-        data-mascota="${mascotaFiltro}">
-
-        <div>
-          <h3>Solicitud para adoptar a ${solicitud.mascota_nombre}</h3>
-          <p><strong>Adoptante:</strong> ${solicitud.nombre_adoptante}</p>
-          <p><strong>DNI:</strong> ${solicitud.dni}</p>
-          <p><strong>Correo:</strong> ${solicitud.correo}</p>
-          <p><strong>Celular:</strong> ${solicitud.telefono}</p>
-          <p><strong>Ciudad:</strong> ${solicitud.ciudad}</p>
-          <p><strong>Distrito:</strong> ${solicitud.distrito}</p>
-          <p><strong>Tipo de vivienda:</strong> ${solicitud.tipo_vivienda}</p>
-          <p><strong>Vivienda:</strong> ${solicitud.vivienda_propiedad}</p>
-          <p><strong>Otras mascotas:</strong> ${solicitud.otras_mascotas}</p>
-          <p><strong>Experiencia:</strong> ${solicitud.experiencia}</p>
-          <p><strong>Motivo:</strong> ${solicitud.motivo}</p>
-          <p><strong>Tiempo disponible:</strong> ${solicitud.tiempo_disponible}</p>
-          <p><strong>Estado:</strong> <span class="estado-texto">${formatearEstadoSolicitud(estado)}</span></p>
-        </div>
-
-        <div class="admin-actions">
-          <button class="btn-review">En revisión</button>
-          <button class="btn-approve">Aprobar</button>
-          <button class="btn-reject">Rechazar</button>
-        </div>
-      </div>
-    `;
-  });
-
-  filtrarSolicitudes();
-}
-
-cargarSolicitudesDesdeBD();
-
-
-// ACTUALIZAR ESTADO DE SOLICITUD EN SUPABASE
-document.addEventListener("click", async (e) => {
-  if (
-    e.target.classList.contains("btn-review") ||
-    e.target.classList.contains("btn-approve") ||
-    e.target.classList.contains("btn-reject")
-  ) {
-    const tarjeta = e.target.closest(".solicitud-card");
-
-    if (!tarjeta) return;
-
-    let nuevoEstado = "pendiente";
-
-    if (e.target.classList.contains("btn-review")) {
-      nuevoEstado = "revision";
-    }
-
-    if (e.target.classList.contains("btn-approve")) {
-      nuevoEstado = "aprobada";
-    }
-
-    if (e.target.classList.contains("btn-reject")) {
-      nuevoEstado = "rechazada";
-    }
-
-    const idSolicitud = tarjeta.dataset.id;
-
-    const { error } = await db
-      .from("solicitudes_adopcion")
-      .update({ estado_solicitud: nuevoEstado })
-      .eq("id", idSolicitud);
-
-    if (error) {
-      alert("No se pudo actualizar la solicitud: " + error.message);
-      return;
-    }
-
-    const estadoTexto = tarjeta.querySelector(".estado-texto");
-
-    tarjeta.dataset.estado = nuevoEstado;
-    tarjeta.classList.remove("revision", "aprobada", "rechazada");
-    tarjeta.classList.add(nuevoEstado);
-
-    estadoTexto.textContent = formatearEstadoSolicitud(nuevoEstado);
-
-    alert("Estado de solicitud actualizado correctamente ✅");
-
-    filtrarSolicitudes();
-  }
-});
-
-
-// CARGAR ALIADOS DESDE SUPABASE EN admin.html
+// ALIADOS EN ADMIN
 const contenedorAliados = document.getElementById("contenedorAliados");
 
 function formatearEstadoAliado(estado) {
@@ -1299,14 +710,12 @@ async function cargarAliadosDesdeBD() {
 
 cargarAliadosDesdeBD();
 
-// ACTUALIZAR ESTADO DE ALIADO EN SUPABASE
 document.addEventListener("click", async (e) => {
   if (
     e.target.classList.contains("btn-aprobar-aliado") ||
     e.target.classList.contains("btn-rechazar-aliado")
   ) {
     const tarjeta = e.target.closest(".aliado-card");
-
     if (!tarjeta) return;
 
     const idAliado = tarjeta.dataset.id;
@@ -1342,7 +751,7 @@ document.addEventListener("click", async (e) => {
   }
 });
 
-// CARGAR HISTORIAL DE SEGUIMIENTO DESDE SUPABASE
+// HISTORIAL DE SEGUIMIENTO
 const contenedorHistorialSeguimiento = document.getElementById("contenedorHistorialSeguimiento");
 
 const totalSeguimientos = document.getElementById("totalSeguimientos");
@@ -1413,18 +822,15 @@ async function cargarHistorialSeguimiento() {
       <div class="admin-card">
         <div>
           <h3>Seguimiento de ${item.mascota_nombre}</h3>
-
           <p><strong>Adoptante:</strong> ${item.adoptante_nombre}</p>
           <p><strong>Fecha de adopción:</strong> ${item.fecha_adopcion}</p>
           <p><strong>Fecha de seguimiento:</strong> ${item.fecha_seguimiento}</p>
           <p><strong>Tipo de seguimiento:</strong> ${item.tipo_seguimiento}</p>
-
           <p><strong>Estado de la mascota:</strong> ${item.estado_mascota}</p>
           <p><strong>Alimentación:</strong> ${item.alimentacion}</p>
           <p><strong>Salud:</strong> ${item.salud}</p>
           <p><strong>Adaptación:</strong> ${item.adaptacion}</p>
           <p><strong>Observaciones:</strong> ${item.observaciones}</p>
-
           <p><strong>Próxima revisión:</strong> ${item.proxima_revision || "No definida"}</p>
           <p><strong>Estado del registro:</strong> ${item.estado_registro}</p>
         </div>
@@ -1438,7 +844,8 @@ async function cargarHistorialSeguimiento() {
 }
 
 cargarHistorialSeguimiento();
-// ESTADÍSTICAS REALES DEL DASHBOARD DESDE SUPABASE
+
+// ESTADÍSTICAS DEL DASHBOARD
 async function obtenerConteo(tabla, filtroCampo = null, filtroValor = null) {
   let consulta = db
     .from(tabla)
@@ -1543,7 +950,8 @@ async function cargarEstadisticasDashboard() {
 }
 
 cargarEstadisticasDashboard();
-// CARGAR PUBLICACIONES DE MASCOTAS EN admin.html
+
+// PUBLICACIONES DE MASCOTAS EN ADMIN
 const contenedorPublicaciones = document.getElementById("contenedorPublicaciones");
 
 function formatearEstadoPublicacion(estado) {
@@ -1615,14 +1023,13 @@ async function cargarPublicacionesMascotas() {
 }
 
 cargarPublicacionesMascotas();
-// APROBAR O RECHAZAR PUBLICACIONES DE MASCOTAS
+
 document.addEventListener("click", async (e) => {
   if (
     e.target.classList.contains("btn-aprobar-mascota") ||
     e.target.classList.contains("btn-rechazar-mascota")
   ) {
     const tarjeta = e.target.closest(".mascota-admin-card");
-
     if (!tarjeta) return;
 
     const idMascota = tarjeta.dataset.id;
@@ -1657,7 +1064,8 @@ document.addEventListener("click", async (e) => {
     alert(`Publicación ${formatearEstadoPublicacion(nuevoEstado).toLowerCase()} correctamente 🐾`);
   }
 });
-// ESTADÍSTICAS REALES EN LA PÁGINA DE INICIO
+
+// ESTADÍSTICAS DEL INICIO
 async function obtenerConteoHome(tabla, filtroCampo = null, filtroValor = null) {
   if (typeof db === "undefined") {
     console.warn("Supabase no está cargado en index.html");
@@ -1692,29 +1100,13 @@ async function cargarEstadisticasInicio() {
   const homeAliados = document.getElementById("homeAliados");
 
   if (!homeTotalMascotas || !homeAdopciones || !homeReportes || !homeAliados) {
-    console.warn("No se encontraron los elementos de estadísticas en index.html");
     return;
   }
 
-  const totalMascotas = await obtenerConteoHome(
-    "mascotas",
-    "estado_publicacion",
-    "aprobada"
-  );
-
-  const adopcionesLogradas = await obtenerConteoHome(
-    "solicitudes_adopcion",
-    "estado_solicitud",
-    "aprobada"
-  );
-
+  const totalMascotas = await obtenerConteoHome("mascotas", "estado_publicacion", "aprobada");
+  const adopcionesLogradas = await obtenerConteoHome("solicitudes_adopcion", "estado_solicitud", "aprobada");
   const reportesAtendidos = await obtenerConteoHome("reportes_mascotas");
-
-  const aliadosAprobados = await obtenerConteoHome(
-    "aliados",
-    "estado_validacion",
-    "aprobado"
-  );
+  const aliadosAprobados = await obtenerConteoHome("aliados", "estado_validacion", "aprobado");
 
   homeTotalMascotas.textContent = `+${totalMascotas}`;
   homeAdopciones.textContent = `+${adopcionesLogradas}`;
@@ -1724,9 +1116,7 @@ async function cargarEstadisticasInicio() {
 
 cargarEstadisticasInicio();
 
-
-
-// CARGAR MASCOTAS DESTACADAS EN INDEX DESDE SUPABASE
+// MASCOTAS DESTACADAS EN INICIO
 const mascotasInicio = document.getElementById("mascotasInicio");
 
 async function cargarMascotasInicio() {
@@ -1778,13 +1168,9 @@ async function cargarMascotasInicio() {
         data-tamano="${mascota.tamano}">
 
         <div class="pet-photo">${mascota.icono || "🐾"}</div>
-
         <h3>${mascota.nombre}</h3>
-
         <p>${mascota.tipo} · ${mascota.edad} · ${mascota.ciudad}</p>
-
         <span>${mascota.vacunas || "Sin información"}</span>
-
         <button class="btn-detalle">Ver detalle</button>
       </div>
     `;
@@ -1793,7 +1179,7 @@ async function cargarMascotasInicio() {
 
 cargarMascotasInicio();
 
-// CARRUSEL DE MASCOTAS DESTACADAS EN EL HERO DESDE SUPABASE
+// CARRUSEL HERO
 const mascotaHero = document.getElementById("mascotaHero");
 const btnMascotaAnterior = document.getElementById("btnMascotaAnterior");
 const btnMascotaSiguiente = document.getElementById("btnMascotaSiguiente");
@@ -1971,4 +1357,3 @@ if (mascotaHero) {
 }
 
 cargarCarruselMascotasHero();
-

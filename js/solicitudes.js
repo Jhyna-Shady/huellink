@@ -1,11 +1,13 @@
 console.log("solicitudes.js cargado correctamente 📋🐾");
 
-// FORMULARIO DE SOLICITUD DE ADOPCIÓN EN SUPABASE
+// FORMULARIO DE SOLICITUD DE ADOPCIÓN
 const formSolicitudAdopcion = document.getElementById("formSolicitudAdopcion");
 const mascotaSolicitud = document.getElementById("mascotaSolicitud");
 
 let mascotaIdSolicitud = null;
+let usuarioIdSolicitud = null;
 
+// OBTENER MASCOTA DESDE LA URL
 if (mascotaSolicitud) {
   const params = new URLSearchParams(window.location.search);
   const mascota = params.get("mascota");
@@ -20,6 +22,101 @@ if (mascotaSolicitud) {
   }
 }
 
+// AUTOCOMPLETAR DATOS DEL USUARIO LOGUEADO
+async function autocompletarDatosAdoptante() {
+  if (!formSolicitudAdopcion) return;
+
+  if (typeof db === "undefined") {
+    console.warn("Supabase no está cargado en solicitud-adopcion.html");
+    return;
+  }
+
+  const { data: sesionData, error: errorSesion } = await db.auth.getSession();
+
+  if (errorSesion) {
+    console.error("Error al obtener sesión:", errorSesion);
+    return;
+  }
+
+  const usuario = sesionData.session?.user;
+
+  if (!usuario) {
+    return;
+  }
+
+  usuarioIdSolicitud = usuario.id;
+
+  let perfil = null;
+
+  if (typeof obtenerPerfilActual === "function") {
+    perfil = await obtenerPerfilActual(usuario.id);
+  } else {
+    const { data, error } = await db
+      .from("perfiles")
+      .select("*")
+      .eq("id", usuario.id)
+      .single();
+
+    if (error) {
+      console.error("Error al obtener perfil:", error);
+      return;
+    }
+
+    perfil = data;
+  }
+
+  if (!perfil) return;
+
+  const nombreAdoptante = document.getElementById("nombreAdoptante");
+  const correoAdoptante = document.getElementById("correoAdoptante");
+  const telefonoAdoptante = document.getElementById("telefonoAdoptante");
+  const ciudadAdoptante = document.getElementById("ciudadAdoptante");
+
+  if (nombreAdoptante) {
+    nombreAdoptante.value = perfil.nombre || "";
+    nombreAdoptante.readOnly = true;
+  }
+
+  if (correoAdoptante) {
+    correoAdoptante.value = perfil.correo || usuario.email || "";
+    correoAdoptante.readOnly = true;
+  }
+
+  if (telefonoAdoptante) {
+    telefonoAdoptante.value = perfil.telefono || "";
+  }
+
+  if (ciudadAdoptante) {
+    ciudadAdoptante.value = perfil.ciudad || "";
+  }
+
+  mostrarAvisoDatosPerfil();
+}
+
+// MOSTRAR MENSAJE PEQUEÑO EN EL FORMULARIO
+function mostrarAvisoDatosPerfil() {
+  const avisoExistente = document.getElementById("avisoPerfilAdopcion");
+
+  if (avisoExistente) return;
+
+  const primerGrupo = formSolicitudAdopcion.querySelector(".form-group");
+
+  if (!primerGrupo) return;
+
+  const aviso = document.createElement("div");
+  aviso.id = "avisoPerfilAdopcion";
+  aviso.className = "form-info";
+  aviso.innerHTML = `
+    <strong>Datos reconocidos automáticamente 🐾</strong>
+    <p>Huellink cargó tus datos principales desde tu perfil. Solo completa la información específica para la adopción.</p>
+  `;
+
+  formSolicitudAdopcion.insertBefore(aviso, primerGrupo);
+}
+
+autocompletarDatosAdoptante();
+
+// ENVIAR SOLICITUD DE ADOPCIÓN
 if (formSolicitudAdopcion) {
   formSolicitudAdopcion.addEventListener("submit", async (e) => {
     e.preventDefault();
@@ -29,7 +126,19 @@ if (formSolicitudAdopcion) {
       return;
     }
 
+    const { data: sesionData } = await db.auth.getSession();
+    const usuarioActual = sesionData.session?.user;
+
+    if (!usuarioActual) {
+      alert("Debes iniciar sesión para enviar una solicitud de adopción.");
+      window.location.href = "login.html?redirect=solicitud-adopcion.html";
+      return;
+    }
+
+    usuarioIdSolicitud = usuarioActual.id;
+
     const nuevaSolicitud = {
+      usuario_id: usuarioIdSolicitud,
       mascota_id: mascotaIdSolicitud,
       mascota_nombre: document.getElementById("mascotaSolicitud").value,
       nombre_adoptante: document.getElementById("nombreAdoptante").value,
@@ -67,7 +176,6 @@ if (formSolicitudAdopcion) {
     );
 
     formSolicitudAdopcion.reset();
-
     window.location.href = "adoptar.html";
   });
 }
@@ -120,7 +228,7 @@ if (limpiarFiltrosSolicitudes) {
   });
 }
 
-// FORMATEAR ESTADO DE SOLICITUD
+// FORMATEAR ESTADO
 function formatearEstadoSolicitud(estado) {
   if (estado === "revision") return "En revisión";
   if (estado === "aprobada") return "Aprobada";
@@ -128,7 +236,7 @@ function formatearEstadoSolicitud(estado) {
   return "Pendiente";
 }
 
-// CARGAR SOLICITUDES DESDE SUPABASE
+// CARGAR SOLICITUDES
 const contenedorSolicitudes = document.getElementById("contenedorSolicitudes");
 
 async function cargarSolicitudesDesdeBD() {

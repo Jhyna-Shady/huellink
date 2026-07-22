@@ -2550,3 +2550,31 @@ button.close,
     padding: 5px 9px;
   }
 }
+
+/* AVISO DE DATOS AUTOCOMPLETADOS */
+.form-info {
+  background-color: rgba(237, 103, 85, 0.1);
+  border-left: 5px solid #ed6755;
+  border-radius: 12px;
+  padding: 14px 16px;
+  margin-bottom: 22px;
+  color: #111111;
+}
+
+.form-info strong {
+  display: block;
+  margin-bottom: 4px;
+  color: #ed6755;
+}
+
+.form-info p {
+  margin: 0;
+  font-size: 0.95rem;
+  color: #555555;
+}
+
+input[readonly] {
+  background-color: #f3f3f3;
+  color: #555555;
+  cursor: not-allowed;
+}

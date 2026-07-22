@@ -1,5 +1,134 @@
 console.log("reportes.js cargado correctamente 📍🐾");
 
+// DATOS DEL USUARIO PARA REPORTES
+let usuarioIdReporte = null;
+let perfilReporteActual = null;
+
+// OBTENER USUARIO Y PERFIL LOGUEADO
+async function obtenerDatosUsuarioReporte() {
+  if (typeof db === "undefined") {
+    console.warn("Supabase no está cargado para reportes.");
+    return null;
+  }
+
+  const { data: sesionData, error: errorSesion } = await db.auth.getSession();
+
+  if (errorSesion) {
+    console.error("Error al obtener sesión en reportes:", errorSesion);
+    return null;
+  }
+
+  const usuario = sesionData.session?.user;
+
+  if (!usuario) {
+    return null;
+  }
+
+  usuarioIdReporte = usuario.id;
+
+  let perfil = null;
+
+  if (typeof obtenerPerfilActual === "function") {
+    perfil = await obtenerPerfilActual(usuario.id);
+  } else {
+    const { data, error } = await db
+      .from("perfiles")
+      .select("*")
+      .eq("id", usuario.id)
+      .single();
+
+    if (error) {
+      console.error("Error al obtener perfil para reportes:", error);
+      return null;
+    }
+
+    perfil = data;
+  }
+
+  perfilReporteActual = perfil;
+
+  return {
+    usuario,
+    perfil
+  };
+}
+
+// COMPLETAR CAMPO SI EXISTE
+function completarCampoReporte(idCampo, valor, bloquear = false) {
+  const campo = document.getElementById(idCampo);
+
+  if (!campo || !valor) {
+    return;
+  }
+
+  campo.value = valor;
+
+  if (bloquear) {
+    campo.readOnly = true;
+  }
+}
+
+// MOSTRAR AVISO EN FORMULARIO DE REPORTE
+function mostrarAvisoDatosReporte(formulario) {
+  if (!formulario) return;
+
+  const avisoId = `aviso-${formulario.id}`;
+
+  if (document.getElementById(avisoId)) {
+    return;
+  }
+
+  const primerGrupo = formulario.querySelector(".form-group");
+
+  if (!primerGrupo) {
+    return;
+  }
+
+  const aviso = document.createElement("div");
+  aviso.id = avisoId;
+  aviso.className = "form-info";
+  aviso.innerHTML = `
+    <strong>Datos reconocidos automáticamente 🐾</strong>
+    <p>Huellink cargó tus datos de contacto desde tu perfil. Solo completa la información de la mascota.</p>
+  `;
+
+  formulario.insertBefore(aviso, primerGrupo);
+}
+
+// AUTOCOMPLETAR CONTACTO EN REPORTES
+async function autocompletarContactoReporte(tipoReporte) {
+  const esPerdida = tipoReporte === "perdida";
+
+  const formulario = document.getElementById(
+    esPerdida ? "formPerdida" : "formEncontrada"
+  );
+
+  if (!formulario) {
+    return;
+  }
+
+  const datos = await obtenerDatosUsuarioReporte();
+
+  if (!datos || !datos.perfil) {
+    return;
+  }
+
+  const perfil = datos.perfil;
+
+  if (esPerdida) {
+    completarCampoReporte("nombreContacto", perfil.nombre, true);
+    completarCampoReporte("telefonoContacto", perfil.telefono, false);
+  } else {
+    completarCampoReporte("nombreReportante", perfil.nombre, true);
+    completarCampoReporte("telefonoReportante", perfil.telefono, false);
+  }
+
+  mostrarAvisoDatosReporte(formulario);
+}
+
+autocompletarContactoReporte("perdida");
+autocompletarContactoReporte("encontrada");
+
 // SUBIR FOTO DE REPORTE A SUPABASE STORAGE
 async function subirFotoReporte(inputId, carpeta) {
   const input = document.getElementById(inputId);

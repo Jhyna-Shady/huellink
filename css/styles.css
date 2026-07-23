@@ -1856,3 +1856,52 @@ input[readonly] {
     padding: 5px 9px;
   }
 }
+
+/* FOTOS DE MASCOTAS EN ADOPCIÓN */
+
+.mascota-foto {
+  width: 100%;
+  height: 190px;
+  object-fit: cover;
+  border-radius: 22px;
+  margin-bottom: 18px;
+  background-color: #fff3d8;
+}
+
+.detalle-mascota-foto {
+  width: 100%;
+  max-height: 420px;
+  object-fit: cover;
+  border-radius: 28px;
+  display: block;
+}
+
+@media (max-width: 600px) {
+  .mascota-foto {
+    height: 170px;
+  }
+
+  .detalle-mascota-foto {
+    max-height: 320px;
+  }
+}
+
+/* FOTO EN CARRUSEL PRINCIPAL */
+
+.hero-mascota-foto {
+  width: 180px;
+  height: 180px;
+  object-fit: cover;
+  border-radius: 28px;
+  display: block;
+  margin: 0 auto 20px;
+  background-color: #fff3d8;
+}
+
+@media (max-width: 600px) {
+  .hero-mascota-foto {
+    width: 150px;
+    height: 150px;
+    border-radius: 24px;
+  }
+}

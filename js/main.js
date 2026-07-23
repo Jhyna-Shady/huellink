@@ -379,7 +379,54 @@ if (accionesDashboard && actividadDashboard) {
     `;
   });
 }
+// SUBIR FOTO DE MASCOTA EN ADOPCIÓN
+async function subirFotoMascotaAdopcion(inputId) {
+  const input = document.getElementById(inputId);
 
+  if (!input || !input.files || input.files.length === 0) {
+    return null;
+  }
+
+  const archivo = input.files[0];
+
+  const tiposPermitidos = ["image/jpeg", "image/png", "image/webp"];
+  const pesoMaximo = 5 * 1024 * 1024;
+
+  if (!tiposPermitidos.includes(archivo.type)) {
+    throw new Error("Solo se permiten imágenes JPG, PNG o WEBP.");
+  }
+
+  if (archivo.size > pesoMaximo) {
+    throw new Error("La imagen no debe superar los 5 MB.");
+  }
+
+  const { data: sesionData } = await db.auth.getSession();
+  const usuarioId = sesionData.session?.user?.id;
+
+  if (!usuarioId) {
+    throw new Error("Debes iniciar sesión para subir una foto.");
+  }
+
+  const extension = archivo.name.split(".").pop().toLowerCase();
+  const nombreArchivo = `mascotas/${usuarioId}-${Date.now()}.${extension}`;
+
+  const { error: uploadError } = await db.storage
+    .from("mascotas-adopcion")
+    .upload(nombreArchivo, archivo, {
+      cacheControl: "3600",
+      upsert: false
+    });
+
+  if (uploadError) {
+    throw uploadError;
+  }
+
+  const { data } = db.storage
+    .from("mascotas-adopcion")
+    .getPublicUrl(nombreArchivo);
+
+  return data.publicUrl;
+}
 // PUBLICAR MASCOTA
 const formPublicarMascota = document.getElementById("formPublicarMascota");
 
@@ -406,6 +453,15 @@ if (formPublicarMascota) {
     if (tipo === "perro") icono = "🐶";
     if (tipo === "gato") icono = "🐱";
 
+    let fotoUrl = null;
+
+    try {
+      fotoUrl = await subirFotoMascotaAdopcion("fotoMascotaAdopcion");
+    } catch (error) {
+      alert(error.message || "No se pudo subir la foto de la mascota.");
+      return;
+    }
+
     const nuevaMascota = {
       nombre,
       tipo,
@@ -421,6 +477,7 @@ if (formPublicarMascota) {
       zona,
       responsable,
       icono,
+      foto_url: fotoUrl,
       estado_publicacion: "pendiente"
     };
 
@@ -444,7 +501,6 @@ if (formPublicarMascota) {
     formPublicarMascota.reset();
   });
 }
-
 // SEGUIMIENTO POST ADOPCIÓN
 const formSeguimiento = document.getElementById("formSeguimiento");
 
@@ -541,7 +597,17 @@ if (detalleNombre) {
   }
 
   function pintarDetalleMascota(mascota) {
-    document.getElementById("detalleIcono").textContent = mascota.icono || "🐾";
+    const detalleIcono = document.getElementById("detalleIcono");
+
+      if (detalleIcono) {
+        if (mascota.foto_url) {
+          detalleIcono.innerHTML = `
+            <img src="${mascota.foto_url}" alt="Foto de ${mascota.nombre}" class="detalle-mascota-foto">
+          `;
+        } else {
+          detalleIcono.textContent = mascota.icono || "🐾";
+        }
+      }
     document.getElementById("detalleNombre").textContent = mascota.nombre || "Mascota sin nombre";
 
     document.getElementById("detalleResumen").textContent =
@@ -623,7 +689,11 @@ async function cargarMascotasDesdeBD() {
         data-tamano="${mascota.tamano}"
         data-edad="${edadFiltro}">
 
-        <div class="pet-photo">${mascota.icono || "🐾"}</div>
+        ${
+            mascota.foto_url
+              ? `<img src="${mascota.foto_url}" alt="Foto de ${mascota.nombre}" class="mascota-foto">`
+              : `<div class="pet-photo">${mascota.icono || "🐾"}</div>`
+          }
         <h3>${mascota.nombre}</h3>
         <p>${mascota.tipo} · ${mascota.edad} · ${mascota.ciudad}</p>
         <span>${mascota.vacunas || "Sin información"}</span>
@@ -1174,7 +1244,11 @@ async function cargarMascotasInicio() {
         data-ciudad="${mascota.ciudad}"
         data-tamano="${mascota.tamano}">
 
-        <div class="pet-photo">${mascota.icono || "🐾"}</div>
+        ${
+            mascota.foto_url
+              ? `<img src="${mascota.foto_url}" alt="Foto de ${mascota.nombre}" class="mascota-foto">`
+              : `<div class="pet-photo">${mascota.icono || "🐾"}</div>`
+          }
         <h3>${mascota.nombre}</h3>
         <p>${mascota.tipo} · ${mascota.edad} · ${mascota.ciudad}</p>
         <span>${mascota.vacunas || "Sin información"}</span>
@@ -1215,17 +1289,29 @@ async function cargarCarruselMascotasHero() {
   console.log("Error carrusel hero:", error);
 
   if (error) {
-    document.getElementById("heroNombre").textContent = "Mascota busca hogar";
-    document.getElementById("heroDescripcion").textContent = "No se pudo cargar la información.";
-    document.getElementById("heroEstado").textContent = "Disponible para adopción";
+    const heroIcono = document.getElementById("heroIcono");
+    const heroNombre = document.getElementById("heroNombre");
+    const heroDescripcion = document.getElementById("heroDescripcion");
+    const heroEstado = document.getElementById("heroEstado");
+
+    if (heroIcono) heroIcono.innerHTML = "🐾";
+    if (heroNombre) heroNombre.textContent = "Mascota busca hogar";
+    if (heroDescripcion) heroDescripcion.textContent = "No se pudo cargar la información.";
+    if (heroEstado) heroEstado.textContent = "Disponible para adopción";
+
     return;
   }
 
   if (!mascotas || mascotas.length === 0) {
-    document.getElementById("heroIcono").textContent = "🐾";
-    document.getElementById("heroNombre").textContent = "Mascota busca hogar";
-    document.getElementById("heroDescripcion").textContent = "Pronto mostraremos mascotas disponibles.";
-    document.getElementById("heroEstado").textContent = "Pendiente de publicación";
+    const heroIcono = document.getElementById("heroIcono");
+    const heroNombre = document.getElementById("heroNombre");
+    const heroDescripcion = document.getElementById("heroDescripcion");
+    const heroEstado = document.getElementById("heroEstado");
+
+    if (heroIcono) heroIcono.innerHTML = "🐾";
+    if (heroNombre) heroNombre.textContent = "Mascota busca hogar";
+    if (heroDescripcion) heroDescripcion.textContent = "Pronto mostraremos mascotas disponibles.";
+    if (heroEstado) heroEstado.textContent = "Pendiente de publicación";
 
     if (btnMascotaAnterior) btnMascotaAnterior.style.display = "none";
     if (btnMascotaSiguiente) btnMascotaSiguiente.style.display = "none";
@@ -1243,6 +1329,9 @@ async function cargarCarruselMascotasHero() {
   if (mascotasHero.length <= 1) {
     if (btnMascotaAnterior) btnMascotaAnterior.style.display = "none";
     if (btnMascotaSiguiente) btnMascotaSiguiente.style.display = "none";
+  } else {
+    if (btnMascotaAnterior) btnMascotaAnterior.style.display = "flex";
+    if (btnMascotaSiguiente) btnMascotaSiguiente.style.display = "flex";
   }
 
   iniciarAutoCarruselHero();
@@ -1253,13 +1342,37 @@ function pintarMascotaHero() {
 
   const mascota = mascotasHero[indiceMascotaHero];
 
-  document.getElementById("heroIcono").textContent = mascota.icono || "🐾";
-  document.getElementById("heroNombre").textContent = `${mascota.nombre} busca hogar`;
+  const heroIcono = document.getElementById("heroIcono");
+  const heroNombre = document.getElementById("heroNombre");
+  const heroDescripcion = document.getElementById("heroDescripcion");
+  const heroEstado = document.getElementById("heroEstado");
 
-  document.getElementById("heroDescripcion").textContent =
-    `${mascota.edad || "Edad no registrada"} · ${mascota.vacunas || "Sin información"} · ${mascota.ciudad || "Ciudad no registrada"}`;
+  if (heroIcono) {
+    if (mascota.foto_url) {
+      heroIcono.innerHTML = `
+        <img 
+          src="${mascota.foto_url}" 
+          alt="Foto de ${mascota.nombre}" 
+          class="hero-mascota-foto"
+        >
+      `;
+    } else {
+      heroIcono.innerHTML = mascota.icono || "🐾";
+    }
+  }
 
-  document.getElementById("heroEstado").textContent = "Disponible para adopción";
+  if (heroNombre) {
+    heroNombre.textContent = `${mascota.nombre} busca hogar`;
+  }
+
+  if (heroDescripcion) {
+    heroDescripcion.textContent =
+      `${mascota.edad || "Edad no registrada"} · ${mascota.vacunas || "Sin información"} · ${mascota.ciudad || "Ciudad no registrada"}`;
+  }
+
+  if (heroEstado) {
+    heroEstado.textContent = "Disponible para adopción";
+  }
 
   actualizarDotsHero();
 }
@@ -1316,6 +1429,10 @@ function actualizarDotsHero() {
 
 function iniciarAutoCarruselHero() {
   if (mascotasHero.length <= 1) return;
+
+  if (intervaloMascotaHero) {
+    clearInterval(intervaloMascotaHero);
+  }
 
   intervaloMascotaHero = setInterval(() => {
     mostrarMascotaSiguiente();

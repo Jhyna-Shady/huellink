@@ -2325,3 +2325,39 @@ h3,
     font-size: 2.5rem;
   }
 }
+
+/* =========================================================
+   ICONOS ILUSTRADOS EN DASHBOARD
+   ========================================================= */
+
+.dashboard-action-image {
+  width: 135px;
+  height: 135px;
+  margin-bottom: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.dashboard-icon-img {
+  width: 135px;
+  height: 135px;
+  object-fit: contain;
+  display: block;
+}
+
+.dashboard-action-image span {
+  font-size: 3rem;
+}
+
+@media (max-width: 600px) {
+  .dashboard-action-image {
+    width: 115px;
+    height: 115px;
+  }
+
+  .dashboard-icon-img {
+    width: 115px;
+    height: 115px;
+  }
+}

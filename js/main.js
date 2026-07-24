@@ -200,11 +200,7 @@ if (accionesDashboard && actividadDashboard) {
           boton: "Ver mis reportes"
         }
       ],
-      actividad: [
-        ["📋", "Solicitud enviada", "Tu solicitud de adopción está en revisión."],
-        ["📍", "Reporte publicado", "Puedes registrar mascotas perdidas o encontradas."],
-        ["🔔", "Posible coincidencia", "Revisa los reportes publicados en Huellink."]
-      ]
+      
     },
 
     rescatista: {
@@ -242,11 +238,7 @@ if (accionesDashboard && actividadDashboard) {
           boton: "Ver historial"
         }
       ],
-      actividad: [
-        ["🐶", "Mascota publicada", "Publicaste una mascota como disponible para adopción."],
-        ["📋", "Nueva solicitud", "Un ciudadano puede solicitar adoptar una mascota."],
-        ["✅", "Seguimiento pendiente", "Recuerda registrar controles post adopción."]
-      ]
+      
     },
 
     refugio: {
@@ -291,11 +283,7 @@ if (accionesDashboard && actividadDashboard) {
           boton: "Ver historial"
         }
       ],
-      actividad: [
-        ["🐾", "Nueva mascota registrada", "Se agregó una nueva mascota al refugio."],
-        ["📋", "Solicitud aprobada", "Una solicitud de adopción fue aprobada."],
-        ["📊", "Estadística actualizada", "El refugio actualiza sus datos de adopción."]
-      ]
+      
     },
 
     administrador: {
@@ -326,11 +314,7 @@ if (accionesDashboard && actividadDashboard) {
           boton: "Ver estadísticas"
         }
       ],
-      actividad: [
-        ["✅", "Registro pendiente", "Hay aliados pendientes de validación."],
-        ["⚠️", "Publicación reportada", "Revisa publicaciones sospechosas."],
-        ["📊", "Resumen actualizado", "Las estadísticas generales fueron actualizadas."]
-      ]
+      
     }
   };
 
@@ -354,16 +338,85 @@ if (accionesDashboard && actividadDashboard) {
 
   accionesDashboard.innerHTML = "";
 
-  datos.acciones.forEach((accion) => {
-    accionesDashboard.innerHTML += `
-      <div class="dashboard-action-card">
-        <div class="action-icon">${accion.icono}</div>
-        <h3>${accion.titulo}</h3>
-        <p>${accion.texto}</p>
-        <a href="${accion.link}">${accion.boton}</a>
+  function obtenerIconoDashboard(titulo, iconoFallback) {
+  const tituloNormalizado = titulo.toLowerCase();
+
+  if (
+    tituloNormalizado.includes("buscar mascotas") ||
+    tituloNormalizado.includes("gestionar mascotas") ||
+    tituloNormalizado.includes("publicar mascota")
+  ) {
+    return `<img src="img/icons/explorar-mascotas.png" alt="${titulo}" class="dashboard-icon-img">`;
+  }
+
+  if (
+    tituloNormalizado.includes("solicitudes") ||
+    tituloNormalizado.includes("revisar solicitudes")
+  ) {
+    return `<img src="img/icons/enviar-una-solicitud.png" alt="${titulo}" class="dashboard-icon-img">`;
+  }
+
+  if (
+    tituloNormalizado.includes("reportar mascota perdida") ||
+    tituloNormalizado.includes("perdida")
+  ) {
+    return `<img src="img/icons/mascotas-perdidas.png" alt="${titulo}" class="dashboard-icon-img">`;
+  }
+
+  if (
+    tituloNormalizado.includes("reportar mascota encontrada") ||
+    tituloNormalizado.includes("encontrada")
+  ) {
+    return `<img src="img/icons/mascotas-encontradas.png" alt="${titulo}" class="dashboard-icon-img">`;
+  }
+
+  if (
+    tituloNormalizado.includes("seguimiento") ||
+    tituloNormalizado.includes("historial")
+  ) {
+    return `<img src="img/icons/adopta-responsablemente.png" alt="${titulo}" class="dashboard-icon-img">`;
+  }
+
+  if (
+    tituloNormalizado.includes("validar aliados") ||
+    tituloNormalizado.includes("aliados")
+  ) {
+    return `<img src="img/icons/aliado-refugio.png" alt="${titulo}" class="dashboard-icon-img">`;
+  }
+
+  if (
+    tituloNormalizado.includes("estadísticas") ||
+    tituloNormalizado.includes("estadisticas")
+  ) {
+    return `<img src="img/icons/organiza-la-informacion.png" alt="${titulo}" class="dashboard-icon-img">`;
+  }
+
+  if (
+    tituloNormalizado.includes("publicaciones") ||
+    tituloNormalizado.includes("controlar")
+  ) {
+    return `<img src="img/icons/publica-reportes.png" alt="${titulo}" class="dashboard-icon-img">`;
+  }
+
+  return `<span>${iconoFallback || "🐾"}</span>`;
+}
+
+accionesDashboard.innerHTML = "";
+
+datos.acciones.forEach((accion) => {
+  accionesDashboard.innerHTML += `
+    <div class="dashboard-action-card">
+      <div class="action-icon dashboard-action-image">
+        ${obtenerIconoDashboard(accion.titulo, accion.icono)}
       </div>
-    `;
-  });
+      <h3>${accion.titulo}</h3>
+      <p>${accion.texto}</p>
+      <a href="${accion.link}">${accion.boton}</a>
+    </div>
+  `;
+});
+
+;
 
   actividadDashboard.innerHTML = "";
 

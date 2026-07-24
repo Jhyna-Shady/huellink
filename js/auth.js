@@ -1,6 +1,96 @@
 console.log("auth.js cargado correctamente 🔐🐾");
 
-// PÁGINAS QUE REQUIEREN SESIÓN
+/* =========================================================
+   MODAL VISUAL HUELLINK
+   ========================================================= */
+
+function mostrarModalHuellink(mensaje, callback = null, titulo = "Huellink") {
+  let modal = document.getElementById("huellinkModal");
+
+  if (!modal) {
+    modal = document.createElement("div");
+    modal.id = "huellinkModal";
+    modal.className = "huellink-modal-overlay";
+
+    modal.innerHTML = `
+      <div class="huellink-modal-card">
+        <button type="button" class="huellink-modal-close" id="huellinkModalClose">
+          ✕
+        </button>
+
+        <img
+          src="img/icons/aliado-refugio.png"
+          alt="Huellink"
+          class="huellink-modal-img"
+          id="huellinkModalImg"
+        >
+
+        <div class="huellink-modal-fallback" id="huellinkModalFallback">
+          🐾
+        </div>
+
+        <h3 class="huellink-modal-title" id="huellinkModalTitle">
+          Huellink
+        </h3>
+
+        <p class="huellink-modal-message" id="huellinkModalMessage">
+          Mensaje de Huellink.
+        </p>
+
+        <button type="button" class="huellink-modal-accept" id="huellinkModalBtn">
+          Aceptar
+        </button>
+      </div>
+    `;
+
+    document.body.appendChild(modal);
+  }
+
+  const tituloModal = document.getElementById("huellinkModalTitle");
+  const mensajeModal = document.getElementById("huellinkModalMessage");
+  const botonModal = document.getElementById("huellinkModalBtn");
+  const cerrarModal = document.getElementById("huellinkModalClose");
+  const imagenModal = document.getElementById("huellinkModalImg");
+  const fallbackModal = document.getElementById("huellinkModalFallback");
+
+  if (tituloModal) {
+    tituloModal.textContent = titulo;
+  }
+
+  if (mensajeModal) {
+    mensajeModal.textContent = mensaje;
+  }
+
+  if (imagenModal && fallbackModal) {
+    imagenModal.style.display = "block";
+    fallbackModal.style.display = "none";
+
+    imagenModal.onerror = () => {
+      imagenModal.style.display = "none";
+      fallbackModal.style.display = "flex";
+    };
+  }
+
+  modal.classList.add("active");
+
+  function cerrar() {
+    modal.classList.remove("active");
+
+    if (callback) {
+      callback();
+    }
+  }
+
+  botonModal.onclick = cerrar;
+  cerrarModal.onclick = cerrar;
+}
+
+window.mostrarModalHuellink = mostrarModalHuellink;
+
+/* =========================================================
+   PÁGINAS PROTEGIDAS
+   ========================================================= */
+
 const AUTH_PAGINAS_PROTEGIDAS = [
   "dashboard.html",
   "admin.html",
@@ -10,11 +100,13 @@ const AUTH_PAGINAS_PROTEGIDAS = [
   "historial-seguimiento.html",
   "reportar-perdida.html",
   "reportar-encontrada.html",
-  "solicitud-adopcion.html",
-
+  "solicitud-adopcion.html"
 ];
 
-// PERMISOS POR ROL
+/* =========================================================
+   PERMISOS POR ROL
+   ========================================================= */
+
 const AUTH_PERMISOS_POR_PAGINA = {
   "admin.html": ["administrador"],
 
@@ -30,7 +122,10 @@ const AUTH_PERMISOS_POR_PAGINA = {
   "dashboard.html": ["ciudadano", "rescatista", "refugio", "administrador"]
 };
 
-// OBTENER PERFIL ACTUAL DESDE SUPABASE
+/* =========================================================
+   PERFIL Y SESIÓN LOCAL
+   ========================================================= */
+
 async function obtenerPerfilActual(userId) {
   if (typeof db === "undefined") {
     console.error("Supabase no está cargado.");
@@ -51,7 +146,6 @@ async function obtenerPerfilActual(userId) {
   return perfil;
 }
 
-// GUARDAR PERFIL EN LOCALSTORAGE
 function guardarPerfilLocal(perfil) {
   if (!perfil) return;
 
@@ -60,14 +154,16 @@ function guardarPerfilLocal(perfil) {
   localStorage.setItem("huellinkNombre", perfil.nombre || "");
 }
 
-// LIMPIAR SESIÓN LOCAL
 function limpiarSesionLocal() {
   localStorage.removeItem("huellinkCorreo");
   localStorage.removeItem("huellinkRol");
   localStorage.removeItem("huellinkNombre");
 }
 
-// VERIFICAR SESIÓN Y PERMISOS
+/* =========================================================
+   VERIFICAR SESIÓN Y PERMISOS
+   ========================================================= */
+
 async function verificarSesionYPermisos() {
   const paginaActual = window.location.pathname.split("/").pop() || "index.html";
   const destinoActual = `${paginaActual}${window.location.search || ""}`;
@@ -77,8 +173,13 @@ async function verificarSesionYPermisos() {
   }
 
   if (typeof db === "undefined") {
-    alert("Supabase no está cargado. Revisa los scripts de esta página.");
-    window.location.href = "login.html";
+    mostrarModalHuellink(
+      "Supabase no está cargado. Revisa los scripts de esta página.",
+      () => {
+        window.location.href = "login.html";
+      },
+      "Error de conexión"
+    );
     return;
   }
 
@@ -86,25 +187,42 @@ async function verificarSesionYPermisos() {
 
   if (error) {
     console.error("Error al verificar sesión:", error);
-    window.location.href = "login.html";
+
+    mostrarModalHuellink(
+      "Ocurrió un error al verificar tu sesión.",
+      () => {
+        window.location.href = "login.html";
+      },
+      "Sesión no verificada"
+    );
     return;
   }
 
   const session = data.session;
 
   if (!session) {
-    alert("Debes iniciar sesión para acceder a esta página.");
-    window.location.href = `login.html?redirect=${encodeURIComponent(destinoActual)}`;
+    mostrarModalHuellink(
+      "Debes iniciar sesión para acceder a esta página.",
+      () => {
+        window.location.href = `login.html?redirect=${encodeURIComponent(destinoActual)}`;
+      },
+      "Acceso requerido"
+    );
     return;
   }
 
   const perfil = await obtenerPerfilActual(session.user.id);
 
   if (!perfil) {
-    alert("No se encontró el perfil del usuario.");
-    await db.auth.signOut();
-    limpiarSesionLocal();
-    window.location.href = "login.html";
+    mostrarModalHuellink(
+      "No se encontró el perfil del usuario.",
+      async () => {
+        await db.auth.signOut();
+        limpiarSesionLocal();
+        window.location.href = "login.html";
+      },
+      "Perfil no encontrado"
+    );
     return;
   }
 
@@ -113,8 +231,13 @@ async function verificarSesionYPermisos() {
   const rolesPermitidos = AUTH_PERMISOS_POR_PAGINA[paginaActual];
 
   if (rolesPermitidos && !rolesPermitidos.includes(perfil.rol)) {
-    alert("No tienes permiso para acceder a esta página.");
-    window.location.href = `dashboard.html?rol=${perfil.rol}`;
+    mostrarModalHuellink(
+      "No tienes permiso para acceder a esta página.",
+      () => {
+        window.location.href = `dashboard.html?rol=${perfil.rol}`;
+      },
+      "Acceso restringido"
+    );
     return;
   }
 
@@ -125,7 +248,10 @@ async function verificarSesionYPermisos() {
   }
 }
 
-// CAMBIAR BOTÓN DE INICIAR SESIÓN CUANDO YA HAY SESIÓN
+/* =========================================================
+   CAMBIAR BOTÓN LOGIN / MI PANEL
+   ========================================================= */
+
 async function actualizarBotonesSesion() {
   const botonesLogin = document.querySelectorAll(".btn-login");
 
@@ -150,7 +276,10 @@ async function actualizarBotonesSesion() {
   });
 }
 
-// CERRAR SESIÓN
+/* =========================================================
+   CERRAR SESIÓN
+   ========================================================= */
+
 document.addEventListener("click", async (e) => {
   if (e.target.classList.contains("btn-logout")) {
     e.preventDefault();
@@ -161,12 +290,20 @@ document.addEventListener("click", async (e) => {
 
     limpiarSesionLocal();
 
-    alert("Sesión cerrada correctamente 🐾");
-    window.location.href = "login.html";
+    mostrarModalHuellink(
+      "Sesión cerrada correctamente 🐾",
+      () => {
+        window.location.href = "index.html";
+      },
+      "Sesión cerrada"
+    );
   }
 });
 
-// LOGIN
+/* =========================================================
+   LOGIN
+   ========================================================= */
+
 const authFormLogin = document.getElementById("formLogin");
 
 if (authFormLogin) {
@@ -174,7 +311,11 @@ if (authFormLogin) {
     e.preventDefault();
 
     if (typeof db === "undefined") {
-      alert("Supabase no está cargado. Revisa los scripts en login.html");
+      mostrarModalHuellink(
+        "Supabase no está cargado. Revisa los scripts en login.html",
+        null,
+        "Error de conexión"
+      );
       return;
     }
 
@@ -187,16 +328,23 @@ if (authFormLogin) {
     });
 
     if (error) {
-      alert("Error al iniciar sesión: " + error.message);
+      mostrarModalHuellink(
+        "Error al iniciar sesión: " + error.message,
+        null,
+        "No se pudo iniciar sesión"
+      );
       return;
     }
 
     const user = data.user;
-
     const perfil = await obtenerPerfilActual(user.id);
 
     if (!perfil) {
-      alert("No se pudo cargar el perfil del usuario.");
+      mostrarModalHuellink(
+        "No se pudo cargar el perfil del usuario.",
+        null,
+        "Perfil no disponible"
+      );
       return;
     }
 
@@ -213,7 +361,10 @@ if (authFormLogin) {
   });
 }
 
-// REGISTRO
+/* =========================================================
+   REGISTRO
+   ========================================================= */
+
 const authFormRegistro = document.getElementById("formRegistro");
 
 if (authFormRegistro) {
@@ -221,7 +372,11 @@ if (authFormRegistro) {
     e.preventDefault();
 
     if (typeof db === "undefined") {
-      alert("Supabase no está cargado. Revisa los scripts en registro.html");
+      mostrarModalHuellink(
+        "Supabase no está cargado. Revisa los scripts en registro.html",
+        null,
+        "Error de conexión"
+      );
       return;
     }
 
@@ -234,7 +389,11 @@ if (authFormRegistro) {
     const confirmarPassword = document.getElementById("confirmarPassword").value;
 
     if (password !== confirmarPassword) {
-      alert("Las contraseñas no coinciden. Intenta nuevamente.");
+      mostrarModalHuellink(
+        "Las contraseñas no coinciden. Intenta nuevamente.",
+        null,
+        "Verifica tu contraseña"
+      );
       return;
     }
 
@@ -244,14 +403,22 @@ if (authFormRegistro) {
     });
 
     if (error) {
-      alert("Error al registrar usuario: " + error.message);
+      mostrarModalHuellink(
+        "Error al registrar usuario: " + error.message,
+        null,
+        "No se pudo registrar"
+      );
       return;
     }
 
     const user = data.user;
 
     if (!user) {
-      alert("Usuario creado, pero falta confirmar el correo. Revisa tu email.");
+      mostrarModalHuellink(
+        "Usuario creado, pero falta confirmar el correo. Revisa tu email.",
+        null,
+        "Confirma tu correo"
+      );
       return;
     }
 
@@ -270,25 +437,36 @@ if (authFormRegistro) {
       .insert([nuevoPerfil]);
 
     if (errorPerfil) {
-      alert("Usuario creado, pero ocurrió un error al guardar el perfil: " + errorPerfil.message);
+      mostrarModalHuellink(
+        "Usuario creado, pero ocurrió un error al guardar el perfil: " + errorPerfil.message,
+        null,
+        "Perfil no guardado"
+      );
       return;
     }
 
-    alert(
-      `Registro creado correctamente 🐾\n\nNombre: ${nombre}\nCorreo: ${correo}\nRol: ${rol}`
+    mostrarModalHuellink(
+      `Registro creado correctamente 🐾\n\nNombre: ${nombre}\nCorreo: ${correo}\nRol: ${rol}`,
+      () => {
+        authFormRegistro.reset();
+        window.location.href = "login.html";
+      },
+      "Registro exitoso"
     );
-
-    authFormRegistro.reset();
-
-    window.location.href = "login.html";
   });
 }
 
-// EJECUTAR FUNCIONES DE AUTH
+/* =========================================================
+   EJECUTAR FUNCIONES DE AUTH
+   ========================================================= */
+
 verificarSesionYPermisos();
 actualizarBotonesSesion();
 
-// DEJAR FUNCIONES DISPONIBLES PARA OTROS ARCHIVOS
+/* =========================================================
+   FUNCIONES GLOBALES
+   ========================================================= */
+
 window.obtenerPerfilActual = obtenerPerfilActual;
 window.guardarPerfilLocal = guardarPerfilLocal;
 window.limpiarSesionLocal = limpiarSesionLocal;

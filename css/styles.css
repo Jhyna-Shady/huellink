@@ -1,5 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;600;700;800;900&display=swap");
-
+@import url("https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@400;600;700;800;900&display=swap");
 /* =========================================================
    HUELLINK - CSS CORREGIDO Y RESPONSIVE
    Reemplaza TODO tu css/styles.css por este archivo.
@@ -1903,5 +1902,289 @@ input[readonly] {
     width: 150px;
     height: 150px;
     border-radius: 24px;
+  }
+}
+
+/* =========================================================
+   MEJORA VISUAL FRONTEND HUELLINK
+   Navbar, colores, tipografía y acciones de reportes
+   ========================================================= */
+
+:root {
+  --huellink-green: #16846f;
+  --huellink-green-dark: #0f3f36;
+  --huellink-green-soft: #dff7ef;
+  --huellink-cream: #fff8ec;
+  --huellink-coral: #f28b64;
+  --huellink-coral-soft: #ffe3d4;
+  --huellink-text: #183b35;
+  --huellink-muted: #5f7c85;
+  --huellink-white: #ffffff;
+}
+
+body {
+  font-family: "Nunito", sans-serif !important;
+  background-color: var(--huellink-cream);
+  color: var(--huellink-text);
+}
+
+h1,
+h2,
+h3,
+.logo {
+  font-family: "Fredoka", sans-serif !important;
+}
+
+/* HEADER MODERNO */
+
+.header {
+  background: rgba(255, 255, 255, 0.96);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 8px 24px rgba(15, 63, 54, 0.08);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.navbar {
+  max-width: 1200px;
+  margin: auto;
+  padding: 16px 24px;
+  display: flex !important;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+}
+
+.logo {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: var(--huellink-green) !important;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  letter-spacing: 0.3px;
+  white-space: nowrap;
+}
+
+.logo:hover {
+  color: var(--huellink-coral) !important;
+}
+
+/* MENÚ PRINCIPAL */
+
+.nav-links {
+  display: flex !important;
+  align-items: center;
+  gap: 8px;
+  list-style: none;
+  margin: 0;
+  padding: 6px;
+  background: #f4fbf8;
+  border-radius: 999px;
+}
+
+.nav-links li {
+  display: flex;
+}
+
+.nav-links a {
+  font-family: "Nunito", sans-serif !important;
+  text-decoration: none;
+  color: var(--huellink-text) !important;
+  font-weight: 800;
+  font-size: 0.95rem;
+  padding: 9px 15px;
+  border-radius: 999px;
+  transition: all 0.25s ease;
+  white-space: nowrap;
+}
+
+.nav-links a:hover {
+  background: var(--huellink-green-soft);
+  color: var(--huellink-green) !important;
+  transform: translateY(-1px);
+}
+
+/* BOTÓN LOGIN */
+
+.btn-login {
+  font-family: "Nunito", sans-serif !important;
+  background: linear-gradient(135deg, #16846f, #20a88c) !important;
+  color: #ffffff !important;
+  padding: 10px 18px !important;
+  border-radius: 999px !important;
+  text-decoration: none;
+  font-weight: 900 !important;
+  font-size: 0.92rem !important;
+  box-shadow: 0 8px 18px rgba(22, 132, 111, 0.25);
+  white-space: nowrap;
+  width: auto !important;
+  max-width: max-content;
+  transition: all 0.25s ease;
+}
+
+.btn-login:hover {
+  background: linear-gradient(135deg, #f28b64, #ffad7a) !important;
+  transform: translateY(-2px);
+  box-shadow: 0 10px 22px rgba(242, 139, 100, 0.3);
+}
+
+/* BOTONES GENERALES MÁS SUAVES */
+
+.btn-primary,
+.btn-secondary,
+.btn-detalle,
+.btn-adoptar,
+.btn-match,
+.btn-submit,
+.dashboard-action-card a,
+.pet-card button {
+  font-family: "Nunito", sans-serif !important;
+  border-radius: 999px !important;
+}
+
+/* TARJETAS MÁS AMIGABLES */
+
+.pet-card,
+.feature-card,
+.report-item-card,
+.dashboard-action-card,
+.quick-card,
+.auth-card,
+.report-form,
+.form-info,
+.admin-card {
+  border-radius: 30px !important;
+}
+
+/* ACCIONES EN REPORTES */
+
+.report-actions {
+  max-width: 1000px;
+  margin: 0 auto 35px;
+  padding: 0 24px;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 22px;
+}
+
+.quick-card {
+  position: relative;
+  display: block;
+  padding: 30px;
+  text-decoration: none;
+  overflow: hidden;
+  transition: all 0.25s ease;
+  box-shadow: 0 14px 32px rgba(15, 63, 54, 0.08);
+}
+
+.quick-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 18px 42px rgba(15, 63, 54, 0.14);
+}
+
+.quick-icon {
+  font-size: 2.4rem;
+  margin-bottom: 12px;
+}
+
+.quick-card h3 {
+  font-size: 1.45rem;
+  color: var(--huellink-text);
+  margin-bottom: 10px;
+}
+
+.quick-card p {
+  color: var(--huellink-muted);
+  line-height: 1.55;
+  margin-bottom: 18px;
+}
+
+.quick-card span {
+  display: inline-block;
+  background: #ffffff;
+  color: var(--huellink-green);
+  padding: 9px 15px;
+  border-radius: 999px;
+  font-weight: 900;
+  font-size: 0.9rem;
+}
+
+.lost-action {
+  background: linear-gradient(135deg, #ffe0c2, #fff3d8);
+}
+
+.found-action {
+  background: linear-gradient(135deg, #d9f6ee, #effff9);
+}
+
+/* RESPONSIVE NAVBAR */
+
+@media (max-width: 900px) {
+  .navbar {
+    display: grid !important;
+    grid-template-columns: 1fr auto;
+    padding: 14px 18px;
+    gap: 12px;
+  }
+
+  .logo {
+    font-size: 1.45rem;
+    grid-column: 1 / 2;
+  }
+
+  .btn-login {
+    grid-column: 2 / 3;
+    font-size: 0.8rem !important;
+    padding: 8px 13px !important;
+  }
+
+  .nav-links {
+    grid-column: 1 / -1;
+    width: 100%;
+    overflow-x: auto;
+    justify-content: flex-start;
+    gap: 6px;
+    padding: 6px;
+    scrollbar-width: none;
+  }
+
+  .nav-links::-webkit-scrollbar {
+    display: none;
+  }
+
+  .nav-links a {
+    font-size: 0.86rem;
+    padding: 8px 12px;
+  }
+
+  .report-actions {
+    grid-template-columns: 1fr;
+    padding: 0 18px;
+  }
+}
+
+@media (max-width: 480px) {
+  .navbar {
+    padding: 12px 14px;
+  }
+
+  .logo {
+    font-size: 1.28rem;
+  }
+
+  .nav-links a {
+    font-size: 0.8rem;
+    padding: 7px 10px;
+  }
+
+  .quick-card {
+    padding: 24px;
+  }
+
+  .quick-card h3 {
+    font-size: 1.25rem;
   }
 }

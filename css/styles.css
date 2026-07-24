@@ -2267,3 +2267,61 @@ h3,
     font-size: 1.25rem;
   }
 }
+
+
+/* =========================================================
+   ICONOS ILUSTRADOS HUELLINK
+   Preparado para PNG/SVG con respaldo emoji
+   ========================================================= */
+
+.icon-image-box {
+  width: 95px;
+  height: 95px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 18px;
+}
+
+.feature-icon-img,
+.report-icon-img {
+  width: 86px;
+  height: 86px;
+  object-fit: contain;
+  display: block;
+}
+
+.icon-fallback {
+  display: none;
+  font-size: 3rem;
+  line-height: 1;
+}
+
+.report-icon-box {
+  margin: 0 auto 18px;
+}
+
+.report-card {
+  text-align: center;
+}
+
+.ally-icon-box {
+  margin-bottom: 18px;
+}
+
+@media (max-width: 600px) {
+  .icon-image-box {
+    width: 82px;
+    height: 82px;
+  }
+
+  .feature-icon-img,
+  .report-icon-img {
+    width: 74px;
+    height: 74px;
+  }
+
+  .icon-fallback {
+    font-size: 2.5rem;
+  }
+}

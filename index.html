@@ -13,16 +13,16 @@
   <!-- ENCABEZADO -->
   <header class="header">
     <nav class="navbar">
-      <div class="logo">
-        🐾 Huellink
-      </div>
+      <a href="index.html" class="logo-link">
+        <div class="logo">🐾 Huellink</div>
+      </a>
 
-    <ul class="nav-links">
-      <li><a href="index.html">Inicio</a></li>
-      <li><a href="adoptar.html">Adoptar</a></li>
-      <li><a href="reportes.html">Reportes</a></li>
-      <li><a href="refugios.html">Aliados</a></li>
-    </ul>
+      <ul class="nav-links">
+        <li><a href="index.html">Inicio</a></li>
+        <li><a href="adoptar.html">Adoptar</a></li>
+        <li><a href="reportes.html">Reportes</a></li>
+        <li><a href="refugios.html">Aliados</a></li>
+      </ul>
 
       <a href="login.html" class="btn-login" id="btnLoginHome">Iniciar sesión</a>
     </nav>
@@ -31,175 +31,272 @@
   <!-- SECCIÓN PRINCIPAL -->
   <section class="hero" id="inicio">
     <div class="hero-content">
-      <span class="tag">Adopción responsable + rescate + tecnología</span>
+      <span class="tag">Adopción responsable + reportes + aliados</span>
 
-      <h1>Conectamos mascotas con hogares responsables</h1>
+      <h1>Una plataforma para conectar mascotas con hogares responsables</h1>
 
       <p>
-        Huellink es una plataforma digital que ayuda a adoptar mascotas,
-        reportar animales perdidos o encontrados, conectar con rescatistas
-        y dar seguimiento después de la adopción.
+        Huellink ayuda a encontrar mascotas en adopción, publicar reportes de
+        mascotas perdidas o encontradas y conectar ciudadanos con refugios,
+        rescatistas y aliados comprometidos con el bienestar animal.
       </p>
 
       <div class="hero-buttons">
-        <a href="adoptar.html" class="btn-primary">Quiero adoptar</a>
-        <a href="reportar-perdida.html" class="btn-secondary">Reportar mascota</a>
+        <a href="adoptar.html" class="btn-primary">Explorar mascotas</a>
+        <a href="reportes.html" class="btn-secondary">Ver reportes</a>
       </div>
     </div>
 
-  
-  <div class="hero-card">
-  <div class="hero-carousel" id="heroCarouselMascotas">
+    <div class="hero-card">
+      <div class="hero-carousel" id="heroCarouselMascotas">
 
-    <button class="carousel-btn carousel-prev" id="btnMascotaAnterior">
-      ‹
-    </button>
+        <button class="carousel-btn carousel-prev" id="btnMascotaAnterior">
+          ‹
+        </button>
 
-    <div class="pet-card-main" id="mascotaHero">
-      <div class="pet-icon" id="heroIcono">🐾</div>
-      <h3 id="heroNombre">Mascota busca hogar</h3>
-      <p id="heroDescripcion">Cargando información...</p>
-      <span id="heroEstado">Disponible para adopción</span>
+        <div class="pet-card-main" id="mascotaHero">
+          <div class="pet-icon" id="heroIcono">🐾</div>
+          <h3 id="heroNombre">Mascota busca hogar</h3>
+          <p id="heroDescripcion">Cargando información...</p>
+          <span id="heroEstado">Disponible para adopción</span>
+        </div>
+
+        <button class="carousel-btn carousel-next" id="btnMascotaSiguiente">
+          ›
+        </button>
+
+        <div class="carousel-dots" id="heroDots"></div>
+
+      </div>
     </div>
-
-    <button class="carousel-btn carousel-next" id="btnMascotaSiguiente">
-      ›
-    </button>
-
-    <div class="carousel-dots" id="heroDots"></div>
-
-  </div>
-</div>
-</div>
   </section>
 
   <!-- ESTADÍSTICAS -->
   <section class="stats">
-  <div class="stat-box">
-    <h2 id="homeTotalMascotas">0</h2>
-    <p>Mascotas registradas</p>
-  </div>
-
-  <div class="stat-box">
-    <h2 id="homeAdopciones">0</h2>
-    <p>Adopciones logradas</p>
-  </div>
-
-  <div class="stat-box">
-    <h2 id="homeReportes">0</h2>
-    <p>Reportes atendidos</p>
-  </div>
-
-  <div class="stat-box">
-    <h2 id="homeAliados">0</h2>
-    <p>Rescatistas aliados</p>
-  </div>
-</section>
-
-  <!-- FUNCIONES PRINCIPALES -->
-  <section class="section" id="funciona">
-    <div class="section-title">
-      <h2>¿Qué puedes hacer en Huellink?</h2>
-      <p>Una sola plataforma para adoptar, reportar, rescatar y hacer seguimiento.</p>
+    <div class="stat-box">
+      <h2 id="homeTotalMascotas">0</h2>
+      <p>Mascotas registradas</p>
     </div>
 
-    <div class="features-grid">
-      <div class="feature-card">
-        <div class="icon">🏠</div>
-        <h3>Adoptar mascotas</h3>
-        <p>Busca perros y gatos disponibles según ubicación, edad, tamaño y características.</p>
-      </div>
+    <div class="stat-box">
+      <h2 id="homeAdopciones">0</h2>
+      <p>Adopciones logradas</p>
+    </div>
 
-      <div class="feature-card">
-        <div class="icon">📍</div>
-        <h3>Reportar mascotas perdidas</h3>
-        <p>Publica reportes con foto, zona, referencia y características de la mascota.</p>
-      </div>
+    <div class="stat-box">
+      <h2 id="homeReportes">0</h2>
+      <p>Reportes publicados</p>
+    </div>
 
-      <div class="feature-card">
-        <div class="icon">🔎</div>
-        <h3>Reportar mascotas encontradas</h3>
-        <p>Ayuda a reunir mascotas con sus dueños registrando animales encontrados.</p>
-      </div>
-
-      <div class="feature-card">
-        <div class="icon">🤝</div>
-        <h3>Conectar con refugios</h3>
-        <p>Refugios y rescatistas pueden inscribirse, publicar mascotas y gestionar casos.</p>
-      </div>
-
-      <div class="feature-card">
-        <div class="icon">💬</div>
-        <h3>Chat interno</h3>
-        <p>Comunicación segura entre adoptantes, refugios, rescatistas y ciudadanos.</p>
-      </div>
-
-      <div class="feature-card">
-        <div class="icon">📊</div>
-        <h3>Seguimiento y estadísticas</h3>
-        <p>Control post adopción, reportes, estados de solicitudes y datos generales.</p>
-      </div>
+    <div class="stat-box">
+      <h2 id="homeAliados">0</h2>
+      <p>Aliados registrados</p>
     </div>
   </section>
 
- <!-- MASCOTAS EN ADOPCIÓN -->
-<section class="section adoption" id="adoptar">
-  <div class="section-title">
-    <h2>Mascotas en adopción</h2>
-    <p>Conoce algunas mascotas que esperan un hogar responsable.</p>
-  </div>
+  <!-- CÓMO FUNCIONA -->
+  <section class="section" id="funciona">
+    <div class="section-title">
+      <h2>¿Cómo funciona Huellink?</h2>
+      <p>Una plataforma sencilla para adoptar, reportar y colaborar con aliados.</p>
+    </div>
 
-  <div class="pets-grid" id="mascotasInicio">
-    <!-- Se carga desde Supabase -->
-  </div>
+    <div class="features-grid">
 
-  <div class="center-button">
-    <a href="adoptar.html" class="btn-primary">Ver todas las mascotas</a>
-  </div>
-</section>
+      <div class="feature-card">
+        <div class="icon-image-box">
+          <img
+            src="img/icons/explorar-mascotas.png"
+            alt="Explora mascotas"
+            class="feature-icon-img"
+            onerror="this.style.display='none'; this.nextElementSibling.style.display='block';"
+          >
+          <span class="icon-fallback">🔍</span>
+        </div>
+
+        <h3>Explora mascotas</h3>
+        <p>
+          Revisa perros y gatos disponibles para adopción según ciudad, edad,
+          tamaño y características.
+        </p>
+      </div>
+
+      <div class="feature-card">
+        <div class="icon-image-box">
+          <img
+            src="img/icons/enviar-una-solicitud.png"
+            alt="Envía una solicitud"
+            class="feature-icon-img"
+            onerror="this.style.display='none'; this.nextElementSibling.style.display='block';"
+          >
+          <span class="icon-fallback">📋</span>
+        </div>
+
+        <h3>Envía una solicitud</h3>
+        <p>
+          Completa el formulario de adopción para que el responsable pueda
+          revisar tu información.
+        </p>
+      </div>
+
+      <div class="feature-card">
+        <div class="icon-image-box">
+          <img
+            src="img/icons/adopta-responsablemente.png"
+            alt="Adopta responsablemente"
+            class="feature-icon-img"
+            onerror="this.style.display='none'; this.nextElementSibling.style.display='block';"
+          >
+          <span class="icon-fallback">🐾</span>
+        </div>
+
+        <h3>Adopta responsablemente</h3>
+        <p>
+          El proceso busca promover adopciones más ordenadas, seguras y con
+          seguimiento posterior.
+        </p>
+      </div>
+
+      <div class="feature-card">
+        <div class="icon-image-box">
+          <img
+            src="img/icons/publica-reportes.png"
+            alt="Publica reportes"
+            class="feature-icon-img"
+            onerror="this.style.display='none'; this.nextElementSibling.style.display='block';"
+          >
+          <span class="icon-fallback">📍</span>
+        </div>
+
+        <h3>Publica reportes</h3>
+        <p>
+          Registra mascotas perdidas o encontradas con foto, zona, referencia y
+          datos de contacto.
+        </p>
+      </div>
+
+      <div class="feature-card">
+        <div class="icon-image-box">
+          <img
+            src="img/icons/conecta-con-aliados.png"
+            alt="Conecta con aliados"
+            class="feature-icon-img"
+            onerror="this.style.display='none'; this.nextElementSibling.style.display='block';"
+          >
+          <span class="icon-fallback">🤝</span>
+        </div>
+
+        <h3>Conecta con aliados</h3>
+        <p>
+          Refugios y rescatistas pueden registrarse para publicar mascotas y
+          gestionar casos.
+        </p>
+      </div>
+
+      <div class="feature-card">
+        <div class="icon-image-box">
+          <img
+            src="img/icons/organiza-la-informacion.png"
+            alt="Organiza la información"
+            class="feature-icon-img"
+            onerror="this.style.display='none'; this.nextElementSibling.style.display='block';"
+          >
+          <span class="icon-fallback">📊</span>
+        </div>
+
+        <h3>Organiza la información</h3>
+        <p>
+          Huellink centraliza mascotas, solicitudes, reportes y seguimiento en
+          una misma plataforma.
+        </p>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- MASCOTAS EN ADOPCIÓN -->
+  <section class="section adoption" id="adoptar">
+    <div class="section-title">
+      <h2>Mascotas en adopción</h2>
+      <p>Conoce algunas mascotas que esperan un hogar responsable.</p>
+    </div>
+
+    <div class="pets-grid" id="mascotasInicio">
+      <!-- Se carga desde Supabase -->
+    </div>
+
+    <div class="center-button">
+      <a href="adoptar.html" class="btn-primary">Ver todas las mascotas</a>
+    </div>
+  </section>
 
   <!-- REPORTES -->
   <section class="section reports" id="reportar">
     <div class="section-title">
-      <h2>Reporta una mascota</h2>
-      <p>Ayuda a encontrar mascotas perdidas o a registrar animales encontrados.</p>
+      <h2>Reportes comunitarios</h2>
+      <p>
+        Consulta mascotas perdidas o encontradas y ayuda a que puedan regresar
+        con su familia.
+      </p>
     </div>
 
     <div class="report-grid">
+
       <div class="report-card lost">
-        <h3>📍 Mascota perdida</h3>
+        <div class="icon-image-box report-icon-box">
+          <img
+            src="img/icons/mascotas-perdidas.png"
+            alt="Mascotas perdidas"
+            class="report-icon-img"
+            onerror="this.style.display='none'; this.nextElementSibling.style.display='block';"
+          >
+          <span class="icon-fallback">📍</span>
+        </div>
+
+        <h3>Mascotas perdidas</h3>
         <p>
-          Registra una mascota extraviada con foto, ubicación aproximada,
-          fecha y características.
+          Revisa reportes publicados por ciudadanos que buscan a sus mascotas
+          extraviadas.
         </p>
-        <a href="reportar-perdida.html">Reportar perdida</a>
+        <a href="reportes.html">Ver reportes</a>
       </div>
 
       <div class="report-card found">
-        <h3>🔎 Mascota encontrada</h3>
+        <div class="icon-image-box report-icon-box">
+          <img
+            src="img/icons/mascotas-encontradas.png"
+            alt="Mascotas encontradas"
+            class="report-icon-img"
+            onerror="this.style.display='none'; this.nextElementSibling.style.display='block';"
+          >
+          <span class="icon-fallback">🔎</span>
+        </div>
+
+        <h3>Mascotas encontradas</h3>
         <p>
-          Publica información de una mascota encontrada para ayudar a ubicar
-          a su familia.
+          Consulta mascotas encontradas y registradas por la comunidad para
+          ayudar a ubicar a sus familias.
         </p>
-        <a href="reportar-encontrada.html">Reportar encontrada</a>
+        <a href="reportes.html">Consultar encontradas</a>
       </div>
+
     </div>
   </section>
 
-  <!-- REFUGIOS Y RESCATISTAS -->
+  <!-- ALIADOS -->
   <section class="section allies" id="aliados">
     <div class="ally-content">
       <div>
-        <h2>¿Eres refugio o rescatista?</h2>
+        <h2>¿Quieres ser aliado de Huellink?</h2>
         <p>
           Inscríbete en Huellink para publicar mascotas, revisar solicitudes,
-          recibir reportes y hacer seguimiento de adopciones.
+          consultar reportes y hacer seguimiento de adopciones.
         </p>
 
         <ul>
           <li>✔ Publica mascotas rescatadas</li>
           <li>✔ Gestiona solicitudes de adopción</li>
-          <li>✔ Recibe reportes por ciudad o zona</li>
+          <li>✔ Consulta reportes por ciudad o zona</li>
           <li>✔ Realiza seguimiento post adopción</li>
         </ul>
 
@@ -207,6 +304,16 @@
       </div>
 
       <div class="ally-box">
+        <div class="icon-image-box ally-icon-box">
+          <img
+            src="img/icons/aliado-refugio.png"
+            alt="Aliado o refugio"
+            class="feature-icon-img"
+            onerror="this.style.display='none'; this.nextElementSibling.style.display='block';"
+          >
+          <span class="icon-fallback">🤝</span>
+        </div>
+
         <h3>Registro validado</h3>
         <p>
           Los refugios y rescatistas serán revisados por el administrador
@@ -220,9 +327,9 @@
   <section class="cta">
     <h2>Una huella puede cambiar una vida</h2>
     <p>
-      Adopta, reporta, rescata y conecta desde una sola plataforma.
+      Adopta, reporta o únete como aliado para ayudar a más mascotas desde una sola plataforma.
     </p>
-    <a href="adoptar.html" class="btn-primary">Adoptar ahora</a>
+    <a href="adoptar.html" class="btn-primary">Comenzar ahora</a>
   </section>
 
   <!-- PIE DE PÁGINA -->
@@ -234,5 +341,6 @@
   <script src="js/supabase-config.js"></script>
   <script src="js/auth.js"></script>
   <script src="js/main.js"></script>
+
 </body>
 </html>

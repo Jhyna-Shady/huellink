@@ -2188,3 +2188,82 @@ h3,
     font-size: 1.25rem;
   }
 }
+
+/* =========================================================
+   TARJETAS DE ACCIÓN EN REPORTES
+   ========================================================= */
+
+.report-actions {
+  max-width: 1000px;
+  margin: 0 auto 35px;
+  padding: 0 24px;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 22px;
+}
+
+.quick-card {
+  position: relative;
+  display: block;
+  padding: 30px;
+  text-decoration: none;
+  overflow: hidden;
+  transition: all 0.25s ease;
+  box-shadow: 0 14px 32px rgba(15, 63, 54, 0.08);
+  border-radius: 30px;
+}
+
+.quick-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 18px 42px rgba(15, 63, 54, 0.14);
+}
+
+.quick-icon {
+  font-size: 2.4rem;
+  margin-bottom: 12px;
+}
+
+.quick-card h3 {
+  font-size: 1.45rem;
+  color: #183b35;
+  margin-bottom: 10px;
+}
+
+.quick-card p {
+  color: #5f7c85;
+  line-height: 1.55;
+  margin-bottom: 18px;
+}
+
+.quick-card span {
+  display: inline-block;
+  background: #ffffff;
+  color: #16846f;
+  padding: 9px 15px;
+  border-radius: 999px;
+  font-weight: 900;
+  font-size: 0.9rem;
+}
+
+.lost-action {
+  background: linear-gradient(135deg, #ffe0c2, #fff3d8);
+}
+
+.found-action {
+  background: linear-gradient(135deg, #d9f6ee, #effff9);
+}
+
+@media (max-width: 900px) {
+  .report-actions {
+    grid-template-columns: 1fr;
+    padding: 0 18px;
+  }
+
+  .quick-card {
+    padding: 24px;
+  }
+
+  .quick-card h3 {
+    font-size: 1.25rem;
+  }
+}

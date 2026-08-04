@@ -21,7 +21,7 @@
         <li><a href="index.html">Inicio</a></li>
         <li><a href="adoptar.html">Adoptar</a></li>
         <li><a href="reportes.html">Reportes</a></li>
-        <li><a href="refugios.html">Refugios</a></li>
+        <li><a href="refugios.html">Aliados</a></li>
         <li><a href="dashboard.html">Panel</a></li>
       </ul>
 
@@ -42,22 +42,22 @@
   <!-- ESTADÍSTICAS -->
   <section class="dashboard-stats admin-stats">
     <div class="dashboard-stat-card">
-      <h2>9</h2>
+      <h2 id="totalSolicitudes">9</h2>
       <p>Solicitudes recibidas</p>
     </div>
 
     <div class="dashboard-stat-card">
-      <h2>4</h2>
+      <h2 id="solicitudesRevision">4</h2>
       <p>En revisión</p>
     </div>
 
     <div class="dashboard-stat-card">
-      <h2>3</h2>
+      <h2 id="solicitudesAprobadas">3</h2>
       <p>Aprobadas</p>
     </div>
 
     <div class="dashboard-stat-card">
-      <h2>2</h2>
+      <h2 id="solicitudesRechazadas">2</h2>
       <p>Rechazadas</p>
     </div>
   </section>
@@ -94,7 +94,20 @@
     </div>
   </section>
 
-    <div class="no-results" id="noResultsSolicitudes">
+  <!-- LISTADO DE SOLICITUDES -->
+  <section class="section solicitudes-section">
+    <div class="section-title">
+      <h2>Listado de solicitudes</h2>
+      <p>
+        Consulta, evalúa y actualiza el estado de las solicitudes recibidas.
+      </p>
+    </div>
+
+    <div class="solicitudes-list" id="contenedorSolicitudes">
+      <div id="listaSolicitudes"></div>
+    </div>
+
+    <div class="no-results" id="noResultsSolicitudes" style="display: none;">
       <h3>No encontramos solicitudes con esos filtros 🐾</h3>
       <p>Prueba cambiando el estado o la mascota seleccionada.</p>
     </div>
@@ -114,9 +127,11 @@
     <p>© 2026 Huellink. Plataforma para adopción responsable y protección animal.</p>
   </footer>
 
+  <!-- SCRIPTS -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="js/supabase-config.js"></script>
   <script src="js/auth.js"></script>
+  <script src="js/solicitudes.js"></script>
   <script src="js/main.js"></script>
 
 </body>

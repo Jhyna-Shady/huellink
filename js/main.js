@@ -198,6 +198,13 @@ if (accionesDashboard && actividadDashboard) {
           texto: "Consulta los reportes de mascotas perdidas o encontradas que publicaste.",
           link: "mis-reportes.html",
           boton: "Ver mis reportes"
+        },
+        {
+          icono: "📋",
+          titulo: "Mis solicitudes",
+          texto: "Revisa si tus solicitudes de adopción están pendientes, en revisión, aprobadas o rechazadas.",
+          link: "mis-solicitudes.html",
+          boton: "Ver mis solicitudes"
         }
       ],
       

@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>Mis solicitudes | Huellink</title>
+
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+
+  <!-- ENCABEZADO -->
+  <header class="header">
+    <nav class="navbar">
+      <a href="index.html" class="logo-link">
+        <div class="logo">🐾 Huellink</div>
+      </a>
+
+      <ul class="nav-links">
+        <li><a href="index.html">Inicio</a></li>
+        <li><a href="adoptar.html">Adoptar</a></li>
+        <li><a href="reportes.html">Reportes</a></li>
+        <li><a href="refugios.html">Aliados</a></li>
+        <li><a href="dashboard.html">Panel</a></li>
+      </ul>
+
+      <a href="#" class="btn-login btn-logout">Cerrar sesión</a>
+    </nav>
+  </header>
+
+  <!-- CABECERA -->
+  <section class="page-hero">
+    <span class="tag">Seguimiento de adopción</span>
+    <h1>Mis solicitudes de adopción</h1>
+    <p>
+      Revisa el estado de las solicitudes que enviaste para adoptar una mascota.
+    </p>
+  </section>
+
+  <!-- LISTADO -->
+  <section class="section">
+    <div class="section-title">
+      <h2>Estado de mis solicitudes</h2>
+      <p>
+        Aquí podrás ver si tu solicitud está pendiente, en revisión, aprobada o rechazada.
+      </p>
+    </div>
+
+    <div class="solicitudes-list" id="contenedorMisSolicitudes">
+      <!-- Las solicitudes del ciudadano se cargarán aquí -->
+    </div>
+
+    <div class="no-results" id="noMisSolicitudes" style="display: none;">
+      <h3>Aún no tienes solicitudes registradas 🐾</h3>
+      <p>
+        Cuando solicites adoptar una mascota, aparecerá aquí el estado de tu postulación.
+      </p>
+      <a href="adoptar.html" class="btn-primary">Ver mascotas</a>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="cta">
+    <h2>Adoptar también es esperar responsablemente</h2>
+    <p>
+      Los refugios o rescatistas revisarán tu solicitud y actualizarán su estado.
+    </p>
+    <a href="adoptar.html" class="btn-primary">Buscar otra mascota</a>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <p>© 2026 Huellink. Plataforma para adopción responsable y protección animal.</p>
+  </footer>
+
+  <!-- SCRIPTS -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/supabase-config.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/mis-solicitudes.js"></script>
+
+</body>
+</html>

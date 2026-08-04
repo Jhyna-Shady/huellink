@@ -2476,3 +2476,95 @@ h3,
     transform: translateY(0) scale(1);
   }
 }
+
+/* =========================================================
+   MIS SOLICITUDES DE ADOPCIÓN
+   ========================================================= */
+
+.solicitudes-section {
+  padding-top: 30px;
+}
+
+.solicitudes-list {
+  width: min(100%, 1050px);
+  margin: 0 auto;
+  display: grid;
+  gap: 22px;
+}
+
+.solicitud-card {
+  background: #ffffff;
+  border-radius: 28px;
+  padding: 28px;
+  box-shadow: 0 18px 40px rgba(15, 63, 54, 0.08);
+}
+
+.solicitud-card-header {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  align-items: flex-start;
+  margin-bottom: 16px;
+}
+
+.solicitud-card h3 {
+  color: #0f3f36;
+  font-size: 1.6rem;
+  margin-top: 10px;
+}
+
+.estado-solicitud {
+  padding: 10px 16px;
+  border-radius: 999px;
+  font-weight: 900;
+  font-size: 0.88rem;
+  white-space: nowrap;
+}
+
+.estado-pendiente {
+  background: #fff1c7;
+  color: #8a6400;
+}
+
+.estado-revision {
+  background: #dff7ef;
+  color: #16846f;
+}
+
+.estado-aprobada {
+  background: #d9fbe6;
+  color: #177245;
+}
+
+.estado-rechazada {
+  background: #ffe0dc;
+  color: #b84232;
+}
+
+.solicitud-estado-descripcion {
+  color: #5f7c85;
+  margin-bottom: 18px;
+}
+
+.solicitud-info-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px 24px;
+  margin-bottom: 14px;
+}
+
+.solicitud-info-grid p,
+.solicitud-card p {
+  color: #446677;
+  line-height: 1.5;
+}
+
+@media (max-width: 700px) {
+  .solicitud-card-header {
+    flex-direction: column;
+  }
+
+  .solicitud-info-grid {
+    grid-template-columns: 1fr;
+  }
+}

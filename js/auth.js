@@ -100,7 +100,8 @@ const AUTH_PAGINAS_PROTEGIDAS = [
   "historial-seguimiento.html",
   "reportar-perdida.html",
   "reportar-encontrada.html",
-  "solicitud-adopcion.html"
+  "solicitud-adopcion.html",
+  "mis-solicitudes.html"
 ];
 
 /* =========================================================
@@ -119,7 +120,8 @@ const AUTH_PERMISOS_POR_PAGINA = {
   "reportar-encontrada.html": ["ciudadano", "rescatista", "refugio", "administrador"],
   "solicitud-adopcion.html": ["ciudadano", "rescatista", "refugio", "administrador"],
 
-  "dashboard.html": ["ciudadano", "rescatista", "refugio", "administrador"]
+  "dashboard.html": ["ciudadano", "rescatista", "refugio", "administrador"],
+  "mis-solicitudes.html": ["ciudadano", "rescatista", "refugio", "administrador"]
 };
 
 /* =========================================================
